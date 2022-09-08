@@ -1,0 +1,29 @@
+query MostStarredRepos {
+  search(type: REPOSITORY, query: "sort:stars stars:>1 language:javascript", first: 100) {
+    pageInfo {
+      startCursor
+      hasNextPage
+      endCursor
+    }
+    userCount
+    edges {
+      node {
+        ... on Repository {
+          name
+          description
+          createdAt
+          stargazers {
+            totalCount
+          }
+          url
+        }
+      }
+    }
+  }
+  rateLimit {
+    limit
+    cost
+    remaining
+    resetAt
+  }
+}
