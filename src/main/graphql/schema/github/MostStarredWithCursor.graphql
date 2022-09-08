@@ -16,6 +16,9 @@ query MostStarredRepos($cursor : String!) {
             totalCount
           }
           url
+          defaultBranchRef {
+            name
+          }
         }
       }
     }

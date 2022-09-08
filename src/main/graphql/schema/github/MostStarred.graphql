@@ -16,6 +16,9 @@ query MostStarredRepos {
             totalCount
           }
           url
+          defaultBranchRef {
+            name
+          }
         }
       }
     }
