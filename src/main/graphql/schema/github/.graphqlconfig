@@ -1,0 +1,15 @@
+{
+  "name": "GitHub API GraphQL Schema",
+  "schemaPath": "schema.json",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "https://api.github.com/graphql",
+        "headers": {
+          "Authorization": "bearer ${env:GITHUB_TOKEN}"
+        },
+        "introspect": false
+      }
+    }
+  }
+}
