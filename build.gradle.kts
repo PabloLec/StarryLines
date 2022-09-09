@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.10"
     application
-    id("com.apollographql.apollo3").version("3.5.0")
+    id("com.apollographql.apollo3").version("3.6.0")
 }
 
 group = "dev.pablolec"
