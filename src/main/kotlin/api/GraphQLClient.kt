@@ -14,6 +14,7 @@ object GraphQLClient {
             val original: Request = chain.request()
             val builder: Request.Builder = original.newBuilder().method(original.method, original.body)
             builder.header("Authorization", "bearer $token")
+            builder.addHeader("User-Agent", "StarryLines")
             chain.proceed(builder.build())
         }
         .build()
