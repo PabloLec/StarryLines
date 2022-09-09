@@ -12,7 +12,7 @@ class Fetcher(val language: String) {
     private val query = "sort:stars stars:>1 language:${language.trim().lowercase()}"
 
     suspend fun fetchMostStarredRepos(cursor: Optional<String>): ApiResponse {
-        logger.debug { "Fetching $language with cursor: ${cursor.getOrNull()}" }
+        logger.debug { "$language | Fetching with cursor: ${cursor.getOrNull()}" }
         val response = client.query(MostStarredReposQuery(query, cursor)).execute()
         if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
 
