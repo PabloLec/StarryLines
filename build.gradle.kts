@@ -16,7 +16,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     // The core runtime dependencies
-    implementation("com.apollographql.apollo3:apollo-runtime:3.5.0")
+    implementation("com.apollographql.apollo3:apollo-runtime:3.6.0")
     testImplementation(kotlin("test"))
 }
 
