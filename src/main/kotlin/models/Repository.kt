@@ -23,12 +23,12 @@ data class Repository(
 
             return Repository(
                 edge.node!!.onRepository!!.name.trim(),
-                edge.node.onRepository!!.description!!.trim(),
-                edge.node.onRepository.createdAt.toDate(),
+                edge.node.onRepository?.description?.trim() ?: "",
+                edge.node.onRepository!!.createdAt.toDate(),
                 edge.node.onRepository.stargazers.totalCount,
                 edge.node.onRepository.url as String,
                 edge.node.onRepository.defaultBranchRef!!.name
             )
         }
     }
-} 
+}

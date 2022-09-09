@@ -1,4 +1,4 @@
-import api.Fetcher
+import api.Manager
 
 enum class SupportedLanguages {
     JAVASCRIPT,
@@ -16,6 +16,6 @@ suspend fun main(args: Array<String>) {
 
     val language = args[0].uppercase()
 
-    val testFetcher = Fetcher(language)
-    testFetcher.fetchMostStarredRepos()
+    val testManager = Manager(language)
+    testManager.run()
 }
