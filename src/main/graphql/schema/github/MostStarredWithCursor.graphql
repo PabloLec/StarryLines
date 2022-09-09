@@ -1,4 +1,4 @@
-query MostStarredRepos($cursor : String!) {
+query MostStarredReposWithCursor($cursor : String!) {
   search(type: REPOSITORY, query: "sort:stars stars:>1 language:javascript", after: $cursor, first: 100) {
     pageInfo {
       startCursor
