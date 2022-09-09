@@ -1,32 +1,32 @@
 query MostStarredRepos($query : String!, $cursor: String) {
-  search(type: REPOSITORY, query: $query, after: $cursor first: 100) {
-    pageInfo {
-      startCursor
-      hasNextPage
-      endCursor
-    }
-    userCount
-    edges {
-      node {
-        ... on Repository {
-          name
-          description
-          createdAt
-          stargazers {
-            totalCount
-          }
-          url
-          defaultBranchRef {
-            name
-          }
+    search(type: REPOSITORY, query: $query, after: $cursor first: 100) {
+        pageInfo {
+            startCursor
+            hasNextPage
+            endCursor
         }
-      }
+        userCount
+        edges {
+            node {
+                ... on Repository {
+                    name
+                    description
+                    createdAt
+                    stargazers {
+                        totalCount
+                    }
+                    url
+                    defaultBranchRef {
+                        name
+                    }
+                }
+            }
+        }
     }
-  }
-  rateLimit {
-    limit
-    cost
-    remaining
-    resetAt
-  }
+    rateLimit {
+        limit
+        cost
+        remaining
+        resetAt
+    }
 }
