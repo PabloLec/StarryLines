@@ -1,5 +1,5 @@
-query MostStarredRepos {
-  search(type: REPOSITORY, query: "sort:stars stars:>1 language:javascript", first: 100) {
+query MostStarredRepos($query : String!, $cursor: String) {
+  search(type: REPOSITORY, query: $query, after: $cursor first: 100) {
     pageInfo {
       startCursor
       hasNextPage

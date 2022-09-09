@@ -1,11 +1,8 @@
-import api.GraphQLClient
-import dev.pablolec.starrylines.RepoFilesQuery
+import api.Fetcher
 
 suspend fun main(args: Array<String>) {
     println("Program arguments: ${args.joinToString()}")
 
-    val client = GraphQLClient.getClient()
-
-    val response = client.query(RepoFilesQuery("pablolec", "recoverpy")).execute()
-    print(response.data)
+    val testFetcher = Fetcher("javascript")
+    testFetcher.fetchMostStarredRepos()
 }
