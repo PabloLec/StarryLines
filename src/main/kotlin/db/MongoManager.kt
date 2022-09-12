@@ -31,7 +31,7 @@ object MongoManager {
             repos.forEach {
                 jobs.add(
                     async {
-                        MongoClient.upsertRepositoryByLanguage(it, language)
+                        MongoClient.upsertFromGHApi(it, language)
                     }
                 )
             }
