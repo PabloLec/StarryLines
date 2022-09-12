@@ -20,6 +20,7 @@ dependencies {
     implementation("org.slf4j:slf4j-log4j12:2.0.0")
     implementation("com.jcabi:jcabi-log:0.22.0")
     implementation("com.apollographql.apollo3:apollo-runtime:3.6.0")
+    implementation("com.github.sya-ri:kgit:1.0.5")
     testImplementation(kotlin("test"))
 }
 

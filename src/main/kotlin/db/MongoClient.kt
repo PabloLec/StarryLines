@@ -17,7 +17,7 @@ object MongoClient {
         client.close()
     }
 
-    fun upsertRepositoryByLanguage(repository: Repository, language: String) {
+    fun upsertFromGHApi(repository: Repository, language: String) {
         val col = database.getCollection<Repository>(language)
         col.updateOne(
             Repository::url eq repository.url,
@@ -27,9 +27,23 @@ object MongoClient {
                 SetTo(Repository::createdAt, repository.createdAt),
                 SetTo(Repository::stargazers, repository.stargazers),
                 SetTo(Repository::defaultBranch, repository.defaultBranch),
-                SetTo(Repository::updateDate, repository.updateDate)
+                SetTo(Repository::githubUpdateDate, repository.githubUpdateDate)
             ),
             upsert()
         )
     }
+
+    fun updateFromLoc(repository: Repository, language: String) {
+        val col = database.getCollection<Repository>(language)
+        col.updateOne(
+            Repository::url eq repository.url,
+            set(
+                SetTo(Repository::loc, repository.loc),
+                SetTo(Repository::locUpdateDate, repository.locUpdateDate)
+            )
+        )
+    }
+
+    fun getAllRepositoriesByLanguage(language: String): List<Repository> =
+        database.getCollection<Repository>(language).find().toList()
 }
