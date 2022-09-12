@@ -3,6 +3,6 @@
 args="\"$*\""
 echo "--args=${args}"
 
-./gradlew build --no-daemon
+./gradlew build
 ./downloadSchema.sh
 sh -c "./gradlew run --args=${args}"
