@@ -11,9 +11,5 @@ jobs:
       - name: Build docker image
         run: docker build -f docker/Dockerfile -t starrylines .
       - name: Run
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MONGO_SECRET: ${{ secrets.MONGO_SECRET }}
-          MONGO_USER: ${{ secrets.MONGO_USER }}
         run: |
-          docker run -e 'GITHUB_TOKEN=$GITHUB_TOKEN' -e 'MONGO_SECRET=$MONGO_SECRET' -e 'MONGO_USER=$MONGO_USER' starrylines getloc javascript kotlin java
+          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' starrylines getloc javascript kotlin java
