@@ -1,4 +1,7 @@
-import api.Manager
+import api.ApiManager
+import db.MongoClient
+import db.MongoManager
+import kotlin.system.exitProcess
 
 enum class Actions {
     FETCH; // Fetch GH API
@@ -15,8 +18,11 @@ enum class SupportedLanguages {
 suspend fun main(args: Array<String>) {
     when (val action = parseArgs(args)) {
         Actions.FETCH -> {
-            val manager = Manager(action.args)
-            manager.run()
+            val apiManager = ApiManager(action.args)
+            val languagesMap = apiManager.run()
+            MongoManager.updateAll(languagesMap)
+            MongoClient.close()
+            exitProcess(0)
         }
     }
 }

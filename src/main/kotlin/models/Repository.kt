@@ -9,7 +9,10 @@ data class Repository(
     val createdAt: LocalDateTime,
     var stargazers: Int,
     val url: String,
-    var defaultBranch: String
+    var defaultBranch: String,
+    val githubUpdateDate: LocalDateTime,
+    val locUpdateDate: LocalDateTime,
+    val loc: Int
 ) {
     companion object {
         private val dateTimeRegex = Regex("""(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})""")
@@ -27,7 +30,10 @@ data class Repository(
                 edge.node.onRepository!!.createdAt.toDate(),
                 edge.node.onRepository.stargazers.totalCount,
                 edge.node.onRepository.url as String,
-                edge.node.onRepository.defaultBranchRef!!.name
+                edge.node.onRepository.defaultBranchRef!!.name,
+                LocalDateTime.now(),
+                LocalDateTime.MIN,
+                0
             )
         }
     }
