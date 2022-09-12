@@ -32,7 +32,7 @@ class GitCount(val language: String, val repo: Repository) {
     }
 
     private fun count() {
-        logger.info { "Counting lines of code for $repo branch" }
+        logger.info { "Counting lines of code for ${repo.name}" }
         val extensions = SupportedLanguages.valueOf(language.uppercase()).extensions()
         val regex = SupportedLanguages.valueOf(language.uppercase()).commentRegex()
         directory.walk().forEach { file ->
@@ -51,6 +51,6 @@ class GitCount(val language: String, val repo: Repository) {
                 .forEach { lineCount += it.count() }
         }
         lineCount /= 80
-        logger.info { "Count succeeded for $repo} | Total LoC: $lineCount" }
+        logger.info { "Count succeeded for ${repo.name} | Total LoC: $lineCount" }
     }
 }
