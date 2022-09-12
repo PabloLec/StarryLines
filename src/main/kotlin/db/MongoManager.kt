@@ -7,10 +7,10 @@ import kotlinx.coroutines.coroutineScope
 import models.Repository
 import mu.KotlinLogging
 
-object MongoManager {
+class MongoManager(private val languagesMap: Map<String, Set<Repository>>) {
     private val logger = KotlinLogging.logger {}
 
-    suspend fun updateAll(languagesMap: Map<String, Set<Repository>>) {
+    suspend fun updateAll() {
         logger.info { "Starting updateAll" }
         val jobs = mutableListOf<Deferred<Unit>>()
         coroutineScope {

@@ -32,16 +32,14 @@ enum class SupportedLanguages {
 suspend fun main(args: Array<String>) {
     when (val action = parseArgs(args)) {
         Action.FETCH -> {
-            val apiManager = ApiManager(action.args)
-            val languagesMap = apiManager.run()
-            MongoManager.updateAll(languagesMap)
+            val languagesMap = ApiManager(action.args).run()
+            MongoManager(languagesMap).updateAll()
             MongoClient.close()
             exitProcess(0)
         }
 
         Action.GETLOC -> {
-            val locManager = LocManager(action.args)
-            locManager.run()
+            LocManager(action.args).run()
         }
     }
 }
