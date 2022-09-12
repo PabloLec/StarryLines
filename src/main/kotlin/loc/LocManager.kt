@@ -14,7 +14,6 @@ class LocManager(val languages: Set<String>) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun run() {
-        logger.info { getRepos() }
         val dispatcher = Dispatchers.IO.limitedParallelism(10)
         runBlocking {
             getRepos().forEach { repo ->
