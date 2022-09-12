@@ -12,6 +12,7 @@ class GitCount(val language: String, val repo: Repository) {
     private val directory = File("/tmp/test/${repo.name}")
 
     fun run(): Int {
+        logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
         clone()
         count()
         directory.deleteRecursively()
@@ -31,13 +32,15 @@ class GitCount(val language: String, val repo: Repository) {
     }
 
     private fun count() {
-        logger.info { "Counting lines of code for ${repo.url} branch ${repo.defaultBranch}" }
+        logger.info { "Counting lines of code for $repo branch" }
         val extensions = SupportedLanguages.valueOf(language.uppercase()).extensions()
         val regex = SupportedLanguages.valueOf(language.uppercase()).commentRegex()
         directory.walk().forEach { file ->
             if (extensions.none { extension -> file.name.endsWith(extension) }) {
                 return@forEach
             }
+            if (!file.isFile) return@forEach
+
             file.bufferedReader()
                 .readLines()
                 .joinToString()
@@ -47,6 +50,7 @@ class GitCount(val language: String, val repo: Repository) {
                 .filterNot(String::isEmpty)
                 .forEach { lineCount += it.count() }
         }
-        logger.info { "Count succeeded for ${repo.url} | Total LoC: $lineCount" }
+        lineCount /= 80
+        logger.info { "Count succeeded for $repo} | Total LoC: $lineCount" }
     }
 }
