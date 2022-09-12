@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.litote.kmongo:kmongo:4.7.1")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.23")
     implementation("org.slf4j:slf4j-log4j12:2.0.0")
     implementation("com.jcabi:jcabi-log:0.22.0")

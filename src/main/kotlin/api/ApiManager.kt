@@ -9,29 +9,30 @@ import mu.KotlinLogging
 
 const val LIMIT_PER_LANGUAGE = 1000
 
-class Manager(val language: Set<String>) {
+class ApiManager(val languages: Set<String>) {
     private val logger = KotlinLogging.logger {}
 
-    suspend fun run() {
-        val allRepos: Set<Repository>
-        val jobs = mutableListOf<Deferred<Set<Repository>>>()
+    suspend fun run(): Map<String, Set<Repository>> {
+        logger.info { "Starting to fetch repositories for languages: $languages" }
+        val jobs = mutableMapOf<String, Deferred<Set<Repository>>>()
 
         coroutineScope {
-            language.forEach { lang ->
-                jobs.add(
+            languages.forEach { lang ->
+                jobs.put(
+                    lang,
                     async {
                         fetchLanguage(lang)
                     }
                 )
             }
-            allRepos = jobs.awaitAll().flatten().toSet()
+            jobs.values.awaitAll().flatten().toSet()
         }
 
-        logger.info { allRepos }
+        return jobs.entries.associate { it.key to it.value.await() }
     }
 
     private suspend fun fetchLanguage(language: String): Set<Repository> {
-        var fetcher = Fetcher(language)
+        val fetcher = Fetcher(language)
         val repos = mutableSetOf<Repository>()
         var cursor = Optional.absent<String>()
         var failCount = 0
