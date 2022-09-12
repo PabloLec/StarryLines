@@ -9,7 +9,7 @@ import java.io.File
 class GitCount(val language: String, val repo: Repository) {
     private val logger = KotlinLogging.logger {}
     private var lineCount = 0
-    private val directory = File("/tmp/test/${repo.name}")
+    private val directory = File("/tmp/loc/${repo.name}")
 
     fun run(): Int {
         logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
