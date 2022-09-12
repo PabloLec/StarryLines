@@ -14,7 +14,12 @@ class GitCount(val language: String, val repo: Repository) {
     fun run(): Int {
         logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
         clone()
-        count()
+        try {
+            count()
+        } catch (e: Exception) {
+            logger.error(e) { "Error while counting lines of code of ${repo.url}" }
+        }
+
         directory.deleteRecursively()
         return lineCount
     }
