@@ -1,4 +1,4 @@
-echo "GITHUB_TOKEN: ${GITHUB_TOKEN}"
+#!/bin/sh
 
 ./gradlew downloadApolloSchema \
   --endpoint="https://api.github.com/graphql" \
