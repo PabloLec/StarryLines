@@ -1,4 +1,4 @@
-name: Fetch GH
+name: LoC Update
 
 on: [ workflow_dispatch ]
 
@@ -12,4 +12,4 @@ jobs:
         run: docker build -f docker/Dockerfile -t starrylines .
       - name: Run
         run: |
-          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' starrylines fetch all
+          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' starrylines getloc all
