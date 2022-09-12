@@ -62,6 +62,10 @@ private fun parseArgs(args: Array<String>): Action {
 
 private fun parseAction(action: Action, args: Array<String>): Action {
     if (args.size < 2) throw IllegalArgumentException("No language specified")
+    if (args[1] == "all") {
+        action.args.addAll(SupportedLanguages.values().map { it.name.lowercase() })
+        return action
+    }
     args.drop(1).forEach {
         val language = it.lowercase().trim()
         if (language !in SupportedLanguages.values().map { it.name.lowercase() }) {
