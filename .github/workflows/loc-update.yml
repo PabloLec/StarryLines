@@ -3,7 +3,7 @@ name: Fetch GH
 on: [ workflow_dispatch ]
 
 jobs:
-  update:
+  loc-update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
