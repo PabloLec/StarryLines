@@ -25,7 +25,7 @@ class LocManager(val languages: Set<String>) {
     }
 
     private suspend fun updateLocCount(repo: Repository, language: String) {
-        val count = GitCount(language, repo).run()
+        val count = GitCount(language, repo).run() ?: return
         repo.loc = count
         repo.locUpdateDate = LocalDateTime.now()
         MongoClient.updateFromLoc(repo, language)
