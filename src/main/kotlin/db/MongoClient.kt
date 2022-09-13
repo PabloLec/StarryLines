@@ -1,6 +1,7 @@
 package db
 
 import com.mongodb.client.MongoDatabase
+import kotlinx.coroutines.coroutineScope
 import models.Repository
 import org.litote.kmongo.*
 
@@ -17,33 +18,49 @@ object MongoClient {
         client.close()
     }
 
-    fun upsertFromGHApi(repository: Repository, language: String) {
-        val col = database.getCollection<Repository>(language)
-        col.updateOne(
-            Repository::url eq repository.url,
-            set(
-                SetTo(Repository::name, repository.name),
-                SetTo(Repository::description, repository.description),
-                SetTo(Repository::createdAt, repository.createdAt),
-                SetTo(Repository::stargazers, repository.stargazers),
-                SetTo(Repository::defaultBranch, repository.defaultBranch),
-                SetTo(Repository::githubUpdateDate, repository.githubUpdateDate),
-                SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
-            ),
-            upsert()
-        )
+    suspend fun upsertFromGHApi(repository: Repository, language: String) {
+        coroutineScope {
+            val col = database.getCollection<Repository>(language)
+            client.startSession().use { session ->
+                session.startTransaction()
+                col.findOne(Repository::url eq repository.url)?.let {
+                    repository.loc = it.loc
+                }
+                col.updateOne(
+                    Repository::url eq repository.url,
+                    set(
+                        SetTo(Repository::name, repository.name),
+                        SetTo(Repository::description, repository.description),
+                        SetTo(Repository::createdAt, repository.createdAt),
+                        SetTo(Repository::stargazers, repository.stargazers),
+                        SetTo(Repository::defaultBranch, repository.defaultBranch),
+                        SetTo(Repository::githubUpdateDate, repository.githubUpdateDate),
+                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
+                    ),
+                    upsert()
+                )
+                session.commitTransaction()
+            }
+        }
     }
 
-    fun updateFromLoc(repository: Repository, language: String) {
-        val col = database.getCollection<Repository>(language)
-        col.updateOne(
-            Repository::url eq repository.url,
-            set(
-                SetTo(Repository::loc, repository.loc),
-                SetTo(Repository::locUpdateDate, repository.locUpdateDate),
-                SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
-            )
-        )
+    suspend fun updateFromLoc(repository: Repository, language: String) {
+        coroutineScope {
+            val col = database.getCollection<Repository>(language)
+            client.startSession().use { session ->
+                session.startTransaction()
+                col.updateOne(
+                    Repository::url eq repository.url,
+                    set(
+                        SetTo(Repository::loc, repository.loc),
+                        SetTo(Repository::locUpdateDate, repository.locUpdateDate),
+                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
+                    ),
+                    upsert()
+                )
+                session.commitTransaction()
+            }
+        }
     }
 
     fun getAllRepositoriesByLanguage(language: String): List<Repository> =

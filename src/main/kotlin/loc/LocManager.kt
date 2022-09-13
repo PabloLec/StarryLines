@@ -24,7 +24,7 @@ class LocManager(val languages: Set<String>) {
         }
     }
 
-    private fun updateLocCount(repo: Repository, language: String) {
+    private suspend fun updateLocCount(repo: Repository, language: String) {
         val count = GitCount(language, repo).run()
         repo.loc = count
         repo.locUpdateDate = LocalDateTime.now()
