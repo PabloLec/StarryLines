@@ -1,4 +1,4 @@
-name: LoC Update
+name: Fetch API
 
 on: [ workflow_dispatch ]
 
