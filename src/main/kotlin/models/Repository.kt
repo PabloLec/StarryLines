@@ -15,8 +15,7 @@ data class Repository(
     var loc: Int?
 ) {
     var mStarsPerLine: Int? = null
-    fun getMilliStarsPerLine() : Int? = loc?.let { (stargazers * 1000) / it }
-
+    fun getMilliStarsPerLine(): Int? = loc?.let { if (loc == 0) 0 else (stargazers * 1000) / it }
 
     companion object {
         private val dateTimeRegex = Regex("""(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})""")
