@@ -4,6 +4,7 @@ import SupportedLanguages
 import com.github.syari.kgit.KGit
 import models.Repository
 import mu.KotlinLogging
+import org.eclipse.jgit.api.errors.JGitInternalException
 import java.io.File
 
 class GitCount(val language: String, val repo: Repository) {
@@ -11,9 +12,14 @@ class GitCount(val language: String, val repo: Repository) {
     private var lineCount = 0
     private val directory = File("/tmp/loc/${repo.name}")
 
-    fun run(): Int {
+    fun run(): Int? {
         logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
-        clone()
+        try {
+            clone()
+        } catch (e: JGitInternalException) {
+            logger.error { "Error cloning ${repo.name} ${e.message}" }
+            return null
+        }
         count()
         directory.deleteRecursively()
         return lineCount
@@ -47,15 +53,14 @@ class GitCount(val language: String, val repo: Repository) {
 
             try {
                 content.replace(regex, "")
-                .lines()
-                .map(String::trim)
-                .filterNot(String::isEmpty)
-                .forEach { lineCount += it.count() }
+                    .lines()
+                    .map(String::trim)
+                    .filterNot(String::isEmpty)
+                    .forEach { lineCount += it.count() }
             } catch (e: VirtualMachineError) {
                 logger.error { "Error while counting lines of ${repo.url} file ${file.name}" }
                 lineCount += content.length
             }
-
         }
         lineCount /= 80
         logger.info { "Count succeeded for ${repo.name} | Total LoC: $lineCount" }
