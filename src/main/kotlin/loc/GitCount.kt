@@ -51,8 +51,8 @@ class GitCount(val language: String, val repo: Repository) {
                 .map(String::trim)
                 .filterNot(String::isEmpty)
                 .forEach { lineCount += it.count() }
-            } catch (e: Exception) {
-                logger.error(e) { "Error while counting lines of $repo file ${file.name}" }
+            } catch (e: VirtualMachineError) {
+                logger.error { "Error while counting lines of ${repo.url} file ${file.name}" }
                 lineCount += content.length
             }
 
