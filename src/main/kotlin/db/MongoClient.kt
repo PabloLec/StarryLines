@@ -27,7 +27,8 @@ object MongoClient {
                 SetTo(Repository::createdAt, repository.createdAt),
                 SetTo(Repository::stargazers, repository.stargazers),
                 SetTo(Repository::defaultBranch, repository.defaultBranch),
-                SetTo(Repository::githubUpdateDate, repository.githubUpdateDate)
+                SetTo(Repository::githubUpdateDate, repository.githubUpdateDate),
+                SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
             ),
             upsert()
         )
@@ -39,7 +40,8 @@ object MongoClient {
             Repository::url eq repository.url,
             set(
                 SetTo(Repository::loc, repository.loc),
-                SetTo(Repository::locUpdateDate, repository.locUpdateDate)
+                SetTo(Repository::locUpdateDate, repository.locUpdateDate),
+                SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
             )
         )
     }

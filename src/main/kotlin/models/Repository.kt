@@ -7,13 +7,17 @@ data class Repository(
     val name: String,
     var description: String,
     val createdAt: LocalDateTime,
-    var stargazers: Int,
+    val stargazers: Int,
     val url: String,
     var defaultBranch: String,
     val githubUpdateDate: LocalDateTime,
     var locUpdateDate: LocalDateTime?,
     var loc: Int?
 ) {
+    var mStarsPerLine: Int? = null
+    fun getMilliStarsPerLine() : Int? = loc?.let { (stargazers * 1000) / it }
+
+
     companion object {
         private val dateTimeRegex = Regex("""(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})""")
 
