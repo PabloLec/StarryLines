@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build docker image
-        run: docker build -f docker/Dockerfile -t starrylines . --no-cache
+        run: docker build -f docker/Dockerfile -t starrylines_${{ github.sha } . --no-cache
       - name: Run
         run: |
-          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' starrylines fetch all
+          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' starrylines_${{ github.sha } fetch all
