@@ -3,6 +3,7 @@ package db
 import com.mongodb.client.MongoDatabase
 import kotlinx.coroutines.coroutineScope
 import models.Repository
+import mu.KotlinLogging
 import org.litote.kmongo.*
 
 object MongoClient {
@@ -13,6 +14,7 @@ object MongoClient {
 
     private val client = KMongo.createClient(connectionString)
     private val database: MongoDatabase = client.getDatabase("StarryLines")
+    private val logger = KotlinLogging.logger {}
 
     fun close() {
         client.close()
@@ -35,11 +37,12 @@ object MongoClient {
                         SetTo(Repository::stargazers, repository.stargazers),
                         SetTo(Repository::defaultBranch, repository.defaultBranch),
                         SetTo(Repository::githubUpdateDate, repository.githubUpdateDate),
-                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
+                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine())
                     ),
                     upsert()
                 )
                 session.commitTransaction()
+                logger.info("Upserted $repository to $language")
             }
         }
     }
@@ -54,11 +57,12 @@ object MongoClient {
                     set(
                         SetTo(Repository::loc, repository.loc),
                         SetTo(Repository::locUpdateDate, repository.locUpdateDate),
-                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
+                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine())
                     ),
                     upsert()
                 )
                 session.commitTransaction()
+                logger.info("Updated $repository to $language")
             }
         }
     }
