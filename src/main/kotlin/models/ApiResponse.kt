@@ -1,10 +1,10 @@
 package models
 
-import dev.pablolec.starrylines.MostStarredReposQuery
+import dev.pablolec.starrylines.GetReposQuery
 
 data class ApiResponse(
     val repos: Set<Repository>,
     val hasNextPage: Boolean,
     val endCursor: String,
-    val rateLimit: MostStarredReposQuery.RateLimit?
+    val rateLimit: GetReposQuery.RateLimit?
 )

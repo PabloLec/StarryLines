@@ -1,7 +1,7 @@
 package api
 
 import com.apollographql.apollo3.api.Optional
-import dev.pablolec.starrylines.MostStarredReposQuery
+import dev.pablolec.starrylines.GetReposQuery
 import models.ApiResponse
 import models.Repository
 import mu.KotlinLogging
@@ -13,7 +13,7 @@ class Fetcher(val language: String) {
 
     suspend fun fetchMostStarredRepos(cursor: Optional<String>): ApiResponse {
         logger.debug { "$language | Fetching with cursor: ${cursor.getOrNull()}" }
-        val response = client.query(MostStarredReposQuery(query, cursor)).execute()
+        val response = client.query(GetReposQuery(query, cursor)).execute()
         if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
 
         val fetchedRepos = mutableSetOf<Repository>()
