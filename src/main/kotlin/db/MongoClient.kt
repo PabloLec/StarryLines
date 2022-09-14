@@ -20,6 +20,26 @@ object MongoClient {
         client.close()
     }
 
+    fun getAllCollections(): List<String> {
+        return database.listCollectionNames().toList()
+    }
+
+    suspend fun insertOne(repo: Repository, collectionName: String) = coroutineScope {
+        val col = database.getCollection<Repository>(collectionName)
+        col.insertOne(repo)
+        logger.info { "Inserted $repo into $collectionName" }
+    }
+
+    suspend fun deleteMany(repos: List<Repository>, collectionName: String) = coroutineScope {
+        val col = database.getCollection<Repository>(collectionName)
+        val result = col.deleteMany(Repository::url `in` repos.map { it.url }.toSet())
+        logger.info { "Removed $result from $collectionName" }
+    }
+
+    fun isInCollection(repo: Repository, collectionName: String): Boolean =
+        database.getCollection<Repository>(collectionName)
+            .findOne(Repository::url eq repo.url) != null
+
     suspend fun upsertFromGHApi(repository: Repository, language: String) {
         coroutineScope {
             val col = database.getCollection<Repository>(language)
@@ -67,6 +87,6 @@ object MongoClient {
         }
     }
 
-    fun getAllRepositoriesByLanguage(language: String): List<Repository> =
-        database.getCollection<Repository>(language).find().toList()
+    fun getCollection(collectionName: String): List<Repository> =
+        database.getCollection<Repository>(collectionName).find().toList()
 }

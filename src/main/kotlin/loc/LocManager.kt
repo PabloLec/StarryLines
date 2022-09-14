@@ -31,7 +31,7 @@ class LocManager(val languages: Set<String>) {
         MongoClient.updateFromLoc(repo, language)
     }
 
-    private fun getRepos() = languages.map { Pair(it, MongoClient.getAllRepositoriesByLanguage(it)) }
+    private fun getRepos() = languages.map { Pair(it, MongoClient.getCollection(it)) }
         .flatMap { it.second.map { repo -> Pair(it.first, repo) } }
         .sortedBy { it.second.locUpdateDate }
 }
