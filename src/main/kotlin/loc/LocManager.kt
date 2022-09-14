@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import models.Repository
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class LocManager(private val mongoManager: MongoManager, val languages: Set<String>) {
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -25,7 +26,7 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Stri
     private suspend fun updateLocCount(repo: Repository, language: String) {
         val count = GitCount(language, repo).run() ?: return mongoManager.addToBlacklist(repo)
         repo.loc = count
-        repo.locUpdateDate = LocalDateTime.now()
+        repo.locUpdateDate = LocalDateTime.now(ZoneOffset.UTC)
         mongoManager.updateLoc(repo, language)
     }
 

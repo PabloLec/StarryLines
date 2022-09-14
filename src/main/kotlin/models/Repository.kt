@@ -2,6 +2,7 @@ package models
 
 import dev.pablolec.starrylines.GetReposQuery
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.math.ceil
 
 data class Repository(
@@ -43,7 +44,7 @@ data class Repository(
                 edge.node.onRepository.url as String,
                 edge.node.onRepository.defaultBranchRef!!.name,
                 getLanguagePercent(edge.node.onRepository.languages),
-                LocalDateTime.now(),
+                LocalDateTime.now(ZoneOffset.UTC),
                 null,
                 null
             )
