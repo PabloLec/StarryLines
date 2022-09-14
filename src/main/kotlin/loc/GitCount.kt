@@ -1,8 +1,8 @@
 package loc
 
-import SupportedLanguages
 import com.github.syari.kgit.KGit
 import models.Repository
+import models.SupportedLanguage
 import mu.KotlinLogging
 import org.eclipse.jgit.api.errors.JGitInternalException
 import java.io.File
@@ -39,8 +39,8 @@ class GitCount(val language: String, val repo: Repository) {
 
     private fun count() {
         logger.info { "Counting lines of code for ${repo.name}" }
-        val extensions = SupportedLanguages.valueOf(language.uppercase()).extensions()
-        val regex = SupportedLanguages.valueOf(language.uppercase()).commentRegex()
+        val extensions = SupportedLanguage.valueOf(language.uppercase()).extensions()
+        val regex = SupportedLanguage.valueOf(language.uppercase()).commentRegex()
         directory.walk().forEach { file ->
             if (extensions.none { extension -> file.name.endsWith(extension) }) {
                 return@forEach
