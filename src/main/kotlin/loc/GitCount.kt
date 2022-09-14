@@ -44,26 +44,18 @@ class GitCount(val language: String, val repo: Repository) {
     private fun count() {
         logger.info { "Counting lines of code for ${repo.name}" }
         val extensions = SupportedLanguage.valueOf(language.uppercase()).extensions()
-        val regex = SupportedLanguage.valueOf(language.uppercase()).commentRegex()
+        val parser = SupportedLanguage.valueOf(language.uppercase()).commentParser()
         directory.walk().forEach { file ->
             if (extensions.none { extension -> file.name.endsWith(extension) }) {
                 return@forEach
             }
             if (!file.isFile) return@forEach
 
-            val content = file.bufferedReader()
-                .readLines()
-                .joinToString()
-
-            try {
-                content.replace(regex, "")
-                    .lines()
-                    .map(String::trim)
-                    .filterNot(String::isEmpty)
-                    .forEach { lineCount += it.count() }
+            lineCount += try {
+                parser(file.bufferedReader())
             } catch (e: VirtualMachineError) {
-                logger.error { "Error while counting lines of ${repo.url} file ${file.name}" }
-                lineCount += content.length
+                logger.error { "Error counting ${repo.url} file ${file.name} ${e.message}" }
+                file.readText().length
             }
         }
         lineCount /= 80

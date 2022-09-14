@@ -57,7 +57,8 @@ object MongoClient {
                         SetTo(Repository::stargazers, repository.stargazers),
                         SetTo(Repository::defaultBranch, repository.defaultBranch),
                         SetTo(Repository::githubUpdateDate, repository.githubUpdateDate),
-                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine())
+                        SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
+                        SetTo(Repository::languagePercent, repository.languagePercent)
                     ),
                     upsert()
                 )

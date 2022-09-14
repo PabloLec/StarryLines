@@ -1,39 +1,43 @@
 package models
 
+import loc.parseJavaStyle
+import loc.parsePythonStyle
+import java.io.BufferedReader
+
 enum class SupportedLanguage {
     JAVASCRIPT {
         override fun extensions() = setOf(".js")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parseJavaStyle
     },
     TYPESCRIPT {
         override fun extensions() = setOf(".ts")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parseJavaStyle
     },
     KOTLIN {
         override fun extensions() = setOf(".kt")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parseJavaStyle
     },
     JAVA {
         override fun extensions() = setOf(".java")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parseJavaStyle
     },
     C {
         override fun extensions() = setOf(".c")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parseJavaStyle
     },
     CPP {
         override fun extensions() = setOf(".cpp")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parseJavaStyle
     },
     GO {
         override fun extensions() = setOf(".go")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parseJavaStyle
     },
     PYTHON {
         override fun extensions() = setOf(".py")
-        override fun commentRegex() = Regex("""[^:]#.*|([^(.]\"\"\"[^(]*)\"\"\"""", RegexOption.MULTILINE)
+        override fun commentParser() = ::parsePythonStyle
     };
 
     abstract fun extensions(): Set<String>
-    abstract fun commentRegex(): Regex
+    abstract fun commentParser(): (BufferedReader) -> Int
 }
