@@ -13,6 +13,9 @@ class MongoManager {
 
     private fun getBlacklist(): List<Repository> = MongoClient.getCollection("blacklist")
 
+    suspend fun updateLoc(repo: Repository, language: String) =
+        coroutineScope { MongoClient.updateFromLoc(repo, language) }
+
     suspend fun updateAll(languagesMap: Map<String, Set<Repository>>) {
         logger.info { "Starting updateAll" }
         val jobs = mutableListOf<Deferred<Unit>>()
