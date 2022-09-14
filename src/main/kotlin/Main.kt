@@ -52,8 +52,10 @@ enum class SupportedLanguages {
 suspend fun main(args: Array<String>) {
     when (val action = parseArgs(args)) {
         Action.FETCH -> {
+            val mongoManager = MongoManager()
+            mongoManager.updateCollectionsWithBlacklist()
             val languagesMap = ApiManager(action.args).run()
-            MongoManager(languagesMap).updateAll()
+            mongoManager.updateAll(languagesMap)
             MongoClient.close()
             exitProcess(0)
         }
