@@ -31,6 +31,6 @@ jobs:
           ./gradlew clean build
       - name: Archive test report
         uses: actions/upload-artifact@v3
-          with:
-            name: Test report
-            path: build/reports/tests/test
+        with:
+          name: Test report
+          path: build/reports/tests/test
