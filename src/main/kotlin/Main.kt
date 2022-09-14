@@ -24,7 +24,7 @@ suspend fun main(args: Array<String>) {
         }
 
         Action.GETLOC -> {
-            LocManager(action.args).run()
+            LocManager(mongoManager, action.args).run()
         }
     }
 }

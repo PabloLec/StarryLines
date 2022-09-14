@@ -1,17 +1,15 @@
 package loc
 
 import db.MongoClient
+import db.MongoManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import models.Repository
-import mu.KotlinLogging
 import java.time.LocalDateTime
 
-class LocManager(val languages: Set<String>) {
-    private val logger = KotlinLogging.logger {}
-
+class LocManager(private val mongoManager: MongoManager, val languages: Set<String>) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun run() {
         val dispatcher = Dispatchers.IO.limitedParallelism(10)
@@ -25,10 +23,10 @@ class LocManager(val languages: Set<String>) {
     }
 
     private suspend fun updateLocCount(repo: Repository, language: String) {
-        val count = GitCount(language, repo).run() ?: return
+        val count = GitCount(language, repo).run() ?: return mongoManager.addToBlacklist(repo)
         repo.loc = count
         repo.locUpdateDate = LocalDateTime.now()
-        MongoClient.updateFromLoc(repo, language)
+        mongoManager.updateLoc(repo, language)
     }
 
     private fun getRepos() = languages.map { Pair(it, MongoClient.getCollection(it)) }

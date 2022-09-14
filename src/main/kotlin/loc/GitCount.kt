@@ -16,12 +16,16 @@ class GitCount(val language: String, val repo: Repository) {
         logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
         try {
             clone()
+            count()
         } catch (e: JGitInternalException) {
             logger.error { "Error cloning ${repo.name} ${e.message}" }
             return null
+        } catch (e: VirtualMachineError) {
+            logger.error { "Error counting ${repo.name} ${e.message}" }
+            return null
+        } finally {
+            directory.deleteRecursively()
         }
-        count()
-        directory.deleteRecursively()
         return lineCount
     }
 
