@@ -29,7 +29,7 @@ suspend fun main(args: Array<String>) {
     }
 }
 
-private fun parseArgs(args: Array<String>): Action {
+fun parseArgs(args: Array<String>): Action {
     if (args.isEmpty()) throw IllegalArgumentException("No action specified")
 
     return when (args[0].uppercase().trim()) {
@@ -45,7 +45,7 @@ private fun parseArgs(args: Array<String>): Action {
     }
 }
 
-private fun parseAction(action: Action, args: Array<String>): Action {
+fun parseAction(action: Action, args: Array<String>): Action {
     if (args.size < 2) throw IllegalArgumentException("No language specified")
     if (args[1] == "all") {
         action.args.addAll(SupportedLanguage.values().map { it.name.lowercase() })
