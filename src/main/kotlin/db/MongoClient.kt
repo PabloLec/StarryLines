@@ -9,8 +9,9 @@ import org.litote.kmongo.*
 object MongoClient {
     private val user = System.getenv("MONGO_USER")!!
     private val secret = System.getenv("MONGO_SECRET")!!
+    private val cluster = System.getenv("MONGO_CLUSTER")!!
     private val connectionString =
-        "mongodb+srv://$user:$secret@cluster-mongodb.yfa5utj.mongodb.net/?retryWrites=true&w=majority"
+        "mongodb+srv://$user:$secret@$cluster/?retryWrites=true&w=majority"
 
     private val client = KMongo.createClient(connectionString)
     private val database: MongoDatabase = client.getDatabase("StarryLines")

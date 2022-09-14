@@ -1,8 +1,5 @@
 FROM openjdk:19-jdk-alpine3.16
 
-ARG GITHUB_TOKEN
-ENV GITHUB_TOKEN $GITHUB_TOKEN
-
 COPY ./src /app/src
 COPY ./gradle /app/gradle
 COPY ./gradlew /app/gradlew
