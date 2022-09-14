@@ -2,6 +2,7 @@ import api.ApiManager
 import db.MongoClient
 import db.MongoManager
 import loc.LocManager
+import models.SupportedLanguage
 import kotlin.system.exitProcess
 
 enum class Action {
@@ -11,49 +12,11 @@ enum class Action {
     val args: MutableSet<String> = mutableSetOf()
 }
 
-enum class SupportedLanguages {
-    JAVASCRIPT {
-        override fun extensions() = setOf(".js")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
-    },
-    TYPESCRIPT {
-        override fun extensions() = setOf(".ts")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
-    },
-    KOTLIN {
-        override fun extensions() = setOf(".kt")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
-    },
-    JAVA {
-        override fun extensions() = setOf(".java")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
-    },
-    C {
-        override fun extensions() = setOf(".c")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
-    },
-    CPP {
-        override fun extensions() = setOf(".cpp")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
-    },
-    GO {
-        override fun extensions() = setOf(".go")
-        override fun commentRegex() = Regex("""/\*(.|[\r\n])*?\*/|[^:]//.*""", RegexOption.MULTILINE)
-    },
-    PYTHON {
-        override fun extensions() = setOf(".py")
-        override fun commentRegex() = Regex("""[^:]#.*|([^(.]\"\"\"[^(]*)\"\"\"""", RegexOption.MULTILINE)
-    };
-
-    abstract fun extensions(): Set<String>
-    abstract fun commentRegex(): Regex
-}
-
 suspend fun main(args: Array<String>) {
+    val mongoManager = MongoManager()
+    mongoManager.updateCollectionsWithBlacklist()
     when (val action = parseArgs(args)) {
         Action.FETCH -> {
-            val mongoManager = MongoManager()
-            mongoManager.updateCollectionsWithBlacklist()
             val languagesMap = ApiManager(action.args).run()
             mongoManager.updateAll(languagesMap)
             MongoClient.close()
@@ -85,12 +48,12 @@ private fun parseArgs(args: Array<String>): Action {
 private fun parseAction(action: Action, args: Array<String>): Action {
     if (args.size < 2) throw IllegalArgumentException("No language specified")
     if (args[1] == "all") {
-        action.args.addAll(SupportedLanguages.values().map { it.name.lowercase() })
+        action.args.addAll(SupportedLanguage.values().map { it.name.lowercase() })
         return action
     }
     args.drop(1).forEach {
         val language = it.lowercase().trim()
-        if (language !in SupportedLanguages.values().map { it.name.lowercase() }) {
+        if (language !in SupportedLanguage.values().map { it.name.lowercase() }) {
             throw IllegalArgumentException("Unsupported language: $language")
         }
         action.args.add(language)
