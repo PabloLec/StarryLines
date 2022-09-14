@@ -2,7 +2,7 @@ package loc
 
 import java.io.BufferedReader
 
-private fun removeInlineCommentJavaStyle(line: String): String {
+private fun removeInlineCommentCStyle(line: String): String {
     val start = line.indexOf("/*")
     val end = line.indexOf("*/")
     if (start != -1 && end != -1) {
@@ -23,7 +23,7 @@ private fun removeInlineCommentPythonStyle(line: String): String {
     return line.trim()
 }
 
-fun parseJavaStyle(reader: BufferedReader): Int {
+fun parseCStyle(reader: BufferedReader): Int {
     var line: String?
     var parsedLength = 0
 
@@ -37,7 +37,7 @@ fun parseJavaStyle(reader: BufferedReader): Int {
             isInComment && line!!.contains("*/") -> isInComment = false
             isInComment -> continue
             line!!.startsWith("//") -> continue
-            else -> parsedLength += removeInlineCommentJavaStyle(line!!).length
+            else -> parsedLength += removeInlineCommentCStyle(line!!).length
         }
     }
     return parsedLength
