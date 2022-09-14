@@ -1,5 +1,5 @@
 query MostStarredRepos($query : String!, $cursor: String) {
-    search(type: REPOSITORY, query: $query, after: $cursor first: 100) {
+    search(type: REPOSITORY, query: $query, after: $cursor, first: 100) {
         pageInfo {
             startCursor
             hasNextPage
@@ -18,6 +18,15 @@ query MostStarredRepos($query : String!, $cursor: String) {
                     url
                     defaultBranchRef {
                         name
+                    }
+                    languages(first: 100) {
+                        totalSize
+                        edges {
+                            size
+                            node {
+                                name
+                            }
+                        }
                     }
                 }
             }
