@@ -6,15 +6,15 @@ import java.io.BufferedReader
 
 enum class SupportedLanguage {
     JAVASCRIPT {
-        override fun extensions() = setOf(".js")
+        override fun extensions() = setOf(".js", ".jsx")
         override fun commentParser() = ::parseCStyle
     },
     TYPESCRIPT {
-        override fun extensions() = setOf(".ts")
+        override fun extensions() = setOf(".ts", ".tsx")
         override fun commentParser() = ::parseCStyle
     },
     KOTLIN {
-        override fun extensions() = setOf(".kt")
+        override fun extensions() = setOf(".kt", ".kts")
         override fun commentParser() = ::parseCStyle
     },
     JAVA {
@@ -22,23 +22,23 @@ enum class SupportedLanguage {
         override fun commentParser() = ::parseCStyle
     },
     C {
-        override fun extensions() = setOf(".c")
+        override fun extensions() = setOf(".c", ".h")
         override fun commentParser() = ::parseCStyle
     },
     CPP {
-        override fun extensions() = setOf(".cpp")
+        override fun extensions() = setOf(".cpp", ".cc", ".cxx", ".c++", ".hpp", ".hh", ".hxx", ".h++")
         override fun commentParser() = ::parseCStyle
     },
     CSHARP {
-        override fun extensions() = setOf(".cs")
+        override fun extensions() = setOf(".cs", ".csx")
         override fun commentParser() = ::parseCStyle
     },
     GO {
-        override fun extensions() = setOf(".go")
+        override fun extensions() = setOf(".go", ".golang")
         override fun commentParser() = ::parseCStyle
     },
     PYTHON {
-        override fun extensions() = setOf(".py")
+        override fun extensions() = setOf(".py", ".pyw")
         override fun commentParser() = ::parsePythonStyle
     };
 

@@ -43,7 +43,7 @@ class GitCount(val language: String, val repo: Repository) {
         val extensions = SupportedLanguage.valueOf(language.uppercase()).extensions()
         val parser = SupportedLanguage.valueOf(language.uppercase()).commentParser()
         directory.walk().forEach { file ->
-            if (extensions.none { extension -> file.name.endsWith(extension) }) {
+            if (extensions.none { extension -> file.name.lowercase().endsWith(extension) }) {
                 return@forEach
             }
             if (!file.isFile) return@forEach
