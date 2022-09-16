@@ -4,7 +4,6 @@ import com.github.syari.kgit.KGit
 import models.Repository
 import models.SupportedLanguage
 import mu.KotlinLogging
-import org.eclipse.jgit.api.errors.JGitInternalException
 import java.io.File
 
 class GitCount(val language: String, val repo: Repository) {
@@ -17,11 +16,8 @@ class GitCount(val language: String, val repo: Repository) {
         try {
             clone()
             count()
-        } catch (e: JGitInternalException) {
+        } catch (e: Throwable) {
             logger.error { "Error cloning ${repo.name} ${e.message}" }
-            return null
-        } catch (e: VirtualMachineError) {
-            logger.error { "Error counting ${repo.name} ${e.message}" }
             return null
         } finally {
             directory.deleteRecursively()
