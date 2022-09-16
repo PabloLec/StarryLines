@@ -26,6 +26,7 @@ class GitCount(val language: String, val repo: Repository) {
     }
 
     private fun clone() {
+        if (!isFreeSpaceEnough()) throw Exception("Not enough free space")
         logger.info { "Cloning ${repo.url} branch ${repo.defaultBranch}" }
         KGit.cloneRepository {
             setURI(repo.url)
@@ -56,5 +57,12 @@ class GitCount(val language: String, val repo: Repository) {
         }
         lineCount /= 80
         logger.info { "Count succeeded for ${repo.name} | Total LoC: $lineCount" }
+    }
+
+    private fun isFreeSpaceEnough(): Boolean {
+        val freeSpace = File("/").freeSpace * 0.9
+        val requiredSpace = repo.diskUsage * 1024
+        logger.debug { "Free space: $freeSpace | Required space: $requiredSpace" }
+        return freeSpace > requiredSpace
     }
 }
