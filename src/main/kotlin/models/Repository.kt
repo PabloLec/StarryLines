@@ -6,7 +6,7 @@ import java.time.ZoneOffset
 import kotlin.math.ceil
 
 data class Repository(
-    val GHID: String?,
+    val ghid: String?,
     val name: String,
     var description: String,
     val createdAt: LocalDateTime,

@@ -9,51 +9,51 @@ import kotlin.test.assertFails
 
 internal class CLITest {
     @Test
-    fun parseUnknownLanguage() {
+    fun testParseUnknownLanguage() {
         assertFails { parseArgs(arrayOf("test", "unknown")) }
     }
 
     @Test
-    fun parseFetch() {
+    fun testParseFetch() {
         val expected = Action.FETCH.also { it.args.addAll(setOf("javascript", "java", "kotlin")) }
         assertEquals(expected, parseArgs(arrayOf("fetch", "javascript", "java", "kotlin")))
     }
 
     @Test
-    fun parseFetchAll() {
+    fun testParseFetchAll() {
         val expected = Action.FETCH.also { it.args.addAll(SupportedLanguage.values().map { it.name.lowercase() }) }
         assertEquals(expected, parseArgs(arrayOf("fetch", "all")))
     }
 
     @Test
-    fun parseFetchEmpty() {
+    fun testParseFetchEmpty() {
         assertFails { parseArgs(arrayOf("fetch")) }
     }
 
     @Test
-    fun parseFetchUnknownLanguage() {
+    fun testParseFetchUnknownLanguage() {
         assertFails { parseArgs(arrayOf("fetch", "java", "unknown")) }
     }
 
     @Test
-    fun parseGetLoc() {
+    fun testParseGetLoc() {
         val expected = Action.GETLOC.also { it.args.addAll(setOf("javascript", "java", "kotlin")) }
         assertEquals(expected, parseArgs(arrayOf("getloc", "javascript", "java", "kotlin")))
     }
 
     @Test
-    fun parseGetLocAll() {
+    fun testParseGetLocAll() {
         val expected = Action.GETLOC.also { it.args.addAll(SupportedLanguage.values().map { it.name.lowercase() }) }
         assertEquals(expected, parseArgs(arrayOf("getloc", "all")))
     }
 
     @Test
-    fun parseGetLocEmpty() {
+    fun testParseGetLocEmpty() {
         assertFails { parseArgs(arrayOf("getloc")) }
     }
 
     @Test
-    fun parseGetLocUnknownLanguage() {
+    fun testParseGetLocUnknownLanguage() {
         assertFails { parseArgs(arrayOf("getloc", "java", "unknown")) }
     }
 }

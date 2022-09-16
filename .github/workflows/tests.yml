@@ -27,6 +27,11 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
       - name: Run build
+        env:
+          MONGO_USER: ${{ secrets.MONGO_USER_TEST }}
+          MONGO_SECRET: ${{ secrets.MONGO_SECRET_TEST }}
+          MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
+          MONGO_DATABASE: ${{ secrets.MONGO_DATABASE_TEST }}
         run: |
           ./gradlew clean build
       - name: Archive test report
