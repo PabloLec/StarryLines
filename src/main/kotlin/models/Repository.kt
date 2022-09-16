@@ -6,6 +6,7 @@ import java.time.ZoneOffset
 import kotlin.math.ceil
 
 data class Repository(
+    val GHID: String?,
     val name: String,
     var description: String,
     val createdAt: LocalDateTime,
@@ -13,6 +14,7 @@ data class Repository(
     val url: String,
     var defaultBranch: String,
     var languagePercent: Int,
+    var diskUsage: Int,
     val githubUpdateDate: LocalDateTime,
     var locUpdateDate: LocalDateTime?,
     var loc: Int?
@@ -37,13 +39,15 @@ data class Repository(
             }
 
             return Repository(
-                edge.node!!.onRepository!!.name.trim(),
-                edge.node.onRepository?.description?.trim() ?: "",
-                edge.node.onRepository!!.createdAt.toDate(),
+                edge.node!!.onRepository!!.id,
+                edge.node.onRepository!!.name.trim(),
+                edge.node.onRepository.description?.trim() ?: "",
+                edge.node.onRepository.createdAt.toDate(),
                 edge.node.onRepository.stargazers.totalCount,
                 edge.node.onRepository.url as String,
                 edge.node.onRepository.defaultBranchRef!!.name,
                 getLanguagePercent(edge.node.onRepository.languages),
+                edge.node.onRepository.diskUsage!!,
                 LocalDateTime.now(ZoneOffset.UTC),
                 null,
                 null

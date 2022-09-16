@@ -9,6 +9,7 @@ query GetRepos($query : String!, $cursor: String) {
         edges {
             node {
                 ... on Repository {
+                    id
                     name
                     description
                     createdAt
@@ -28,6 +29,7 @@ query GetRepos($query : String!, $cursor: String) {
                             }
                         }
                     }
+                    diskUsage
                 }
             }
         }

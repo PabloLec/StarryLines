@@ -52,6 +52,7 @@ object MongoClient {
                 col.updateOne(
                     Repository::url eq repository.url,
                     set(
+                        SetTo(Repository::GHID, repository.GHID),
                         SetTo(Repository::name, repository.name),
                         SetTo(Repository::description, repository.description),
                         SetTo(Repository::createdAt, repository.createdAt),
@@ -59,6 +60,7 @@ object MongoClient {
                         SetTo(Repository::defaultBranch, repository.defaultBranch),
                         SetTo(Repository::githubUpdateDate, repository.githubUpdateDate),
                         SetTo(Repository::mStarsPerLine, repository.getMilliStarsPerLine()),
+                        SetTo(Repository::diskUsage, repository.diskUsage),
                         SetTo(Repository::languagePercent, repository.languagePercent)
                     ),
                     upsert()
