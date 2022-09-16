@@ -10,11 +10,12 @@ object MongoClient {
     private val user = System.getenv("MONGO_USER")!!
     private val secret = System.getenv("MONGO_SECRET")!!
     private val cluster = System.getenv("MONGO_CLUSTER")!!
+    private val databaseName = System.getenv("MONGO_DATABASE")!!
     private val connectionString =
         "mongodb+srv://$user:$secret@$cluster/?retryWrites=true&w=majority"
 
     private val client = KMongo.createClient(connectionString)
-    private val database: MongoDatabase = client.getDatabase("StarryLines")
+    private val database: MongoDatabase = client.getDatabase(databaseName)
     private val logger = KotlinLogging.logger {}
 
     fun close() {
@@ -52,7 +53,7 @@ object MongoClient {
                 col.updateOne(
                     Repository::url eq repository.url,
                     set(
-                        SetTo(Repository::GHID, repository.GHID),
+                        SetTo(Repository::ghid, repository.ghid),
                         SetTo(Repository::name, repository.name),
                         SetTo(Repository::description, repository.description),
                         SetTo(Repository::createdAt, repository.createdAt),

@@ -11,7 +11,7 @@ class MongoManager {
         MongoClient.insertOne(repo, "blacklist")
     }
 
-    private fun getBlacklist(): List<Repository> = MongoClient.getCollection("blacklist")
+    fun getBlacklist(): List<Repository> = MongoClient.getCollection("blacklist")
 
     suspend fun updateLoc(repo: Repository, language: String) =
         coroutineScope { MongoClient.updateFromLoc(repo, language) }
