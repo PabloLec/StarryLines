@@ -7,7 +7,8 @@ import kotlin.system.exitProcess
 
 enum class Action {
     FETCH, // Fetch GH API
-    GETLOC; // Get LoC for stored repos
+    GETLOC, // Get LoC for stored repos
+    FULL; // Execute all actions sequentially
 
     val args: MutableSet<String> = mutableSetOf()
 }
@@ -19,14 +20,20 @@ suspend fun main(args: Array<String>) {
         Action.FETCH -> {
             val languagesMap = ApiManager(action.args).run()
             mongoManager.updateAll(languagesMap)
-            MongoClient.close()
-            exitProcess(0)
         }
 
         Action.GETLOC -> {
             LocManager(mongoManager, action.args).run()
         }
+
+        Action.FULL -> {
+            val languagesMap = ApiManager(action.args).run()
+            mongoManager.updateAll(languagesMap)
+            LocManager(mongoManager, action.args).run()
+        }
     }
+    MongoClient.close()
+    exitProcess(0)
 }
 
 fun parseArgs(args: Array<String>): Action {
@@ -39,6 +46,10 @@ fun parseArgs(args: Array<String>): Action {
 
         Action.GETLOC.name -> {
             parseAction(Action.GETLOC, args)
+        }
+
+        Action.FULL.name -> {
+            parseAction(Action.FULL, args)
         }
 
         else -> throw IllegalArgumentException("Unknown action: ${args[0]}")
