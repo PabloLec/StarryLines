@@ -1,6 +1,5 @@
 package loc
 
-import db.MongoClient
 import db.MongoManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +14,7 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Stri
     fun run() {
         val dispatcher = Dispatchers.IO.limitedParallelism(10)
         runBlocking {
-            getRepos().forEach { repo ->
+            mongoManager.getAllRepos(languages).forEach { repo ->
                 launch(dispatcher) {
                     updateLocCount(repo.second, repo.first)
                 }
@@ -29,8 +28,4 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Stri
         repo.locUpdateDate = LocalDateTime.now(ZoneOffset.UTC)
         mongoManager.updateLoc(repo, language)
     }
-
-    private fun getRepos() = languages.map { Pair(it, MongoClient.getCollection(it)) }
-        .flatMap { it.second.map { repo -> Pair(it.first, repo) } }
-        .sortedBy { it.second.locUpdateDate }
 }

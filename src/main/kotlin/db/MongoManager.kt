@@ -67,4 +67,8 @@ class MongoManager {
             logger.info { "Blacklist update finished" }
         }
     }
+
+    fun getAllRepos(languages: Set<String>) = languages.map { Pair(it, MongoClient.getCollection(it)) }
+        .flatMap { it.second.map { repo -> Pair(it.first, repo) } }
+        .sortedBy { it.second.locUpdateDate }
 }
