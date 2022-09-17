@@ -18,8 +18,7 @@ suspend fun main(args: Array<String>) {
     mongoManager.updateCollectionsWithBlacklist()
     when (val action = parseArgs(args)) {
         Action.FETCH -> {
-            val languagesMap = ApiManager(action.args).run()
-            mongoManager.updateAll(languagesMap)
+            ApiManager(mongoManager, action.args).run()
         }
 
         Action.GETLOC -> {
@@ -27,9 +26,7 @@ suspend fun main(args: Array<String>) {
         }
 
         Action.FULL -> {
-            val languagesMap = ApiManager(action.args).run()
-            mongoManager.updateAll(languagesMap)
-            LocManager(mongoManager, action.args).run()
+            // NOT IMPLEMENTED
         }
     }
     MongoClient.close()

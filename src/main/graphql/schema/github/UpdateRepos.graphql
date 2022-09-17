@@ -1,0 +1,27 @@
+query UpdateRepos($ids: [ID!]!) {
+    nodes(ids: $ids) {
+        ... on Repository {
+            id
+            name
+            description
+            createdAt
+            stargazers {
+                totalCount
+            }
+            url
+            defaultBranchRef {
+                name
+            }
+            languages(first: 100) {
+                totalSize
+                edges {
+                    size
+                    node {
+                        name
+                    }
+                }
+            }
+            diskUsage
+        }
+    }
+}
