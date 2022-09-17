@@ -1,4 +1,4 @@
-query GetRepos($query : String!, $cursor: String) {
+query GetTopRepos($query : String!, $cursor: String) {
     search(type: REPOSITORY, query: $query, after: $cursor, first: 100) {
         pageInfo {
             startCursor

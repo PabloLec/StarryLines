@@ -2,17 +2,33 @@ package api
 
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloHttpException
+import db.MongoManager
 import kotlinx.coroutines.*
 import models.ApiResponse
 import models.Repository
 import mu.KotlinLogging
+import java.time.LocalDateTime
 
 const val LIMIT_PER_LANGUAGE = 1000
 
-class ApiManager(val languages: Set<String>) {
+class ApiManager(private val mongoManager: MongoManager, val languages: Set<String>) {
     private val logger = KotlinLogging.logger {}
 
-    suspend fun run(): Map<String, Set<Repository>> {
+    suspend fun run() {
+        val languagesMap = fetchTopRepos()
+        mongoManager.updateAll(languagesMap)
+
+        val toUpdate = mongoManager
+            .getAllRepos(languages)
+            .filter { it.second.githubUpdateDate < LocalDateTime.now().minusDays(1) }
+            .groupBy { it.first }
+            .mapValues { it.value.map { it.second } }
+
+        val updatedMap = updateRepos(toUpdate)
+        mongoManager.updateAll(updatedMap)
+    }
+
+    private suspend fun fetchTopRepos(): Map<String, Set<Repository>> {
         logger.info { "Starting to fetch repositories for languages: $languages" }
         val jobs = mutableMapOf<String, Deferred<Set<Repository>>>()
 
@@ -32,7 +48,7 @@ class ApiManager(val languages: Set<String>) {
     }
 
     private suspend fun fetchLanguage(language: String): Set<Repository> {
-        val fetcher = Fetcher(language)
+        val fetcher = Fetcher()
         val repos = mutableSetOf<Repository>()
         var cursor = Optional.absent<String>()
         var failCount = 0
@@ -40,7 +56,7 @@ class ApiManager(val languages: Set<String>) {
         while (repos.size < LIMIT_PER_LANGUAGE) {
             val apiResponse: ApiResponse
             try {
-                apiResponse = fetcher.fetchMostStarredRepos(cursor)
+                apiResponse = fetcher.fetchMostStarredRepos(language, cursor)
             } catch (e: ApolloHttpException) {
                 logger.debug { "$language | $e " }
                 failCount++
@@ -62,5 +78,41 @@ class ApiManager(val languages: Set<String>) {
 
         logger.info { "$language | Fetching finished, total: ${repos.size}" }
         return repos
+    }
+
+    private suspend fun updateRepos(toUpdate: Map<String, List<Repository>>): Map<String, Set<Repository>> {
+        logger.info { "Starting to update repositories for languages: $languages with ${toUpdate.flatMap { it.value }.size} repos" }
+        val jobs = mutableMapOf<String, Deferred<Set<Repository>>>()
+
+        coroutineScope {
+            toUpdate.forEach { (lang, repos) ->
+                jobs.put(
+                    lang,
+                    async {
+                        updateLanguage(repos)
+                    }
+                )
+            }
+            jobs.values.awaitAll().flatten().toSet()
+        }
+
+        return jobs.entries.associate { it.key to it.value.await() }
+    }
+
+    private suspend fun updateLanguage(repos: List<Repository>): Set<Repository> {
+        val fetcher = Fetcher()
+        val updatedRepos = mutableSetOf<Repository>()
+
+        repos.chunked(20).forEach {
+            val apiResponse: ApiResponse
+            try {
+                apiResponse = fetcher.fetchReposToUpdate(it)
+                updatedRepos.addAll(apiResponse.repos)
+            } catch (e: ApolloHttpException) {
+                logger.debug { "$e " }
+            }
+        }
+
+        return updatedRepos
     }
 }

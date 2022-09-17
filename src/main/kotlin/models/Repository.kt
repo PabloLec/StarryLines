@@ -1,12 +1,13 @@
 package models
 
-import dev.pablolec.starrylines.GetReposQuery
+import dev.pablolec.starrylines.GetTopReposQuery
+import dev.pablolec.starrylines.UpdateReposQuery
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.math.ceil
 
 data class Repository(
-    val ghid: String?,
+    val ghid: String,
     val name: String,
     var description: String,
     val createdAt: LocalDateTime,
@@ -25,14 +26,43 @@ data class Repository(
     companion object {
         private val dateTimeRegex = Regex("""(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})""")
 
-        fun fromEdge(edge: GetReposQuery.Edge): Repository {
+        fun fromNode(node: UpdateReposQuery.Node): Repository {
             fun Any.toDate(): LocalDateTime {
                 val dateValues = dateTimeRegex.find(this as String)!!.groupValues
                     .drop(1).dropLast(1).map { it.toInt() }.toTypedArray()
                 return LocalDateTime.of(dateValues[0], dateValues[1], dateValues[2], dateValues[3], dateValues[4])
             }
 
-            fun getLanguagePercent(languages: GetReposQuery.Languages?): Int {
+            fun getLanguagePercent(languages: UpdateReposQuery.Languages?): Int {
+                languages!!.edges!!.maxByOrNull { it!!.size }!!.let {
+                    return ceil(((it.size.toDouble() / languages.totalSize) * 100)).toInt()
+                }
+            }
+
+            return Repository(
+                node.onRepository!!.id,
+                node.onRepository.name.trim(),
+                node.onRepository.description?.trim() ?: "",
+                node.onRepository.createdAt.toDate(),
+                node.onRepository.stargazers.totalCount,
+                node.onRepository.url as String,
+                node.onRepository.defaultBranchRef!!.name,
+                getLanguagePercent(node.onRepository.languages),
+                node.onRepository.diskUsage!!,
+                LocalDateTime.now(ZoneOffset.UTC),
+                null,
+                null
+            )
+        }
+
+        fun fromEdge(edge: GetTopReposQuery.Edge): Repository {
+            fun Any.toDate(): LocalDateTime {
+                val dateValues = dateTimeRegex.find(this as String)!!.groupValues
+                    .drop(1).dropLast(1).map { it.toInt() }.toTypedArray()
+                return LocalDateTime.of(dateValues[0], dateValues[1], dateValues[2], dateValues[3], dateValues[4])
+            }
+
+            fun getLanguagePercent(languages: GetTopReposQuery.Languages?): Int {
                 languages!!.edges!!.maxByOrNull { it!!.size }!!.let {
                     return ceil(((it.size.toDouble() / languages.totalSize) * 100)).toInt()
                 }
