@@ -14,7 +14,7 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Stri
     fun run() {
         val dispatcher = Dispatchers.IO.limitedParallelism(10)
         runBlocking {
-            mongoManager.getAllRepos(languages).forEach { repo ->
+            getReposToProcess().forEach { repo ->
                 launch(dispatcher) {
                     updateLocCount(repo.second, repo.first)
                 }
@@ -28,4 +28,7 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Stri
         repo.locUpdateDate = LocalDateTime.now(ZoneOffset.UTC)
         mongoManager.updateLoc(repo, language)
     }
+
+    private fun getReposToProcess() = mongoManager.getAllRepos(languages).filter { it.second.loc == null }
+        .plus(mongoManager.getAllRepos(languages).sortedBy { it.second.locUpdateDate }.take(500))
 }
