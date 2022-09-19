@@ -7,6 +7,6 @@ on:
 
 jobs:
   getloc:
-    uses: run PabloLec/StarryLines/.github/workflows/run.yml@main
+    uses: PabloLec/StarryLines/.github/workflows/run.yml@main
     with:
       args: 'getloc go'
