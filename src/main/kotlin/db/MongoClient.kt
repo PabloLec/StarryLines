@@ -3,6 +3,7 @@ package db
 import com.mongodb.client.MongoDatabase
 import kotlinx.coroutines.coroutineScope
 import models.Repository
+import models.TopRepository
 import mu.KotlinLogging
 import org.litote.kmongo.*
 
@@ -30,6 +31,17 @@ object MongoClient {
         val col = database.getCollection<Repository>(collectionName)
         col.insertOne(repo)
         logger.info { "Inserted $repo into $collectionName" }
+    }
+
+    suspend fun insertMany(repos: List<TopRepository>, collectionName: String) = coroutineScope {
+        val col = database.getCollection<TopRepository>(collectionName)
+        col.insertMany(repos)
+        logger.info { "Inserted ${repos.size} repos into $collectionName" }
+    }
+
+    suspend fun deleteCollection(collectionName: String) = coroutineScope {
+        database.getCollection<TopRepository>(collectionName).drop()
+        logger.info { "Deleted collection $collectionName" }
     }
 
     suspend fun deleteMany(repos: List<Repository>, collectionName: String) = coroutineScope {

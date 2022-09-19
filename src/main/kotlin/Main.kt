@@ -3,12 +3,13 @@ import db.MongoClient
 import db.MongoManager
 import loc.LocManager
 import models.SupportedLanguage
+import top.TopManager
 import kotlin.system.exitProcess
 
 enum class Action {
     FETCH, // Fetch GH API
     GETLOC, // Get LoC for stored repos
-    FULL; // Execute all actions sequentially
+    TOP; // Create Top 100
 
     val args: MutableSet<String> = mutableSetOf()
 }
@@ -25,8 +26,8 @@ suspend fun main(args: Array<String>) {
             LocManager(mongoManager, action.args).run()
         }
 
-        Action.FULL -> {
-            // NOT IMPLEMENTED
+        Action.TOP -> {
+            TopManager(mongoManager, action.args).run()
         }
     }
     MongoClient.close()
@@ -45,8 +46,8 @@ fun parseArgs(args: Array<String>): Action {
             parseAction(Action.GETLOC, args)
         }
 
-        Action.FULL.name -> {
-            parseAction(Action.FULL, args)
+        Action.TOP.name -> {
+            parseAction(Action.TOP, args)
         }
 
         else -> throw IllegalArgumentException("Unknown action: ${args[0]}")

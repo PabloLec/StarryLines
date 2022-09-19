@@ -18,9 +18,9 @@ data class Repository(
     var diskUsage: Int,
     val githubUpdateDate: LocalDateTime,
     var locUpdateDate: LocalDateTime?,
-    var loc: Int?
+    var loc: Int?,
+    var mStarsPerLine: Int?
 ) {
-    var mStarsPerLine: Int? = null
     fun getMilliStarsPerLine(): Int? = loc?.let { if (loc == 0) 0 else (stargazers * 1000) / it }
 
     companion object {
@@ -51,6 +51,7 @@ data class Repository(
                 node.onRepository.diskUsage!!,
                 LocalDateTime.now(ZoneOffset.UTC),
                 null,
+                null,
                 null
             )
         }
@@ -79,6 +80,7 @@ data class Repository(
                 getLanguagePercent(edge.node.onRepository.languages),
                 edge.node.onRepository.diskUsage!!,
                 LocalDateTime.now(ZoneOffset.UTC),
+                null,
                 null,
                 null
             )
