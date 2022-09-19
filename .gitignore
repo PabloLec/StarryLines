@@ -3,3 +3,4 @@
 build/
 .env
 .github/bin
+.run
