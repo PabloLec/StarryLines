@@ -1,0 +1,26 @@
+name: Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      args:
+        required: true
+        description: 'Arguments to pass for the run command'
+        type: string
+  workflow_call:
+    inputs:
+      args:
+        required: true
+        type: string
+
+jobs:
+  loc-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build docker image
+        run: docker build -f docker/Dockerfile -t starrylines_${{ github.sha }} . --no-cache
+      - name: Run
+        run: |
+          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' -e 'MONGO_CLUSTER=${{ secrets.MONGO_CLUSTER }}' -e 'MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}' starrylines_${{ github.sha }} ${{ inputs.args }}
