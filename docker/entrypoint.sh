@@ -5,4 +5,4 @@ echo "--args=${args}"
 
 ./gradlew build
 ./downloadSchema.sh
-sh -c "./gradlew run --args=${args} -x test"
+sh -c "./gradlew run --args=${args} -x test --stacktrace"
