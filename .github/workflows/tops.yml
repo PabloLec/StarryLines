@@ -1,0 +1,12 @@
+name: Create tops
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 7 * * *'
+
+jobs:
+  getloc:
+    uses: PabloLec/StarryLines/.github/workflows/run.yml@main
+    with:
+      args: 'top all'
