@@ -2,6 +2,7 @@ package db
 
 import kotlinx.coroutines.*
 import models.Repository
+import models.TopRepository
 import mu.KotlinLogging
 
 class MongoManager {
@@ -51,18 +52,25 @@ class MongoManager {
         }
     }
 
+    suspend fun updateTop(collectionName: String, repos: List<TopRepository>) {
+        MongoClient.deleteCollection(collectionName)
+        MongoClient.insertMany(repos, collectionName)
+    }
+
     suspend fun updateCollectionsWithBlacklist() {
         val blacklist = getBlacklist()
         val collections = MongoClient.getAllCollections()
         val jobs = mutableListOf<Deferred<Unit>>()
         runBlocking {
-            collections.filterNot { it == "blacklist" }.forEach { collection ->
-                jobs.add(
-                    async {
-                        MongoClient.deleteMany(blacklist, collection)
-                    }
-                )
-            }
+            collections
+                .filterNot { it == "blacklist" || "_top" in it }
+                .forEach { collection ->
+                    jobs.add(
+                        async {
+                            MongoClient.deleteMany(blacklist, collection)
+                        }
+                    )
+                }
             jobs.awaitAll()
             logger.info { "Blacklist update finished" }
         }
