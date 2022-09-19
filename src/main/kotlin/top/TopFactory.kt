@@ -10,20 +10,20 @@ class TopFactory {
             .map { TopRepository.fromRepository(it) }
             .filterNot { it.loc == null || it.mStarsPerLine == null }
             .filter { isEligible(it) }
-            .onEach { repo -> repo.score = getScore(repo) }
+            .onEach { repo -> repo.score = getRealMilliStars(repo) }
             .sortedByDescending { it.score }
             .take(100)
             .toSet()
 
     private fun getRealMilliStars(repo: TopRepository) = (repo.mStarsPerLine?.div(100.0))?.times(repo.languagePercent)
-
-    private fun getScore(repo: TopRepository) = repo.loc?.let { getRealMilliStars(repo)?.div(it) }?.toInt()
+        ?.toInt()
 
     private fun isEligible(repo: TopRepository) = listOf(
         repo.loc!! > 10,
         "awesome" !in repo.url,
         "curated" !in repo.description.lowercase(),
-        "obsolete" !in repo.description.lowercase()
+        "obsolete" !in repo.description.lowercase(),
+        "cheatsheet" !in repo.description.lowercase()
     )
         .all { it }
 }
