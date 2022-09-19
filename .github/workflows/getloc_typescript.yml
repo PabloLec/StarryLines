@@ -1,4 +1,4 @@
-name: Get LoC - C
+name: Get LoC - Typescript
 
 on:
   workflow_dispatch:
@@ -10,4 +10,4 @@ jobs:
     steps:
       - uses: run PabloLec/StarryLines/.github/workflows/run.yml@main
         with:
-          args: 'getloc cpp'
+          args: 'getloc typescript'
