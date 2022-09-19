@@ -54,7 +54,7 @@ internal class MongoManagerTest {
         val blackListRepo = Repository(
             "", "test3", "", LocalDateTime.now(), 0, "", "", 0,
             0,
-            LocalDateTime.now(), LocalDateTime.now(), 0
+            LocalDateTime.now(), LocalDateTime.now(), 0, null
         )
 
         @JvmStatic
