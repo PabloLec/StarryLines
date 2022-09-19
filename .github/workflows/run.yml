@@ -13,8 +13,6 @@ on:
         required: true
         type: string
     secrets:
-      GITHUB_TOKEN:
-        required: true
       MONGO_SECRET:
         required: true
       MONGO_USER:
