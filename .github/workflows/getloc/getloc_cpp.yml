@@ -1,0 +1,13 @@
+name: Get LoC - C
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  getloc:
+    steps:
+      - uses: run PabloLec/StarryLines/.github/workflows/run.yml@main
+        with:
+          args: 'getloc cpp'
