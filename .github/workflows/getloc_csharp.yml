@@ -10,4 +10,8 @@ jobs:
     uses: PabloLec/StarryLines/.github/workflows/run.yml@main
     with:
       args: 'getloc csharp'
-    secrets: inherit
+    secrets:
+      MONGO_USER: ${{ secrets.MONGO_USER }}
+      MONGO_SECRET: ${{ secrets.MONGO_SECRET }}
+      MONGO_DATABASE: ${{ secrets.MONGO_DATABASE }}
+      MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
