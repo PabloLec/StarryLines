@@ -7,7 +7,6 @@ on:
 
 jobs:
   getloc:
-    steps:
-      - uses: run PabloLec/StarryLines/.github/workflows/run.yml@main
-        with:
-          args: 'getloc javascript'
+    uses: run PabloLec/StarryLines/.github/workflows/run.yml@main
+    with:
+      args: 'getloc javascript'
