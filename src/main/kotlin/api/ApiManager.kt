@@ -108,7 +108,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
             try {
                 apiResponse = fetcher.fetchReposToUpdate(it)
                 updatedRepos.addAll(apiResponse.repos)
-            } catch (e: ApolloHttpException) {
+            } catch (e: Exception) {
                 logger.debug { "$e " }
             }
         }
