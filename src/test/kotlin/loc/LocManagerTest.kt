@@ -52,6 +52,7 @@ internal class LocManagerTest {
         fun cleanUp() = runTest {
             MongoClient.deleteCollection("python_test")
             MongoClient.deleteCollection("c_test")
+            MongoClient.deleteCollection("blacklist")
             File("/tmp/loc/").deleteRecursively()
         }
     }
