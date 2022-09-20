@@ -120,6 +120,9 @@ object MongoClient {
     fun getCollection(collectionName: String): List<Repository> =
         database.getCollection<Repository>(collectionName).find().toList()
 
+    fun getTopCollection(collectionName: String): List<TopRepository> =
+        database.getCollection<TopRepository>(collectionName).find().toList()
+
     fun getBlacklistCollection(): List<String> =
         database.getCollection<BlacklistUrl>("blacklist").find().toList().map { it.url }
 }
