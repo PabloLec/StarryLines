@@ -6,7 +6,7 @@ on:
     - cron: '0 23 * * *'
 
 jobs:
-  getloc:
+  fetch:
     uses: PabloLec/StarryLines/.github/workflows/run.yml@main
     with:
       args: 'fetch all'
