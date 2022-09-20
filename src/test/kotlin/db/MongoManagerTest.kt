@@ -21,13 +21,13 @@ internal class MongoManagerTest {
 
     @Test
     fun testGetBlackList() =
-        assertEquals(mongoManager.getBlacklist().map { it.name }, listOf("test1", "test2"))
+        assertEquals(mongoManager.getBlacklist().map { it }, listOf("test1", "test2"))
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testAddToBlacklist() = runTest {
-        mongoManager.addToBlacklist(blackListRepo)
-        assertContains(mongoManager.getBlacklist().map { it.name }, blackListRepo.name)
+        mongoManager.addToBlacklist(blackListRepo, null)
+        assertContains(mongoManager.getBlacklist().map { it }, blackListRepo.name)
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class MongoManagerTest {
     @Test
     fun testUpdateCollectionsWithBlacklist() {
         runTest {
-            mongoManager.addToBlacklist(blackListRepo)
+            mongoManager.addToBlacklist(blackListRepo, null)
             MongoClient.insertOne(blackListRepo, "java_test")
             assertContains(MongoClient.getCollection("java_test").map { it.name }, blackListRepo.name)
             mongoManager.updateCollectionsWithBlacklist()
@@ -52,7 +52,7 @@ internal class MongoManagerTest {
 
     companion object {
         val blackListRepo = Repository(
-            "", "test3", "", LocalDateTime.now(), 0, "", "", 0,
+            "", "test3", "", LocalDateTime.now(), 0, "test3", "", 0,
             0,
             LocalDateTime.now(), LocalDateTime.now(), 0, null
         )

@@ -8,11 +8,11 @@ import mu.KotlinLogging
 class MongoManager {
     private val logger = KotlinLogging.logger {}
 
-    suspend fun addToBlacklist(repo: Repository) = coroutineScope {
-        MongoClient.insertOne(repo, "blacklist")
+    suspend fun addToBlacklist(repo: Repository, reason: String?) = coroutineScope {
+        MongoClient.insertOneToBlacklist(repo.url, reason)
     }
 
-    fun getBlacklist(): List<Repository> = MongoClient.getCollection("blacklist")
+    fun getBlacklist(): List<String> = MongoClient.getBlacklistCollection()
 
     suspend fun updateLoc(repo: Repository, language: String) =
         coroutineScope { MongoClient.updateFromLoc(repo, language) }
@@ -39,7 +39,7 @@ class MongoManager {
             repos.forEach { repo ->
                 jobs.add(
                     async {
-                        if (blackList.any { it.url == repo.url }) {
+                        if (blackList.any { it == repo.url }) {
                             logger.info { "Skipping ${repo.url} because it's in the blacklist" }
                             return@async
                         }
@@ -63,11 +63,11 @@ class MongoManager {
         val jobs = mutableListOf<Deferred<Unit>>()
         runBlocking {
             collections
-                .filterNot { it == "blacklist" || "_top" in it }
+                .filterNot { "blacklist" in it || "_top" in it }
                 .forEach { collection ->
                     jobs.add(
                         async {
-                            MongoClient.deleteMany(blacklist, collection)
+                            MongoClient.deleteManyByUrl(blacklist, collection)
                         }
                     )
                 }

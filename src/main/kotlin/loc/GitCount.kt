@@ -11,14 +11,14 @@ class GitCount(val language: String, val repo: Repository) {
     private var lineCount = 0
     private val directory = File("/tmp/loc/${repo.name}")
 
-    fun run(): Int? {
+    fun run(): Int {
         logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
         try {
             clone()
             count()
         } catch (e: Throwable) {
             logger.error { "Error cloning ${repo.name} ${e.message}" }
-            return null
+            throw e
         } finally {
             directory.deleteRecursively()
         }
