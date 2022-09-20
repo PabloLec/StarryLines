@@ -19,9 +19,9 @@ data class Repository(
     val githubUpdateDate: LocalDateTime,
     var locUpdateDate: LocalDateTime?,
     var loc: Int?,
-    var mStarsPerLine: Int?
+    var milliStarsPerLine: Int?
 ) {
-    fun getMilliStarsPerLine(): Int? = loc?.let { if (loc == 0) 0 else (stargazers * 1000) / it }
+    fun computeMilliStarsPerLine(): Int? = loc?.let { if (loc == 0) 0 else (stargazers * 1000) / it }
 
     companion object {
         private val dateTimeRegex = Regex("""(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})""")

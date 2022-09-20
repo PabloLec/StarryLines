@@ -36,7 +36,7 @@ internal class MongoManagerTest {
         MongoClient.insertOne(javaRepo, "java_test")
         javaRepo.locUpdateDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
         javaRepo.loc = 1000
-        javaRepo.mStarsPerLine = 10000
+        javaRepo.milliStarsPerLine = 10000
         mongoManager.updateLoc(javaRepo, "java_test")
         assertContains(MongoClient.getCollection("java_test"), javaRepo)
     }
