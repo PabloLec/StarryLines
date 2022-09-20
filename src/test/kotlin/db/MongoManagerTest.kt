@@ -68,6 +68,14 @@ internal class MongoManagerTest {
         }
     }
 
+    @Test
+    fun testGetAllRepos() = runTest {
+        mongoManager.updateAll(fetchResult)
+        val allRepos = mongoManager.getAllRepos(setOf("java_test", "python_test"))
+        assertContains(allRepos, Pair("java_test", javaRepo))
+        assertContains(allRepos, Pair("python_test", pythonRepo))
+    }
+
     companion object {
         @JvmStatic
         @BeforeAll
