@@ -55,3 +55,46 @@ apollo {
     generateKotlinModels.set(true)
     packageName.set("dev.pablolec.starrylines")
 }
+
+val excluded = setOf(
+    "dev/pablolec/starrylines/type/",
+    "dev/pablolec/starrylines/adapter/",
+    "dev/pablolec/starrylines/selections/",
+    "dev/pablolec/starrylines/*Query*"
+)
+
+tasks.withType<JacocoCoverageVerification> {
+    violationRules {
+        rule {
+            limit {
+                minimum = BigDecimal(0.62)
+            }
+        }
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+            files(
+                classDirectories.files.map {
+                    fileTree(it).apply {
+                        exclude(excluded)
+                    }
+                }
+            )
+        )
+    }
+}
+
+tasks.withType<JacocoReport> {
+    afterEvaluate {
+        classDirectories.setFrom(
+            files(
+                classDirectories.files.map {
+                    fileTree(it).apply {
+                        exclude(excluded)
+                    }
+                }
+            )
+        )
+    }
+}

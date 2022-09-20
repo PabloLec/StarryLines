@@ -9,6 +9,11 @@ import kotlin.test.assertFails
 
 internal class CLITest {
     @Test
+    fun testParseEmpty() {
+        assertFails { parseArgs(arrayOf()) }
+    }
+
+    @Test
     fun testParseUnknownLanguage() {
         assertFails { parseArgs(arrayOf("test", "unknown")) }
     }
@@ -55,5 +60,27 @@ internal class CLITest {
     @Test
     fun testParseGetLocUnknownLanguage() {
         assertFails { parseArgs(arrayOf("getloc", "java", "unknown")) }
+    }
+
+    @Test
+    fun testParseTop() {
+        val expected = Action.TOP.also { it.args.addAll(setOf("javascript", "java", "kotlin")) }
+        assertEquals(expected, parseArgs(arrayOf("top", "javascript", "java", "kotlin")))
+    }
+
+    @Test
+    fun testParseTopAll() {
+        val expected = Action.TOP.also { it.args.addAll(SupportedLanguage.values().map { it.name.lowercase() }) }
+        assertEquals(expected, parseArgs(arrayOf("top", "all")))
+    }
+
+    @Test
+    fun testParseTopEmpty() {
+        assertFails { parseArgs(arrayOf("top")) }
+    }
+
+    @Test
+    fun testParseTopUnknownLanguage() {
+        assertFails { parseArgs(arrayOf("top", "java", "unknown")) }
     }
 }
