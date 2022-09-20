@@ -1,14 +1,10 @@
 package db
 
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.junit5.MockKExtension
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import test.mocks.*
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -16,14 +12,15 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@ExtendWith(MockKExtension::class)
 internal class MongoManagerTest {
-    @InjectMockKs
-    lateinit var mongoManager: MongoManager
+    private var mongoManager = MongoManager()
 
     @Test
     fun testGetBlackList() =
-        assertEquals(mongoManager.getBlacklist().map { it }, listOf("test1", "test2"))
+        assertEquals(
+            mongoManager.getBlacklist().map { it },
+            listOf(blacklistRepoPrevious1.url, blacklistRepoPrevious2.url)
+        )
 
     @Test
     fun testAddToBlacklist() = runTest {
@@ -79,14 +76,16 @@ internal class MongoManagerTest {
     companion object {
         @JvmStatic
         @BeforeAll
-        fun setUp() {
-            MockKAnnotations.init(this)
+        fun setUp() = runTest {
+            MongoClient.deleteCollection("blacklist")
+            MongoClient.insertOneToBlacklist(blacklistRepoPrevious1.url, "test")
+            MongoClient.insertOneToBlacklist(blacklistRepoPrevious2.url, "test")
         }
 
         @JvmStatic
         @AfterAll
-        fun cleanUp(): Unit = runTest {
-            MongoClient.deleteMany(listOf(blacklistRepo), "blacklist")
+        fun cleanUp() = runTest {
+            MongoClient.deleteCollection("blacklist")
             MongoClient.deleteCollection("java_test")
             MongoClient.deleteCollection("python_test")
             MongoClient.deleteCollection("top_test")

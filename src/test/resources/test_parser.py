@@ -16,4 +16,14 @@ def bar():
     """This is a function docstring"""
     return 2
 
+def baz():
+    '''Docstring with single quotes'''
+    return 3
+
+def qux():
+    '''Multi-line
+    single-quotes
+    '''
+    return 4
+
 b = "# Don't remove me" # But remove me

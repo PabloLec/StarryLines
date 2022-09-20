@@ -5,11 +5,12 @@ import models.Repository
 import models.SupportedLanguage
 import mu.KotlinLogging
 import java.io.File
+import java.util.*
 
 class GitCount(val language: String, val repo: Repository) {
     private val logger = KotlinLogging.logger {}
     private var lineCount = 0
-    private val directory = File("/tmp/loc/${repo.name}")
+    private val directory = getTmpDirectory()
 
     fun run(): Int {
         logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
@@ -40,8 +41,9 @@ class GitCount(val language: String, val repo: Repository) {
 
     private fun count() {
         logger.info { "Counting lines of code for ${repo.name}" }
-        val extensions = SupportedLanguage.valueOf(language.uppercase()).extensions()
-        val parser = SupportedLanguage.valueOf(language.uppercase()).commentParser()
+        val languageString = language.uppercase().split("_").first()
+        val extensions = SupportedLanguage.valueOf(languageString).extensions()
+        val parser = SupportedLanguage.valueOf(languageString).commentParser()
         directory.walk().forEach { file ->
             if (extensions.none { extension -> file.name.lowercase().endsWith(extension) }) {
                 return@forEach
@@ -61,8 +63,11 @@ class GitCount(val language: String, val repo: Repository) {
 
     private fun isFreeSpaceEnough(): Boolean {
         val freeSpace = File("/").freeSpace * 0.9
-        val requiredSpace = repo.diskUsage * 1024
+        val requiredSpace = repo.diskUsage.toDouble() * 1024
         logger.debug { "Free space: $freeSpace | Required space: $requiredSpace" }
         return freeSpace > requiredSpace
     }
+
+    private fun getTmpDirectory(): File =
+        File("${System.getProperty("java.io.tmpdir")}/loc/${UUID.randomUUID()}/${repo.name}")
 }
