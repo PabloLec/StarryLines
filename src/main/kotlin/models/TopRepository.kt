@@ -9,7 +9,7 @@ data class TopRepository(
     val stargazers: Int,
     val url: String,
     val loc: Int?,
-    val mStarsPerLine: Int?,
+    val milliStarsPerLine: Int?,
     var score: Int?
 ) {
     var languagePercent: Int = 0
