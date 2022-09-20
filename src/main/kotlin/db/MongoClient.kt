@@ -63,10 +63,6 @@ object MongoClient {
         logger.info { "Removed $result from $collectionName" }
     }
 
-    fun isInCollection(repo: Repository, collectionName: String): Boolean =
-        database.getCollection<Repository>(collectionName)
-            .findOne(Repository::url eq repo.url) != null
-
     suspend fun upsertFromGHApi(repository: Repository, language: String) {
         coroutineScope {
             val col = database.getCollection<Repository>(language)
