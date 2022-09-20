@@ -23,7 +23,7 @@ data class TopRepository(
                 repo.stargazers,
                 repo.url,
                 repo.loc,
-                repo.mStarsPerLine,
+                repo.milliStarsPerLine,
                 null
             ).also { it.languagePercent = repo.languagePercent }
     }
