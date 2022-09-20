@@ -15,7 +15,7 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class LocManagerTest {
-    val mongoManager = MongoManager()
+    private val mongoManager = MongoManager()
 
     @Test
     fun testRun() = runTest {
