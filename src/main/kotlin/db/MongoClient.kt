@@ -2,6 +2,7 @@ package db
 
 import com.mongodb.client.MongoDatabase
 import kotlinx.coroutines.coroutineScope
+import models.BlacklistUrl
 import models.Repository
 import models.TopRepository
 import mu.KotlinLogging
@@ -33,6 +34,12 @@ object MongoClient {
         logger.info { "Inserted $repo into $collectionName" }
     }
 
+    suspend fun insertOneToBlacklist(url: String, reason: String?) = coroutineScope {
+        val col = database.getCollection<BlacklistUrl>("blacklist")
+        col.insertOne(BlacklistUrl(url, reason))
+        logger.info { "Inserted $url into blacklist" }
+    }
+
     suspend fun insertMany(repos: List<TopRepository>, collectionName: String) = coroutineScope {
         val col = database.getCollection<TopRepository>(collectionName)
         col.insertMany(repos)
@@ -47,6 +54,12 @@ object MongoClient {
     suspend fun deleteMany(repos: List<Repository>, collectionName: String) = coroutineScope {
         val col = database.getCollection<Repository>(collectionName)
         val result = col.deleteMany(Repository::url `in` repos.map { it.url }.toSet())
+        logger.info { "Removed $result from $collectionName" }
+    }
+
+    suspend fun deleteManyByUrl(urls: List<String>, collectionName: String) = coroutineScope {
+        val col = database.getCollection<Repository>(collectionName)
+        val result = col.deleteMany(Repository::url `in` urls.toSet())
         logger.info { "Removed $result from $collectionName" }
     }
 
@@ -106,4 +119,7 @@ object MongoClient {
 
     fun getCollection(collectionName: String): List<Repository> =
         database.getCollection<Repository>(collectionName).find().toList()
+
+    fun getBlacklistCollection(): List<String> =
+        database.getCollection<BlacklistUrl>("blacklist").find().toList().map { it.url }
 }

@@ -23,7 +23,12 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Stri
     }
 
     private suspend fun updateLocCount(repo: Repository, language: String) {
-        val count = GitCount(language, repo).run() ?: return mongoManager.addToBlacklist(repo)
+        val count: Int
+        try {
+            count = GitCount(language, repo).run()
+        } catch (e: Exception) {
+            return mongoManager.addToBlacklist(repo, e.message)
+        }
         repo.loc = count
         repo.locUpdateDate = LocalDateTime.now(ZoneOffset.UTC)
         mongoManager.updateLoc(repo, language)
