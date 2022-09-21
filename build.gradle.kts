@@ -24,7 +24,7 @@ dependencies {
     implementation("com.github.sya-ri:kgit:1.0.5")
     implementation("org.jacoco:org.jacoco.core:0.8.8")
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
     testImplementation("io.mockk:mockk:1.12.8")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 }
