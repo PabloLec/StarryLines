@@ -59,18 +59,11 @@ val excluded = setOf(
     "dev/pablolec/starrylines/adapter/",
     "dev/pablolec/starrylines/selections/",
     "dev/pablolec/starrylines/*Query*",
-    "cli/InterfaceKt"
+    "cli/InterfaceKt",
+    "models/SupportedLanguage*"
 )
 
 tasks.withType<JacocoCoverageVerification> {
-    violationRules {
-        rule {
-            limit {
-                minimum = BigDecimal(0.62)
-            }
-        }
-    }
-
     afterEvaluate {
         classDirectories.setFrom(
             files(
