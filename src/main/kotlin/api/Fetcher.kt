@@ -12,7 +12,6 @@ class Fetcher {
     private val client = GraphQLClient.getClient()
 
     suspend fun fetchMostStarredRepos(language: String, cursor: Optional<String>): ApiResponse {
-        logger.debug { "$language | Fetching with cursor: ${cursor.getOrNull()}" }
         val query = "sort:stars stars:>1 language:${language.trim().lowercase()}"
         val response = client.query(GetTopReposQuery(query, cursor)).execute()
         if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
