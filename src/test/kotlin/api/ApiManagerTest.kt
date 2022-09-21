@@ -9,12 +9,14 @@ import dev.pablolec.starrylines.GetTopReposQuery
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.mockkObject
+import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.*
+import test.mocks.apolloClientMocked
+import test.mocks.testData
 import kotlin.test.assertContains
 
 @OptIn(ExperimentalCoroutinesApi::class, ApolloExperimental::class)
@@ -50,6 +52,7 @@ internal class ApiManagerTest {
         @AfterAll
         fun cleanUp() = runTest {
             MongoClient.deleteCollection("kotlin_test")
+            unmockkAll()
         }
     }
 }
