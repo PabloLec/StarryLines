@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "1.7.10"
     application
     id("com.apollographql.apollo3") version "3.6.0"
-    jacoco
+    id("org.jetbrains.kotlinx.kover") version "0.6.0"
 }
 
 group = "dev.pablolec"
@@ -22,7 +22,6 @@ dependencies {
     implementation("com.jcabi:jcabi-log:0.22.0")
     implementation("com.apollographql.apollo3:apollo-runtime:3.6.0")
     implementation("com.github.sya-ri:kgit:1.0.5")
-    implementation("org.jacoco:org.jacoco.core:0.8.8")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
     testImplementation("io.mockk:mockk:1.12.8")
@@ -31,16 +30,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    finalizedBy(tasks.jacocoTestReport)
-}
-
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-    reports {
-        xml.required.set(false)
-        csv.required.set(false)
-        html.outputLocation.set(layout.buildDirectory.dir("jacoco"))
-    }
+    finalizedBy(tasks.named("koverHtmlReport"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -57,44 +47,22 @@ apollo {
 }
 
 val excluded = setOf(
-    "dev/pablolec/starrylines/type/",
-    "dev/pablolec/starrylines/adapter/",
-    "dev/pablolec/starrylines/selections/",
-    "dev/pablolec/starrylines/*Query*"
+    "dev.pablolec.starrylines.type.*",
+    "dev.pablolec.starrylines.adapter.*",
+    "dev.pablolec.starrylines.selections.*",
+    "dev.pablolec.starrylines.*Query*"
 )
 
-tasks.withType<JacocoCoverageVerification> {
-    violationRules {
-        rule {
-            limit {
-                minimum = BigDecimal(0.62)
-            }
+kover {
+    filters {
+        classes {
+            excludes += excluded
         }
     }
 
-    afterEvaluate {
-        classDirectories.setFrom(
-            files(
-                classDirectories.files.map {
-                    fileTree(it).apply {
-                        exclude(excluded)
-                    }
-                }
-            )
-        )
-    }
-}
-
-tasks.withType<JacocoReport> {
-    afterEvaluate {
-        classDirectories.setFrom(
-            files(
-                classDirectories.files.map {
-                    fileTree(it).apply {
-                        exclude(excluded)
-                    }
-                }
-            )
-        )
+    htmlReport {
+        isDisabled.set(false)
+        onCheck.set(true)
+        reportDir.set(layout.buildDirectory.dir("kover/html"))
     }
 }
