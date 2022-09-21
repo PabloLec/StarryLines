@@ -26,6 +26,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
+
       - name: Run build
         env:
           MONGO_USER: ${{ secrets.MONGO_USER_TEST }}
@@ -35,17 +36,23 @@ jobs:
           GITHUB_TOKEN: "not_a_token"
         run: |
           ./gradlew clean build --stacktrace --info
+
       - name: Archive test report
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: Test report
           path: build/reports/tests/test
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-          files: ./build/reports/kover/xml/report.xml
-          name: codecov-starrylines
-          verbose: true
+          args: >
+            -Dsonar.organization=pablolec
+            -Dsonar.projectKey=PabloLec_StarryLines
+            -Dsonar.coverage.jacoco.xmlReportPaths=./build/reports/kover/xml/report.xml
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.sources=./src/main
