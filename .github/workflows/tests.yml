@@ -32,6 +32,7 @@ jobs:
           MONGO_SECRET: ${{ secrets.MONGO_SECRET_TEST }}
           MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
           MONGO_DATABASE: ${{ secrets.MONGO_DATABASE_TEST }}
+          GITHUB_TOKEN: "not_a_token"
         run: |
           ./gradlew clean build --stacktrace --info
       - name: Archive test report
