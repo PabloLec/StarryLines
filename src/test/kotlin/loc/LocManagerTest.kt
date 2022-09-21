@@ -22,12 +22,17 @@ internal class LocManagerTest {
         val locManager = LocManager(mongoManager, setOf("c_test", "python_test"))
         MongoClient.insertOne(locCRepo, "c_test")
         MongoClient.insertOne(locPythonRepo, "python_test")
-        locManager.run()
 
-        val allRepos = mongoManager.getAllRepos(setOf("c_test", "python_test")).map { it.second }
+        locManager.run()
+        var allRepos = mongoManager.getAllRepos(setOf("c_test", "python_test")).map { it.second }
+        if (allRepos.any { it.loc == null }) {
+            // Hacky way to ensure MongoDB has time to update the documents
+            allRepos = mongoManager.getAllRepos(setOf("c_test", "python_test")).map { it.second }
+        }
         val pythonRepo = allRepos.find { it.name == "pythonRepo" }!!
-        assertEquals(pythonRepo.loc, 161)
         val cRepo = allRepos.find { it.name == "CRepo" }!!
+
+        assertEquals(pythonRepo.loc, 161)
         assertEquals(cRepo.loc, 28341)
     }
 
@@ -35,6 +40,7 @@ internal class LocManagerTest {
     fun testFail() = runTest {
         val locManager = LocManager(mongoManager, setOf("python_test"))
         MongoClient.insertOne(pythonRepo, "python_test")
+
         locManager.run()
 
         assert(mongoManager.getBlacklist().contains("pythonRepo"))
