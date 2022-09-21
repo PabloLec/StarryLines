@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.10"
     application
+    jacoco
     id("com.apollographql.apollo3") version "3.6.0"
-    id("org.jetbrains.kotlinx.kover") version "0.6.0"
 }
 
 group = "dev.pablolec"
@@ -31,7 +31,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    finalizedBy(tasks.named("koverReport"))
+    finalizedBy(tasks.named("jacocoTestReport"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -47,29 +47,53 @@ apollo {
     packageName.set("dev.pablolec.starrylines")
 }
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+    }
+}
+
 val excluded = setOf(
-    "dev.pablolec.starrylines.type.*",
-    "dev.pablolec.starrylines.adapter.*",
-    "dev.pablolec.starrylines.selections.*",
-    "dev.pablolec.starrylines.*Query*",
-    "cli.InterfaceKt"
+    "dev/pablolec/starrylines/type/",
+    "dev/pablolec/starrylines/adapter/",
+    "dev/pablolec/starrylines/selections/",
+    "dev/pablolec/starrylines/*Query*",
+    "cli/InterfaceKt"
 )
 
-kover {
-    filters {
-        classes {
-            excludes += excluded
+tasks.withType<JacocoCoverageVerification> {
+    violationRules {
+        rule {
+            limit {
+                minimum = BigDecimal(0.62)
+            }
         }
     }
 
-    xmlReport {
-        isDisabled.set(false)
-        onCheck.set(true)
+    afterEvaluate {
+        classDirectories.setFrom(
+            files(
+                classDirectories.files.map {
+                    fileTree(it).apply {
+                        exclude(excluded)
+                    }
+                }
+            )
+        )
     }
+}
 
-    htmlReport {
-        isDisabled.set(false)
-        onCheck.set(true)
-        reportDir.set(layout.buildDirectory.dir("kover/html"))
+tasks.withType<JacocoReport> {
+    afterEvaluate {
+        classDirectories.setFrom(
+            files(
+                classDirectories.files.map {
+                    fileTree(it).apply {
+                        exclude(excluded)
+                    }
+                }
+            )
+        )
     }
 }
