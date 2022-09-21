@@ -41,3 +41,11 @@ jobs:
         with:
           name: Test report
           path: build/reports/tests/test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          files: ./build/reports/kover/xml/report.xml
+          name: codecov-starrylines
+          verbose: true
