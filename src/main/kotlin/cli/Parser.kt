@@ -1,10 +1,6 @@
-import api.ApiManager
-import db.MongoClient
-import db.MongoManager
-import loc.LocManager
+package cli
+
 import models.SupportedLanguage
-import top.TopManager
-import kotlin.system.exitProcess
 
 enum class Action {
     FETCH, // Fetch GH API
@@ -12,26 +8,6 @@ enum class Action {
     TOP; // Create Top 100
 
     val args: MutableSet<String> = mutableSetOf()
-}
-
-suspend fun main(args: Array<String>) {
-    val mongoManager = MongoManager()
-    mongoManager.updateCollectionsWithBlacklist()
-    when (val action = parseArgs(args)) {
-        Action.FETCH -> {
-            ApiManager(mongoManager, action.args).run()
-        }
-
-        Action.GETLOC -> {
-            LocManager(mongoManager, action.args).run()
-        }
-
-        Action.TOP -> {
-            TopManager(mongoManager, action.args).run()
-        }
-    }
-    MongoClient.close()
-    exitProcess(0)
 }
 
 fun parseArgs(args: Array<String>): Action {

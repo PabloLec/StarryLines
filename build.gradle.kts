@@ -39,7 +39,7 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("cli.InterfaceKt")
 }
 
 apollo {
@@ -51,7 +51,8 @@ val excluded = setOf(
     "dev.pablolec.starrylines.type.*",
     "dev.pablolec.starrylines.adapter.*",
     "dev.pablolec.starrylines.selections.*",
-    "dev.pablolec.starrylines.*Query*"
+    "dev.pablolec.starrylines.*Query*",
+    "cli.InterfaceKt"
 )
 
 kover {
