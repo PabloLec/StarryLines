@@ -37,7 +37,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
 
         coroutineScope {
             languages.forEach { lang ->
-                jobs.put(
+                jobs += Pair(
                     lang,
                     async {
                         fetchLanguage(lang)
@@ -79,7 +79,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
 
         coroutineScope {
             toUpdate.forEach { (lang, repos) ->
-                jobs.put(
+                jobs += Pair(
                     lang,
                     async {
                         updateLanguage(repos)
