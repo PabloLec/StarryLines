@@ -31,7 +31,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    finalizedBy(tasks.named("koverHtmlReport"))
+    finalizedBy(tasks.named("koverReport"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -59,6 +59,11 @@ kover {
         classes {
             excludes += excluded
         }
+    }
+
+    xmlReport {
+        isDisabled.set(false)
+        onCheck.set(true)
     }
 
     htmlReport {
