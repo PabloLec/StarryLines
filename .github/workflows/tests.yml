@@ -33,8 +33,9 @@ jobs:
           MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
           MONGO_DATABASE: ${{ secrets.MONGO_DATABASE_TEST }}
         run: |
-          ./gradlew clean build --stacktrace --debug
+          ./gradlew clean build --stacktrace --info
       - name: Archive test report
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: Test report
