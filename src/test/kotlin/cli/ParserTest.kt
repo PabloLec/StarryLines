@@ -1,9 +1,9 @@
-package test
+package test.cli
 
-import Action
+import cli.Action
+import cli.parseArgs
 import models.SupportedLanguage
 import org.junit.jupiter.api.Test
-import parseArgs
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
