@@ -20,7 +20,6 @@ import test.mocks.apolloClientMocked
 import test.mocks.repoToInsertBeforeUpdate
 import test.mocks.testDataTopReposQuery
 import test.mocks.testDataUpdateReposQuery
-import java.time.LocalDateTime
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
@@ -60,7 +59,7 @@ internal class ApiManagerTest {
         val updatedRepo = allRepos.find { it.name == "repo_to_update" }!!
 
         assertEquals(20000, updatedRepo.stargazers)
-        assert(updatedRepo.githubUpdateDate < LocalDateTime.now().minusHours(1))
+        assert(updatedRepo.githubUpdateDate != repoToInsertBeforeUpdate.githubUpdateDate)
     }
 
     companion object {
