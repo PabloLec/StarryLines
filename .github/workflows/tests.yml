@@ -56,3 +56,4 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=./build/reports/kover/xml/report.xml
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.sources=./src/main
+            -Dsonar.coverage.exclusions=**/Interface.kt,**/SupportedLanguage.kt
