@@ -3,7 +3,10 @@ package api
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloHttpException
 import db.MongoManager
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import models.ApiResponse
 import models.Repository
 import mu.KotlinLogging
@@ -51,19 +54,13 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
         val fetcher = Fetcher()
         val repos = mutableSetOf<Repository>()
         var cursor = Optional.absent<String>()
-        var failCount = 0
 
         while (repos.size < LIMIT_PER_LANGUAGE) {
             val apiResponse: ApiResponse
             try {
                 apiResponse = fetcher.fetchMostStarredRepos(language, cursor)
             } catch (e: ApolloHttpException) {
-                logger.debug { "$language | $e " }
-                failCount++
-                if (failCount >= 100) throw Exception("$language | Too many failures")
-                withContext(Dispatchers.IO) {
-                    Thread.sleep(5_000)
-                }
+                logger.debug { " $language | $e " }
                 continue
             }
 
@@ -109,7 +106,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
                 apiResponse = fetcher.fetchReposToUpdate(it)
                 updatedRepos.addAll(apiResponse.repos)
             } catch (e: Exception) {
-                logger.debug { "$e " }
+                logger.debug { " $it | $e " }
             }
         }
 
