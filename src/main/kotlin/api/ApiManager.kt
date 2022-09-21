@@ -60,15 +60,11 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
             try {
                 apiResponse = fetcher.fetchMostStarredRepos(language, cursor)
             } catch (e: ApolloHttpException) {
-                logger.debug { " $language | $e " }
+                logger.error { " $language | $e " }
                 continue
             }
 
             repos.addAll(apiResponse.repos)
-            logger.debug {
-                "$language | Total repos fetched: ${repos.size}".plus(" | hasNextPage: ${apiResponse.hasNextPage}")
-                    .plus(" | endCursor: ${apiResponse.endCursor}").plus(" | rateLimit: ${apiResponse.rateLimit}")
-            }
             if (!apiResponse.hasNextPage) break
             cursor = Optional.present(apiResponse.endCursor)
         }
@@ -106,7 +102,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
                 apiResponse = fetcher.fetchReposToUpdate(it)
                 updatedRepos.addAll(apiResponse.repos)
             } catch (e: Exception) {
-                logger.debug { " $it | $e " }
+                logger.error { " $it | $e " }
             }
         }
 
