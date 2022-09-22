@@ -17,6 +17,7 @@ jobs:
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
+          preCommands: cd src/main/workers
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           secrets: |
@@ -26,5 +27,3 @@ jobs:
         env:
           REALM_APPID: ${{ secrets.REALM_APPID }}
           MONGO_API_KEY: ${{ secrets.MONGO_API_KEY }}
-        run: |
-          cd src/main/workers
