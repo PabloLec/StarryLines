@@ -3,7 +3,7 @@ name: Fetch GH API
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '45 1,11,20 * * *'
 
 jobs:
   fetch:

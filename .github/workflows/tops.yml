@@ -3,7 +3,7 @@ name: Create tops
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 7 * * *'
+    - cron: '15 8 * * *'
 
 jobs:
   tops:
