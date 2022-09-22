@@ -1,0 +1,25 @@
+name: PR tests
+
+on:
+  pull_request_target:
+    branches:
+      - main
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    environment:
+      name: PR-env
+    steps:
+      - name: Approve
+        run: echo "Test run needs approval"
+
+  PR-tests:
+    needs: [approve]
+    uses: PabloLec/StarryLines/.github/workflows/tests.yml@main
+    secrets:
+      MONGO_USER_TEST: ${{ secrets.MONGO_USER_TEST }}
+      MONGO_SECRET_TEST: ${{ secrets.MONGO_SECRET_TEST }}
+      MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
+      MONGO_DATABASE_TEST: ${{ secrets.MONGO_DATABASE_TEST }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

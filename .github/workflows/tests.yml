@@ -4,9 +4,19 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  workflow_call:
+    secrets:
+      MONGO_USER_TEST:
+        required: true
+      MONGO_SECRET_TEST:
+        required: true
+      MONGO_CLUSTER:
+        required: true
+      MONGO_DATABASE_TEST:
+        required: true
+      SONAR_TOKEN:
+        required: true
+
 
 jobs:
   build:
