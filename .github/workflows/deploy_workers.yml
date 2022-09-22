@@ -17,7 +17,7 @@ jobs:
       - name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
-          preCommands: cd src/main/workers
+          preCommands: cd src/main/workers && npm install .
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: publish --env production
