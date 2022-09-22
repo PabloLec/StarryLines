@@ -20,9 +20,6 @@ jobs:
           preCommands: cd src/main/workers
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          secrets: |
-            REALM_APPID
-            MONGO_API_KEY
           command: publish --env production
         env:
           REALM_APPID: ${{ secrets.REALM_APPID }}
