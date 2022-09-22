@@ -14,3 +14,6 @@ format = "modules"
 [env.production]
 workers_dev = false
 route = "https://starrylines-worker.pablolec.dev/*"
+kv_namespaces = [
+    { binding = "StarryLinesTop", id = "814e96bb9e8b4ab082856f6184db30d9" }
+]
