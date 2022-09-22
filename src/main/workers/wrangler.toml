@@ -1,0 +1,16 @@
+name = "mongo-proxy"
+type = "javascript"
+compatibility_date = "2022-09-22"
+workers_dev = true
+
+[build]
+command = "npm run build"
+
+[build.upload]
+dir = "build"
+main = "./index.mjs"
+format = "modules"
+
+[env.production]
+workers_dev = false
+route = "https://starrylines-worker.pablolec.dev/*"

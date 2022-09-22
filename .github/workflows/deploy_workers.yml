@@ -1,0 +1,28 @@
+name: Deploy workers
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/main/workers/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Publish
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          secrets: |
+            REALM_APPID
+            MONGO_API_KEY
+          command: publish --env production
+        env:
+          REALM_APPID: ${{ secrets.REALM_APPID }}
+          MONGO_API_KEY: ${{ secrets.MONGO_API_KEY }}

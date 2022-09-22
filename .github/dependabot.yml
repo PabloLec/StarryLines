@@ -18,3 +18,9 @@ updates:
       interval: "daily"
     assignees:
       - "PabloLec"
+  - package-ecosystem: "npm"
+    directory: "/src/main/workers"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "PabloLec"
