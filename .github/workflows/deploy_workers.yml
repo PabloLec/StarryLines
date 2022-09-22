@@ -20,7 +20,4 @@ jobs:
           preCommands: cd src/main/workers && npm install .
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: publish --env production
-        env:
-          REALM_APPID: ${{ secrets.REALM_APPID }}
-          MONGO_API_KEY: ${{ secrets.MONGO_API_KEY }}
+          command: publish --env production --var REALM_APPID:${{ secrets.REALM_APPID }} --var MONGO_API_KEY:${{ secrets.MONGO_API_KEY }}
