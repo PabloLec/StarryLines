@@ -3,17 +3,13 @@ package api
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloHttpException
 import db.MongoManager
-import dev.pablolec.starrylines.type.RateLimit
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import models.ApiResponse
 import models.Repository
 import mu.KotlinLogging
 import java.time.LocalDateTime
 
-const val LIMIT_PER_LANGUAGE = 1000
+const val LIMIT_PER_LANGUAGE = 2000
 
 class ApiManager(private val mongoManager: MongoManager, val languages: Set<String>) {
     private val logger = KotlinLogging.logger {}
@@ -28,27 +24,18 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
             .groupBy { it.first }
             .mapValues { it.value.map { it.second } }
 
-        val updatedMap = updateRepos(toUpdate)
+        val updatedMap = updateLeftoverRepos(toUpdate)
         mongoManager.updateAll(updatedMap)
     }
 
     private suspend fun fetchTopRepos(): Map<String, Set<Repository>> {
         logger.info { "Starting to fetch repositories for languages: $languages" }
-        val jobs = mutableMapOf<String, Deferred<Set<Repository>>>()
-
-        coroutineScope {
-            languages.forEach { lang ->
-                jobs += Pair(
-                    lang,
-                    async {
-                        fetchLanguage(lang)
-                    }
-                )
+        val results = buildMap {
+            languages.forEach { language ->
+                put(language, fetchLanguage(language))
             }
-            jobs.values.awaitAll().flatten().toSet()
         }
-
-        return jobs.entries.associate { it.key to it.value.await() }
+        return results.entries.associate { it.key to it.value }
     }
 
     private suspend fun fetchLanguage(language: String): Set<Repository> {
@@ -69,12 +56,6 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
                 continue
             }
 
-            val rateLimitRemaining = apiResponse.rateLimit?.remaining
-            if (rateLimitRemaining != null && (rateLimitRemaining % 100 == 0 || rateLimitRemaining < 20)) {
-                logger.info { " Rate Limit: ${apiResponse.rateLimit.remaining} requests remaining" }
-            }
-            logger.info { "Rate limit: ${apiResponse.rateLimit}" }
-
             repos.addAll(apiResponse.repos)
             if (!apiResponse.hasNextPage) break
             cursor = Optional.present(apiResponse.endCursor)
@@ -84,26 +65,18 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
         return repos
     }
 
-    private suspend fun updateRepos(toUpdate: Map<String, List<Repository>>): Map<String, Set<Repository>> {
+    private suspend fun updateLeftoverRepos(toUpdate: Map<String, List<Repository>>): Map<String, Set<Repository>> {
         logger.info { "Starting to update repositories for languages: $languages with ${toUpdate.flatMap { it.value }.size} repos" }
-        val jobs = mutableMapOf<String, Deferred<Set<Repository>>>()
-
-        coroutineScope {
+        val results = buildMap {
             toUpdate.forEach { (lang, repos) ->
-                jobs += Pair(
-                    lang,
-                    async {
-                        updateLanguage(repos)
-                    }
-                )
+                put(lang, updateLeftoverByLanguage(repos))
             }
-            jobs.values.awaitAll().flatten().toSet()
         }
 
-        return jobs.entries.associate { it.key to it.value.await() }
+        return results.entries.associate { it.key to it.value }
     }
 
-    private suspend fun updateLanguage(repos: List<Repository>): Set<Repository> {
+    private suspend fun updateLeftoverByLanguage(repos: List<Repository>): Set<Repository> {
         val fetcher = Fetcher()
         val updatedRepos = mutableSetOf<Repository>()
 
@@ -113,18 +86,14 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
                 apiResponse = fetcher.fetchReposToUpdate(it)
                 updatedRepos.addAll(apiResponse.repos)
             } catch (e: Exception) {
-                logger.error { " $it | $e " }
-                return@forEach
-            }
-
-            val rateLimitRemaining = apiResponse.rateLimit?.remaining
-            if (rateLimitRemaining != null && (rateLimitRemaining % 100 == 0 || rateLimitRemaining < 10)) {
-                logger.info { " Rate Limit: ${apiResponse.rateLimit.remaining} requests remaining" }
+                logger.error { "Update error: $e " }
             }
         }
 
         return updatedRepos
     }
 
-
+    private suspend fun fetchNewRepos(toFetch: Set<Pair<String, Int>>) {
+        val jobs = mutableMapOf<String, Deferred<Set<Repository>>>()
+    }
 }
