@@ -3,6 +3,7 @@ package api
 import com.apollographql.apollo3.api.Optional
 import com.apollographql.apollo3.exception.ApolloHttpException
 import db.MongoManager
+import dev.pablolec.starrylines.type.RateLimit
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -60,9 +61,19 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
             try {
                 apiResponse = fetcher.fetchMostStarredRepos(language, cursor)
             } catch (e: ApolloHttpException) {
+                if ("403" in e.message.orEmpty()) {
+                    logger.error { " 403: Rate limit exceeded" }
+                    break
+                }
                 logger.error { " $language | $e " }
                 continue
             }
+
+            val rateLimitRemaining = apiResponse.rateLimit?.remaining
+            if (rateLimitRemaining != null && (rateLimitRemaining % 100 == 0 || rateLimitRemaining < 20)) {
+                logger.info { " Rate Limit: ${apiResponse.rateLimit.remaining} requests remaining" }
+            }
+            logger.info { "Rate limit: ${apiResponse.rateLimit}" }
 
             repos.addAll(apiResponse.repos)
             if (!apiResponse.hasNextPage) break
@@ -103,9 +114,17 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
                 updatedRepos.addAll(apiResponse.repos)
             } catch (e: Exception) {
                 logger.error { " $it | $e " }
+                return@forEach
+            }
+
+            val rateLimitRemaining = apiResponse.rateLimit?.remaining
+            if (rateLimitRemaining != null && (rateLimitRemaining % 100 == 0 || rateLimitRemaining < 10)) {
+                logger.info { " Rate Limit: ${apiResponse.rateLimit.remaining} requests remaining" }
             }
         }
 
         return updatedRepos
     }
+
+
 }
