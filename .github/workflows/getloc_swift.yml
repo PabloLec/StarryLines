@@ -1,0 +1,17 @@
+name: Get LoC - Swift
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  getloc:
+    uses: PabloLec/StarryLines/.github/workflows/run.yml@main
+    with:
+      args: getloc swift
+    secrets:
+      MONGO_USER: ${{ secrets.MONGO_USER }}
+      MONGO_SECRET: ${{ secrets.MONGO_SECRET }}
+      MONGO_DATABASE: ${{ secrets.MONGO_DATABASE }}
+      MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
