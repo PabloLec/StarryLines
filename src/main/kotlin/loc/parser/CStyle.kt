@@ -16,15 +16,15 @@ fun parseCStyle(reader: BufferedReader): Int {
             isInComment && line!!.contains("*/") -> isInComment = false
             isInComment -> continue
             line!!.startsWith("//") -> continue
-            else -> parsedLength += removeInlineComments(line!!).length
+            else -> parsedLength += removeInlineCommentsCStyle(line!!).length
         }
     }
     return parsedLength
 }
 
-private fun removeInlineComments(line: String): String {
+fun removeInlineCommentsCStyle(line: String): String {
     val start = line.indexOf("/*")
-    val end = line.indexOf("*/")
+    val end = line.lastIndexOf("*/")
     if (start != -1 && end != -1) {
         return line.substring(0, start) + line.substring(end + 2)
     }

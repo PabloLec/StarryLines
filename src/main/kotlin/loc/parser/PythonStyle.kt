@@ -17,13 +17,13 @@ fun parsePythonStyle(reader: BufferedReader): Int {
             line!!.startsWith("\"\"\"") || line!!.startsWith("'''") -> isInComment = true
             isInComment -> continue
             line!!.startsWith("#") -> continue
-            else -> parsedLength += removeInlineComments(line!!).length
+            else -> parsedLength += removeInlineCommentsPythonStyle(line!!).length
         }
     }
     return parsedLength
 }
 
-private fun removeInlineComments(line: String): String {
+fun removeInlineCommentsPythonStyle(line: String): String {
     val delimiter = line.lastIndexOf("#")
     if (delimiter != -1 && (line.substring(0, delimiter).count { it == '"' } % 2) == 0) {
         return line.substring(0, delimiter).trim()
