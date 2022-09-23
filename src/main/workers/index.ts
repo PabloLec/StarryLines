@@ -30,7 +30,7 @@ const SUPPORTED_LANGUAGES = ["javascript",
     "csharp",
     "go",
     "kotlin"
-];
+].map(function(lang) { return lang+"_top" });
 
 const cacheTtl = 7200;
 
@@ -94,10 +94,10 @@ const worker: ExportedHandler<Bindings> = {
         }
     },
     async scheduled(event, env, ctx) {
-        SUPPORTED_LANGUAGES.forEach(async (lang) => {
+        for (const lang of SUPPORTED_LANGUAGES) {
             let kv = await env.StarryLinesTop.get(lang);
-            if (kv) return;
-            login(env.MONGO_API_KEY).then(async (client) => {
+            if (kv) continue;
+            await login(env.MONGO_API_KEY).then(async (client) => {
                return client.db("StarryLines")
                     .collection<Repository>(lang)
                     .find();
@@ -109,7 +109,7 @@ const worker: ExportedHandler<Bindings> = {
             }).then(() => {
                 console.log(`Updated ${lang} top KV.`);
             });
-        })
+        }
     },
 };
 
