@@ -21,16 +21,34 @@ interface Repository extends Document {
 
 let App: Realm.App;
 
+const SUPPORTED_LANGUAGES = ["javascript",
+    "typescript",
+    "java",
+    "python",
+    "c",
+    "cpp",
+    "csharp",
+    "go",
+    "kotlin"
+];
+
+const cacheTtl = 7200;
+
+
 const worker: ExportedHandler<Bindings> = {
     async fetch(req, env) {
         App = App || new Realm.App(env.REALM_APPID);
         const url = new URL(req.url);
         const method = req.method;
         const path = url.pathname.replace(/[/]$/, "");
-        const topID = url.pathname.split("/")[2];
+        const topID = url.pathname.split("/")[2].toLowerCase().trim();
+
+        if (SUPPORTED_LANGUAGES.indexOf(topID) == -1) {
+            return toError("Unsupported language", 400);
+        }
 
         // Try to get KV
-        let kv = await env.StarryLinesTop.get(topID, { cacheTtl: 7200 });
+        let kv = await env.StarryLinesTop.get(topID, {cacheTtl: cacheTtl});
         if (kv) {
             console.log(`KV hit for: ${req.url}.`);
             return reply(JSON.parse(kv));
@@ -67,13 +85,28 @@ const worker: ExportedHandler<Bindings> = {
             let response = reply(data);
 
             await cache.put(cacheKey, response.clone());
-            await env.StarryLinesTop.put(topID, JSON.stringify(data), { expirationTtl: 7200 });
+            await env.StarryLinesTop.put(topID, JSON.stringify(data), {expirationTtl: cacheTtl});
 
             return response;
         } catch (err) {
             const msg = (err as Error).message || "Error with query.";
             return toError(msg, 500);
         }
+    },
+    async scheduled(event, env, ctx) {
+        SUPPORTED_LANGUAGES.forEach(async (lang) => {
+            let kv = await env.StarryLinesTop.get(lang);
+            if (kv) return;
+            login(env.MONGO_API_KEY).then(async (client) => {
+                client.db("StarryLines")
+                    .collection<Repository>(lang)
+                    .find();
+            }).then((data) => {
+                env.StarryLinesTop.put(lang, JSON.stringify(data), {expirationTtl: cacheTtl});
+            }).then(() => {
+                console.log(`Updated ${lang} top KV.`);
+            });
+        })
     },
 };
 
@@ -84,20 +117,20 @@ async function login(token: string) {
 }
 
 const cacheHeaders = {
-    "Cache-Control": "max-age=7200, s-maxage=7200",
+    "Cache-Control": "max-age=cacheTtl, s-maxage=cacheTtl",
 };
 
 function toJSON(data: unknown, status = 200): Response {
-    let headers = { "content-type": "application/json" };
+    let headers = {"content-type": "application/json"};
     if (status == 200) {
-        headers = { ...headers, ...cacheHeaders };
+        headers = {...headers, ...cacheHeaders};
     }
     let body = JSON.stringify(data, null, 2);
-    return new Response(body, { headers, status });
+    return new Response(body, {headers, status});
 }
 
 function toError(error: string | unknown, status = 400): Response {
-    return toJSON({ error }, status);
+    return toJSON({error}, status);
 }
 
 function reply(output: any): Response {
