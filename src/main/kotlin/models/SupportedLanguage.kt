@@ -2,6 +2,7 @@ package models
 
 import loc.parseCStyle
 import loc.parsePythonStyle
+import loc.parser.parseSwiftStyle
 import java.io.BufferedReader
 
 enum class SupportedLanguage {
@@ -40,6 +41,10 @@ enum class SupportedLanguage {
     PYTHON {
         override fun extensions() = setOf(".py", ".pyw")
         override fun commentParser() = ::parsePythonStyle
+    },
+    SWIFT {
+        override fun extensions() = setOf(".swift")
+        override fun commentParser() = ::parseSwiftStyle
     };
 
     abstract fun extensions(): Set<String>
