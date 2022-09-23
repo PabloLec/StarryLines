@@ -49,7 +49,7 @@ internal class ApiManagerTest {
     }
 
     @Test
-    fun testRunWithUpdate() = runTest {
+    fun testRunWithLeftoverUpdate() = runTest {
         apolloClientMocked.enqueueTestResponse(topReposQuery, testDataTopReposQuery)
         apolloClientMocked.enqueueTestResponse(updateQuery, testDataUpdateReposQuery)
         MongoClient.insertOne(repoToInsertBeforeUpdate, "kotlin_test")
