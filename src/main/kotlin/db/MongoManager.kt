@@ -32,7 +32,7 @@ class MongoManager {
         }
     }
 
-    private suspend fun updateLanguage(language: String, repos: Set<Repository>) {
+    suspend fun updateLanguage(language: String, repos: Set<Repository>) {
         val blackList = getBlacklist()
         val jobs = mutableListOf<Deferred<Unit>>()
         coroutineScope {

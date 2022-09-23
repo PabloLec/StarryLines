@@ -1,22 +1,23 @@
 package api
 
 import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.exception.ApolloHttpException
 import db.MongoManager
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import models.ApiResponse
 import models.Repository
 import mu.KotlinLogging
 import java.time.LocalDateTime
 
 const val LIMIT_PER_LANGUAGE = 2000
+const val MINIMUM_STARS = 350
 
 class ApiManager(private val mongoManager: MongoManager, val languages: Set<String>) {
     private val logger = KotlinLogging.logger {}
+    private val minimumStarsFound = mutableMapOf<String, Int>()
 
     suspend fun run() {
-        val languagesMap = fetchTopRepos()
-        mongoManager.updateAll(languagesMap)
+        fetchTopRepos()
 
         val toUpdate = mongoManager
             .getAllRepos(languages)
@@ -24,21 +25,41 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
             .groupBy { it.first }
             .mapValues { it.value.map { it.second } }
 
-        val updatedMap = updateLeftoverRepos(toUpdate)
-        mongoManager.updateAll(updatedMap)
+        coroutineScope {
+            val updatedMap = updateLeftoverRepos(toUpdate)
+            launch {
+                mongoManager.updateAll(updatedMap)
+            }
+            fetchNewRepos()
+        }
     }
 
-    private suspend fun fetchTopRepos(): Map<String, Set<Repository>> {
+    private suspend fun fetchTopRepos() {
         logger.info { "Starting to fetch repositories for languages: $languages" }
-        val results = buildMap {
-            languages.forEach { language ->
-                put(language, fetchLanguage(language))
+        coroutineScope {
+            languages.forEach { lang ->
+                val fetchedRepos = fetchLanguage(lang, null)
+                minimumStarsFound[lang] = fetchedRepos.minOfOrNull { it.stargazers } ?: return@forEach
+                launch {
+                    mongoManager.updateLanguage(lang, fetchedRepos)
+                }
             }
         }
-        return results.entries.associate { it.key to it.value }
     }
 
-    private suspend fun fetchLanguage(language: String): Set<Repository> {
+    private suspend fun fetchNewRepos() {
+        logger.info { "Starting to fetch new repositories with values $minimumStarsFound" }
+        coroutineScope {
+            minimumStarsFound.forEach { (lang, maximumStars) ->
+                val fetchedRepos = fetchLanguage(lang, maximumStars)
+                launch {
+                    mongoManager.updateLanguage(lang, fetchedRepos)
+                }
+            }
+        }
+    }
+
+    private suspend fun fetchLanguage(language: String, maximumStars: Int?): MutableSet<Repository> {
         val fetcher = Fetcher()
         val repos = mutableSetOf<Repository>()
         var cursor = Optional.absent<String>()
@@ -46,14 +67,20 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
         while (repos.size < LIMIT_PER_LANGUAGE) {
             val apiResponse: ApiResponse
             try {
-                apiResponse = fetcher.fetchMostStarredRepos(language, cursor)
-            } catch (e: ApolloHttpException) {
+                apiResponse = fetcher.fetchMostStarredRepos(language, cursor, maximumStars)
+            } catch (e: Exception) {
                 if ("403" in e.message.orEmpty()) {
                     logger.error { " 403: Rate limit exceeded" }
                     break
                 }
                 logger.error { " $language | $e " }
-                continue
+                return mutableSetOf()
+            }
+
+            if (apiResponse.repos.any { it.stargazers < MINIMUM_STARS }) {
+                logger.warn { "Found repo with < $MINIMUM_STARS stars" }
+                mongoManager.updateLanguage(language, repos)
+                return repos
             }
 
             repos.addAll(apiResponse.repos)
@@ -91,9 +118,5 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
         }
 
         return updatedRepos
-    }
-
-    private suspend fun fetchNewRepos(toFetch: Set<Pair<String, Int>>) {
-        val jobs = mutableMapOf<String, Deferred<Set<Repository>>>()
     }
 }
