@@ -1,5 +1,6 @@
-package loc
+package loc.parser
 
+import loc.parser.removeInlineCommentsShellStyle
 import java.io.BufferedReader
 
 fun parsePythonStyle(reader: BufferedReader): Int {
@@ -17,16 +18,8 @@ fun parsePythonStyle(reader: BufferedReader): Int {
             line!!.startsWith("\"\"\"") || line!!.startsWith("'''") -> isInComment = true
             isInComment -> continue
             line!!.startsWith("#") -> continue
-            else -> parsedLength += removeInlineCommentsPythonStyle(line!!).length
+            else -> parsedLength += removeInlineCommentsShellStyle(line!!).length
         }
     }
     return parsedLength
-}
-
-fun removeInlineCommentsPythonStyle(line: String): String {
-    val delimiter = line.lastIndexOf("#")
-    if (delimiter != -1 && (line.substring(0, delimiter).count { it == '"' } % 2) == 0) {
-        return line.substring(0, delimiter).trim()
-    }
-    return line.trim()
 }

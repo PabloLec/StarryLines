@@ -1,8 +1,6 @@
 package models
 
-import loc.parseCStyle
-import loc.parsePythonStyle
-import loc.parser.parseSwiftStyle
+import loc.parser.*
 import java.io.BufferedReader
 
 enum class SupportedLanguage {
@@ -49,6 +47,10 @@ enum class SupportedLanguage {
     SWIFT {
         override fun extensions() = setOf(".swift")
         override fun commentParser() = ::parseSwiftStyle
+    },
+    SHELL {
+        override fun extensions() = setOf(".sh", ".bash", ".zsh", ".fish", ".ksh", ".csh", ".tcsh")
+        override fun commentParser() = ::parseShellStyle
     };
 
     abstract fun extensions(): Set<String>

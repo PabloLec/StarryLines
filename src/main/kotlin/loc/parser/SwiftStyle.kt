@@ -1,6 +1,5 @@
 package loc.parser
 
-import loc.removeInlineCommentsCStyle
 import java.io.BufferedReader
 
 fun parseSwiftStyle(reader: BufferedReader): Int {

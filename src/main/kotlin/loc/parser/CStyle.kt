@@ -1,4 +1,4 @@
-package loc
+package loc.parser
 
 import java.io.BufferedReader
 
