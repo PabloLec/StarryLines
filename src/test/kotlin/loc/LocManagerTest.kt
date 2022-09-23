@@ -25,7 +25,7 @@ internal class LocManagerTest {
 
         locManager.run()
         var allRepos = mongoManager.getAllRepos(setOf("c_test", "python_test")).map { it.second }
-        if (allRepos.any { it.loc == null }) {
+        while (allRepos.any { it.loc == null }) {
             // Hacky way to ensure MongoDB has time to update the documents
             allRepos = mongoManager.getAllRepos(setOf("c_test", "python_test")).map { it.second }
         }
