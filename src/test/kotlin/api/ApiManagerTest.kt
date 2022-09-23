@@ -7,10 +7,7 @@ import db.MongoClient
 import db.MongoManager
 import dev.pablolec.starrylines.GetTopReposQuery
 import dev.pablolec.starrylines.UpdateReposQuery
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.mockkObject
-import io.mockk.unmockkAll
+import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll

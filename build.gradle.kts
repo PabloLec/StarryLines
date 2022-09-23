@@ -59,7 +59,7 @@ val excluded = setOf(
     "dev/pablolec/starrylines/adapter/",
     "dev/pablolec/starrylines/selections/",
     "dev/pablolec/starrylines/*Query*",
-    "cli/InterfaceKt",
+    "cli/Interface*",
     "models/SupportedLanguage*"
 )
 
