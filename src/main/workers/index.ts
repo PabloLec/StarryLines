@@ -98,10 +98,13 @@ const worker: ExportedHandler<Bindings> = {
             let kv = await env.StarryLinesTop.get(lang);
             if (kv) return;
             login(env.MONGO_API_KEY).then(async (client) => {
-                client.db("StarryLines")
+               return client.db("StarryLines")
                     .collection<Repository>(lang)
                     .find();
             }).then((data) => {
+                data.forEach(function (v) {
+                    delete v._id;
+                });
                 env.StarryLinesTop.put(lang, JSON.stringify(data), {expirationTtl: cacheTtl});
             }).then(() => {
                 console.log(`Updated ${lang} top KV.`);
