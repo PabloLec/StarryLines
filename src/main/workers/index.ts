@@ -94,9 +94,13 @@ const worker: ExportedHandler<Bindings> = {
         }
     },
     async scheduled(event, env, ctx) {
+        App = App || new Realm.App(env.REALM_APPID);
         for (const lang of SUPPORTED_LANGUAGES) {
             let kv = await env.StarryLinesTop.get(lang);
-            if (kv) continue;
+            if (kv) {
+                console.log(`KV existing for: ${lang}.`);
+                continue;
+            }
             await login(env.MONGO_API_KEY).then(async (client) => {
                return client.db("StarryLines")
                     .collection<Repository>(lang)
