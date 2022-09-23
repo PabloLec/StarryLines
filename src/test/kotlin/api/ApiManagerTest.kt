@@ -16,22 +16,16 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.apolloClientMocked
-import test.mocks.repoToInsertBeforeUpdate
-import test.mocks.testDataTopReposQuery
-import test.mocks.testDataUpdateReposQuery
+import test.mocks.*
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class, ApolloExperimental::class)
 internal class ApiManagerTest {
-    private var apiManager: ApiManager
     private val mongoManager = MongoManager()
-    private val topReposQuery = GetTopReposQuery("sort:stars stars:>1 language:kotlin_test", Optional.absent())
     private val updateQuery = UpdateReposQuery(listOf("testId"))
 
     init {
-        apiManager = ApiManager(mongoManager, setOf("kotlin_test"))
         mockkObject(GraphQLClient)
         every { GraphQLClient.getClient() } returns apolloClientMocked
         MockKAnnotations.init(this, relaxUnitFun = true)
@@ -39,22 +33,21 @@ internal class ApiManagerTest {
 
     @Test
     fun testSimpleRun() = runTest {
-        apolloClientMocked.enqueueTestResponse(topReposQuery, testDataTopReposQuery)
+        apolloClientMocked.enqueueTestResponse(getTopQuery("kotlin_test"), testDataTopReposQuery)
 
-        apiManager.run()
-
+        ApiManager(mongoManager, setOf("kotlin_test")).run()
         val allRepos = mongoManager.getAllRepos(setOf("kotlin_test")).map { it.second.name }
 
         assertContains(allRepos, "Repo1")
     }
 
     @Test
-    fun testRunWithLeftoverUpdate() = runTest {
-        apolloClientMocked.enqueueTestResponse(topReposQuery, testDataTopReposQuery)
+    fun testRunWithUpdate() = runTest {
+        apolloClientMocked.enqueueTestResponse(getTopQuery("kotlin_test"), testDataTopReposQuery)
         apolloClientMocked.enqueueTestResponse(updateQuery, testDataUpdateReposQuery)
         MongoClient.insertOne(repoToInsertBeforeUpdate, "kotlin_test")
 
-        apiManager.run()
+        ApiManager(mongoManager, setOf("kotlin_test")).run()
         val allRepos = mongoManager.getAllRepos(setOf("kotlin_test")).map { it.second }
         val updatedRepo = allRepos.find { it.name == "repo_to_update" }!!
 
@@ -62,6 +55,18 @@ internal class ApiManagerTest {
         assert(updatedRepo.githubUpdateDate != repoToInsertBeforeUpdate.githubUpdateDate)
     }
 
+    @Test
+    fun testRunWithFewStars() = runTest {
+        apolloClientMocked.enqueueTestResponse(getTopQuery("java_test"), testDataFewStars)
+
+        ApiManager(mongoManager, setOf("java_test")).run()
+
+        val allRepos = mongoManager.getAllRepos(setOf("java_test")).map { it.second.name }
+
+        assert(allRepos.isEmpty())
+    }
+
+    private fun getTopQuery(language: String) = GetTopReposQuery("sort:stars stars:>1 language:$language", Optional.absent())
     companion object {
         @JvmStatic
         @BeforeAll

@@ -25,10 +25,41 @@ val testEdgeNewRepo = GetTopReposQuery.Edge(
         onRepository = GetTopReposQuery.OnRepository(
             id = "MDEwOlJlcG9zaXRvcnkxMjM0NTY3ODk=",
             name = "Repo1",
-            description = "Description1",
+            description = "Description",
             createdAt = "2021-01-01T00:00:00Z",
             stargazers = GetTopReposQuery.Stargazers(
                 totalCount = 10000
+            ),
+            url = "",
+            defaultBranchRef = GetTopReposQuery.DefaultBranchRef(
+                name = "main"
+            ),
+            languages = GetTopReposQuery.Languages(
+                totalSize = 1,
+                edges = listOf(
+                    GetTopReposQuery.Edge1(
+                        size = 1,
+                        node = GetTopReposQuery.Node1(
+                            name = "Kotlin"
+                        )
+                    )
+                )
+            ),
+            diskUsage = 1
+        )
+    )
+)
+
+val testEdgeRepoWithFewStars = GetTopReposQuery.Edge(
+    node = GetTopReposQuery.Node(
+        __typename = "Repository",
+        onRepository = GetTopReposQuery.OnRepository(
+            id = "MDEwOlJlcG9zaXRvcnkxMjM0NTY3ODk=",
+            name = "ShouldNotBePresent",
+            description = "Description",
+            createdAt = "2021-01-01T00:00:00Z",
+            stargazers = GetTopReposQuery.Stargazers(
+                totalCount = 100
             ),
             url = "",
             defaultBranchRef = GetTopReposQuery.DefaultBranchRef(
@@ -56,7 +87,7 @@ val testNodeRepoToUpdate = listOf(
         onRepository = UpdateReposQuery.OnRepository(
             id = "MDEwOlJlcG9zaXRvcnkxMjM0NTY3ODk=",
             name = "repo_to_update",
-            description = "Description1",
+            description = "Description",
             createdAt = "2021-01-01T00:00:00Z",
             stargazers = UpdateReposQuery.Stargazers(
                 totalCount = 20000
@@ -97,8 +128,8 @@ val repoToInsertBeforeUpdate = models.Repository(
     null
 )
 
-val testSearchTopRepos = GetTopReposQuery.Search(testPageInfo, 10, listOf(testEdgeNewRepo))
+val testDataTopReposQuery = GetTopReposQuery.Data(GetTopReposQuery.Search(testPageInfo, 10, listOf(testEdgeNewRepo)), null)
 
-val testDataTopReposQuery = GetTopReposQuery.Data(testSearchTopRepos, null)
+val testDataFewStars = GetTopReposQuery.Data(GetTopReposQuery.Search(testPageInfo, 10, listOf(testEdgeRepoWithFewStars)), null)
 
 val testDataUpdateReposQuery = UpdateReposQuery.Data(testNodeRepoToUpdate)
