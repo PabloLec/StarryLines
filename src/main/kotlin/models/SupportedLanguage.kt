@@ -38,6 +38,10 @@ enum class SupportedLanguage {
         override fun extensions() = setOf(".go", ".golang")
         override fun commentParser() = ::parseCStyle
     },
+    RUST {
+        override fun extensions() = setOf(".rs")
+        override fun commentParser() = ::parseCStyle
+    },
     PYTHON {
         override fun extensions() = setOf(".py", ".pyw")
         override fun commentParser() = ::parsePythonStyle
