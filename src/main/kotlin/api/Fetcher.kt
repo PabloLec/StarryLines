@@ -11,14 +11,19 @@ class Fetcher {
     private val logger = KotlinLogging.logger {}
     private val client = GraphQLClient.getClient()
 
-    suspend fun fetchMostStarredRepos(language: String, cursor: Optional<String>): ApiResponse {
-        val query = "sort:stars stars:>1 language:${language.trim().lowercase()}"
+    suspend fun fetchMostStarredRepos(language: String, cursor: Optional<String>, maximumStars: Int?): ApiResponse {
+        val starsOperator = if (maximumStars != null) "<$maximumStars" else ">1"
+        val query = "sort:stars stars:$starsOperator language:${language.trim().lowercase()}"
         val response = client.query(GetTopReposQuery(query, cursor)).execute()
         if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
 
         val fetchedRepos = mutableSetOf<Repository>()
         for (edge in response.data?.search?.edges!!) {
-            fetchedRepos.add(Repository.fromEdge(edge!!))
+            try {
+                fetchedRepos.add(Repository.fromEdge(edge!!))
+            } catch (e: Exception) {
+                logger.error { "Error while parsing edge $edge: ${e.message}" }
+            }
         }
 
         return ApiResponse(
@@ -35,7 +40,11 @@ class Fetcher {
 
         val fetchedRepos = mutableSetOf<Repository>()
         for (node in response.data?.nodes!!) {
-            fetchedRepos.add(Repository.fromNode(node!!))
+            try {
+                fetchedRepos.add(Repository.fromNode(node!!))
+            } catch (e: Exception) {
+                logger.error { "Error while parsing node $node: ${e.message}" }
+            }
         }
 
         return ApiResponse(

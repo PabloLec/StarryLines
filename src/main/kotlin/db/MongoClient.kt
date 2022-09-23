@@ -31,36 +31,36 @@ object MongoClient {
     suspend fun insertOne(repo: Repository, collectionName: String) = coroutineScope {
         val col = database.getCollection<Repository>(collectionName)
         col.insertOne(repo)
-        logger.info { "Inserted $repo into $collectionName" }
+        logger.debug { "Inserted $repo into $collectionName" }
     }
 
     suspend fun insertOneToBlacklist(url: String, reason: String?) = coroutineScope {
         val col = database.getCollection<BlacklistUrl>("blacklist")
         col.insertOne(BlacklistUrl(url, reason))
-        logger.info { "Inserted $url into blacklist" }
+        logger.debug { "Inserted $url into blacklist" }
     }
 
     suspend fun insertMany(repos: List<TopRepository>, collectionName: String) = coroutineScope {
         val col = database.getCollection<TopRepository>(collectionName)
         col.insertMany(repos)
-        logger.info { "Inserted ${repos.size} repos into $collectionName" }
+        logger.debug { "Inserted ${repos.size} repos into $collectionName" }
     }
 
     suspend fun deleteCollection(collectionName: String) = coroutineScope {
         database.getCollection<TopRepository>(collectionName).drop()
-        logger.info { "Deleted collection $collectionName" }
+        logger.debug { "Deleted collection $collectionName" }
     }
 
     suspend fun deleteMany(repos: List<Repository>, collectionName: String) = coroutineScope {
         val col = database.getCollection<Repository>(collectionName)
         val result = col.deleteMany(Repository::url `in` repos.map { it.url }.toSet())
-        logger.info { "Removed $result from $collectionName" }
+        logger.debug { "Removed $result from $collectionName" }
     }
 
     suspend fun deleteManyByUrl(urls: List<String>, collectionName: String) = coroutineScope {
         val col = database.getCollection<Repository>(collectionName)
         val result = col.deleteMany(Repository::url `in` urls.toSet())
-        logger.info { "Removed $result from $collectionName" }
+        logger.debug { "Removed $result from $collectionName" }
     }
 
     suspend fun upsertFromGHApi(repository: Repository, language: String) {
@@ -88,7 +88,7 @@ object MongoClient {
                     upsert()
                 )
                 session.commitTransaction()
-                logger.info("Upserted $repository to $language")
+                logger.debug("Upserted $repository to $language")
             }
         }
     }
@@ -108,7 +108,7 @@ object MongoClient {
                     upsert()
                 )
                 session.commitTransaction()
-                logger.info("Updated $repository to $language")
+                logger.debug("Updated $repository to $language")
             }
         }
     }

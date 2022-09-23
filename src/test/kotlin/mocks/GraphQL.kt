@@ -28,7 +28,7 @@ val testEdgeNewRepo = GetTopReposQuery.Edge(
             description = "Description1",
             createdAt = "2021-01-01T00:00:00Z",
             stargazers = GetTopReposQuery.Stargazers(
-                totalCount = 100
+                totalCount = 10000
             ),
             url = "",
             defaultBranchRef = GetTopReposQuery.DefaultBranchRef(
