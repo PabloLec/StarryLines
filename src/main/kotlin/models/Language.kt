@@ -3,6 +3,7 @@ package models
 import loc.parser.parseCStyle
 import loc.parser.parsePowershellStyle
 import loc.parser.parsePythonStyle
+import loc.parser.parseRubyStyle
 import loc.parser.parseShellStyle
 import loc.parser.parseSwiftStyle
 import java.io.BufferedReader
@@ -58,7 +59,7 @@ enum class Language {
     },
     RUBY {
         override fun extensions() = setOf(".rb", ".rbw")
-        override fun commentParser() = ::parseShellStyle
+        override fun commentParser() = ::parseRubyStyle
     },
     PHP {
         override fun extensions() = setOf(".php", ".php3", ".php4", ".php5", ".php7", ".phtml")

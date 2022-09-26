@@ -35,7 +35,8 @@ const SUPPORTED_LANGUAGES = ["javascript",
     "shell",
     "php",
     "scala",
-    "powershell"
+    "powershell",
+    "ruby",
 ].map(function(lang) { return lang+"_top" });
 
 const cacheTtl = 7200;

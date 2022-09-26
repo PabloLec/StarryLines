@@ -3,6 +3,7 @@ package loc
 import loc.parser.parseCStyle
 import loc.parser.parsePowershellStyle
 import loc.parser.parsePythonStyle
+import loc.parser.parseRubyStyle
 import loc.parser.parseShellStyle
 import loc.parser.parseSwiftStyle
 import org.junit.jupiter.api.Test
@@ -48,5 +49,13 @@ internal class ParserTest {
             ?.let { parseSwiftStyle(it) }
 
         assertEquals(77, result)
+    }
+
+    @Test
+    fun testParseRubyStyle() {
+        val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.rb")?.bufferedReader()
+            ?.let { parseRubyStyle(it) }
+
+        assertEquals(39, result)
     }
 }
