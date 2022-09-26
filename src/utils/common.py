@@ -32,13 +32,13 @@ def current_blacklist():
     return set([repo["url"] for repo in c.find({})])
 
 
-def add_to_blacklist(urls: set):
+def add_to_blacklist(urls: set, reason: str):
     c = db["blacklist"]
     current = current_blacklist()
     count = 0
     for url in urls:
         if url not in current:
-            c.insert_one({"url": url, "reason": "NOT RELEVANT"})
+            c.insert_one({"url": url, "reason": reason})
             print(f" - Added {url} to blacklist")
             count += 1
         else:

@@ -24,7 +24,7 @@ def get_repos_to_blacklist(coll_name: str):
 
 def main():
     for lang in LANGS:
-        add_to_blacklist(get_repos_to_blacklist(lang))
+        add_to_blacklist(get_repos_to_blacklist(lang), "NOT RELEVANT")
 
 
 main()
