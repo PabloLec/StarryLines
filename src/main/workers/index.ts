@@ -29,7 +29,10 @@ const SUPPORTED_LANGUAGES = ["javascript",
     "cpp",
     "csharp",
     "go",
-    "kotlin"
+    "kotlin",
+    "rust",
+    "swift",
+    "shell"
 ].map(function(lang) { return lang+"_top" });
 
 const cacheTtl = 7200;
