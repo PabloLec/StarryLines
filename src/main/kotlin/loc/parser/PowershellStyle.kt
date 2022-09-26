@@ -2,7 +2,7 @@ package loc.parser
 
 import java.io.BufferedReader
 
-fun parsePythonStyle(reader: BufferedReader): Int {
+fun parsePowershellStyle(reader: BufferedReader): Int {
     var line: String?
     var parsedLength = 0
 
@@ -11,10 +11,9 @@ fun parsePythonStyle(reader: BufferedReader): Int {
         line = line!!.trim()
         when {
             line!!.isEmpty() -> continue
-            isInComment && (line!!.contains("\"\"\"") || line!!.contains("'''")) -> isInComment = false
-            line!!.startsWith("\"\"\"") && line!!.endsWith("\"\"\"") -> continue
-            line!!.startsWith("'''") && line!!.endsWith("'''") -> continue
-            line!!.startsWith("\"\"\"") || line!!.startsWith("'''") -> isInComment = true
+            line!!.startsWith("<#") && line!!.endsWith("#>") -> continue
+            isInComment && line!!.contains("#>") -> isInComment = false
+            line!!.startsWith("<#") -> isInComment = true
             isInComment -> continue
             line!!.startsWith("#") -> continue
             else -> parsedLength += removeInlineCommentsShellStyle(line!!).length

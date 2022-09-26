@@ -16,12 +16,10 @@ fun parseShellStyle(reader: BufferedReader): Int {
                 commentMarker = line!!.substring(line!!.indexOf("<<") + 2).trim().replace("'", "")
                 isInComment = true
             }
-
             isInComment && line!! == commentMarker -> {
                 isInComment = false
                 commentMarker = null
             }
-
             line!!.startsWith(":") && line!!.endsWith("'") && line!!.count { it == '\'' } % 2 == 0 -> continue
             isInComment && (line!!.contains("'")) -> isInComment = false
             line!!.startsWith(":") -> isInComment = true
