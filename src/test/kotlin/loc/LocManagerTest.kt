@@ -39,12 +39,11 @@ internal class LocManagerTest {
 
     @Test
     fun testFail() = runTest {
+        // Test that the LocManager doesn't crash when it can't find a repo
         val locManager = LocManager(mongoManager, setOf(Language.PYTHON))
         MongoClient.insertOne(pythonRepo, "python")
 
         locManager.run()
-
-        assert(mongoManager.getBlacklist().contains("pythonRepo"))
     }
 
     companion object {

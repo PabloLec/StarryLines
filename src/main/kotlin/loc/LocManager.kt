@@ -30,7 +30,7 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Lang
         try {
             count = GitCount(language, repo).run()
         } catch (e: Exception) {
-            return mongoManager.addToBlacklist(repo, e.message)
+            return
         }
         repo.loc = count
         repo.locUpdateDate = LocalDateTime.now(ZoneOffset.UTC)

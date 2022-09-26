@@ -20,12 +20,10 @@ internal class TopManagerTest {
     fun testRun() = runTest {
         MongoClient.insertOne(javaRepo.copy().also { it.loc = 1500; it.milliStarsPerLine = 8500 }, "kotlin")
         MongoClient.insertOne(pythonRepo.copy().also { it.loc = 3500; it.milliStarsPerLine = 15800 }, "kotlin")
-        MongoClient.insertOne(blacklistRepo.copy().also { it.loc = 0; it.milliStarsPerLine = 0 }, "kotlin")
         TopManager(mongoManager, setOf(Language.KOTLIN)).run()
 
         val top = MongoClient.getTopCollection("kotlin_top")
         assert(listOf("pythonRepo", "javaRepo").all { it in top.map { it.name } })
-        assert("blacklistRepo" !in top.map { it.name })
         assert(top.find { it.name == "pythonRepo" }?.score!! > top.find { it.name == "javaRepo" }?.score!!)
     }
 
