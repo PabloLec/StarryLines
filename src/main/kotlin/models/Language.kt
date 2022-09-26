@@ -42,7 +42,11 @@ enum class Language {
         override fun commentParser() = ::parseCStyle
     },
     RUST {
-        override fun extensions() = setOf(".rs")
+        override fun extensions() = setOf(".rs", ".rust")
+        override fun commentParser() = ::parseCStyle
+    },
+    DART {
+        override fun extensions() = setOf(".dart", ".dartlang", ".dart-lang")
         override fun commentParser() = ::parseCStyle
     },
     PYTHON {
