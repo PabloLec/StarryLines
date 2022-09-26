@@ -80,7 +80,6 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Lang
 
             if (apiResponse.repos.any { it.stargazers < MINIMUM_STARS }) {
                 logger.warn { "Found repo with < $MINIMUM_STARS stars" }
-                mongoManager.updateLanguage(language, repos)
                 return repos
             }
 
