@@ -1,13 +1,13 @@
 package cli
 
-import models.SupportedLanguage
+import models.Language
 
 enum class Action {
     FETCH, // Fetch GH API
     GETLOC, // Get LoC for stored repos
     TOP; // Create Top 100
 
-    val args: MutableSet<String> = mutableSetOf()
+    val args: MutableSet<Language> = mutableSetOf()
 }
 
 fun parseArgs(args: Array<String>): Action {
@@ -33,15 +33,13 @@ fun parseArgs(args: Array<String>): Action {
 fun parseAction(action: Action, args: Array<String>): Action {
     if (args.size < 2) throw IllegalArgumentException("No language specified")
     if (args[1] == "all") {
-        action.args.addAll(SupportedLanguage.values().map { it.name.lowercase() })
+        action.args.addAll(Language.values())
         return action
     }
     args.drop(1).forEach {
-        val language = it.lowercase().trim()
-        if (language !in SupportedLanguage.values().map { it.name.lowercase() }) {
-            throw IllegalArgumentException("Unsupported language: $language")
-        }
-        action.args.add(language)
+        Language.find(it.trim().lowercase())?.let { lang ->
+            action.args.add(lang)
+        } ?: throw IllegalArgumentException("Unsupported language: $it")
     }
     return action
 }

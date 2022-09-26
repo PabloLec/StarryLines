@@ -2,12 +2,12 @@ package loc
 
 import com.github.syari.kgit.KGit
 import models.Repository
-import models.SupportedLanguage
+import models.Language
 import mu.KotlinLogging
 import java.io.File
 import java.util.*
 
-class GitCount(val language: String, val repo: Repository) {
+class GitCount(val language: Language, val repo: Repository) {
     private val logger = KotlinLogging.logger {}
     private var lineCount = 0
     private val directory = getTmpDirectory()
@@ -41,9 +41,9 @@ class GitCount(val language: String, val repo: Repository) {
 
     private fun count() {
         logger.info { "Counting lines of code for ${repo.name}" }
-        val languageString = language.uppercase().split("_").first()
-        val extensions = SupportedLanguage.valueOf(languageString).extensions()
-        val parser = SupportedLanguage.valueOf(languageString).commentParser()
+        val languageString = language.toString().uppercase()
+        val extensions = Language.valueOf(languageString).extensions()
+        val parser = Language.valueOf(languageString).commentParser()
         directory.walk().forEach { file ->
             if (extensions.none { extension -> file.name.lowercase().endsWith(extension) }) {
                 return@forEach

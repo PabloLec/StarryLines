@@ -1,9 +1,12 @@
 package models
 
-import loc.parser.*
+import loc.parser.parseCStyle
+import loc.parser.parsePythonStyle
+import loc.parser.parseShellStyle
+import loc.parser.parseSwiftStyle
 import java.io.BufferedReader
 
-enum class SupportedLanguage {
+enum class Language {
     JAVASCRIPT {
         override fun extensions() = setOf(".js", ".jsx")
         override fun commentParser() = ::parseCStyle
@@ -55,4 +58,10 @@ enum class SupportedLanguage {
 
     abstract fun extensions(): Set<String>
     abstract fun commentParser(): (BufferedReader) -> Int
+
+    override fun toString() = name.lowercase()
+
+    companion object {
+        fun find(value: String): Language? = Language.values().find { it.toString() == value }
+    }
 }

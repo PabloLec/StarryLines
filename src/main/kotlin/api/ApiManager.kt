@@ -6,15 +6,16 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import models.ApiResponse
 import models.Repository
+import models.Language
 import mu.KotlinLogging
 import java.time.LocalDateTime
 
 const val LIMIT_PER_LANGUAGE = 2000
 const val MINIMUM_STARS = 350
 
-class ApiManager(private val mongoManager: MongoManager, val languages: Set<String>) {
+class ApiManager(private val mongoManager: MongoManager, val languages: Set<Language>) {
     private val logger = KotlinLogging.logger {}
-    private val minimumStarsFound = mutableMapOf<String, Int>()
+    private val minimumStarsFound = mutableMapOf<Language, Int>()
 
     suspend fun run() {
         fetchTopRepos()
@@ -59,7 +60,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
         }
     }
 
-    private suspend fun fetchLanguage(language: String, maximumStars: Int?): MutableSet<Repository> {
+    private suspend fun fetchLanguage(language: Language, maximumStars: Int?): MutableSet<Repository> {
         val fetcher = Fetcher()
         val repos = mutableSetOf<Repository>()
         var cursor = Optional.absent<String>()
@@ -92,7 +93,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Stri
         return repos
     }
 
-    private suspend fun updateLeftoverRepos(toUpdate: Map<String, List<Repository>>): Map<String, Set<Repository>> {
+    private suspend fun updateLeftoverRepos(toUpdate: Map<Language, List<Repository>>): Map<Language, Set<Repository>> {
         logger.info { "Starting to update repositories for languages: $languages with ${toUpdate.flatMap { it.value }.size} repos" }
         val results = buildMap {
             toUpdate.forEach { (lang, repos) ->

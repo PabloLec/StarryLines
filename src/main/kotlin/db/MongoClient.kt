@@ -4,9 +4,17 @@ import com.mongodb.client.MongoDatabase
 import kotlinx.coroutines.coroutineScope
 import models.BlacklistUrl
 import models.Repository
+import models.Language
 import models.TopRepository
 import mu.KotlinLogging
-import org.litote.kmongo.*
+import org.litote.kmongo.KMongo
+import org.litote.kmongo.SetTo
+import org.litote.kmongo.eq
+import org.litote.kmongo.findOne
+import org.litote.kmongo.getCollection
+import org.litote.kmongo.`in`
+import org.litote.kmongo.set
+import org.litote.kmongo.upsert
 
 object MongoClient {
     private val user = System.getenv("MONGO_USER")!!
@@ -57,9 +65,9 @@ object MongoClient {
         logger.debug { "Removed $result from $collectionName" }
     }
 
-    suspend fun upsertFromGHApi(repository: Repository, language: String) {
+    suspend fun upsertFromGHApi(repository: Repository, language: Language) {
         coroutineScope {
-            val col = database.getCollection<Repository>(language)
+            val col = database.getCollection<Repository>(language.toString())
             client.startSession().use { session ->
                 session.startTransaction()
                 col.findOne(Repository::url eq repository.url)?.let {
@@ -87,9 +95,9 @@ object MongoClient {
         }
     }
 
-    suspend fun updateFromLoc(repository: Repository, language: String) {
+    suspend fun updateFromLoc(repository: Repository, language: Language) {
         coroutineScope {
-            val col = database.getCollection<Repository>(language)
+            val col = database.getCollection<Repository>(language.toString())
             client.startSession().use { session ->
                 session.startTransaction()
                 col.updateOne(

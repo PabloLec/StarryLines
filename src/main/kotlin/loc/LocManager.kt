@@ -6,11 +6,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import models.Repository
+import models.Language
 import java.io.File
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
-class LocManager(private val mongoManager: MongoManager, val languages: Set<String>) {
+class LocManager(private val mongoManager: MongoManager, val languages: Set<Language>) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun run() {
         clearLocDir()
@@ -24,7 +25,7 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Stri
         }
     }
 
-    private suspend fun updateLocCount(repo: Repository, language: String) {
+    private suspend fun updateLocCount(repo: Repository, language: Language) {
         val count: Int
         try {
             count = GitCount(language, repo).run()

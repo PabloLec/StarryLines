@@ -2,7 +2,7 @@ package test.cli
 
 import cli.Action
 import cli.parseArgs
-import models.SupportedLanguage
+import models.Language
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -20,13 +20,19 @@ internal class CLITest {
 
     @Test
     fun testParseFetch() {
-        val expected = Action.FETCH.also { it.args.addAll(setOf("javascript", "java", "kotlin")) }
+        val expected = Action.FETCH.also {
+            it.args.addAll(
+                setOf(Language.JAVASCRIPT, Language.JAVA, Language.KOTLIN)
+            )
+        }
+
         assertEquals(expected, parseArgs(arrayOf("fetch", "javascript", "java", "kotlin")))
     }
 
     @Test
     fun testParseFetchAll() {
-        val expected = Action.FETCH.also { it.args.addAll(SupportedLanguage.values().map { it.name.lowercase() }) }
+        val expected = Action.FETCH.also { it.args.addAll(Language.values()) }
+
         assertEquals(expected, parseArgs(arrayOf("fetch", "all")))
     }
 
@@ -42,13 +48,18 @@ internal class CLITest {
 
     @Test
     fun testParseGetLoc() {
-        val expected = Action.GETLOC.also { it.args.addAll(setOf("javascript", "java", "kotlin")) }
+        val expected = Action.GETLOC.also {
+            it.args.addAll(
+                setOf(Language.JAVASCRIPT, Language.JAVA, Language.KOTLIN)
+            )
+        }
+
         assertEquals(expected, parseArgs(arrayOf("getloc", "javascript", "java", "kotlin")))
     }
 
     @Test
     fun testParseGetLocAll() {
-        val expected = Action.GETLOC.also { it.args.addAll(SupportedLanguage.values().map { it.name.lowercase() }) }
+        val expected = Action.GETLOC.also { it.args.addAll(Language.values()) }
         assertEquals(expected, parseArgs(arrayOf("getloc", "all")))
     }
 
@@ -64,13 +75,17 @@ internal class CLITest {
 
     @Test
     fun testParseTop() {
-        val expected = Action.TOP.also { it.args.addAll(setOf("javascript", "java", "kotlin")) }
+        val expected = Action.TOP.also {
+            it.args.addAll(
+                setOf(Language.JAVASCRIPT, Language.JAVA, Language.KOTLIN)
+            )
+        }
         assertEquals(expected, parseArgs(arrayOf("top", "javascript", "java", "kotlin")))
     }
 
     @Test
     fun testParseTopAll() {
-        val expected = Action.TOP.also { it.args.addAll(SupportedLanguage.values().map { it.name.lowercase() }) }
+        val expected = Action.TOP.also { it.args.addAll(Language.values()) }
         assertEquals(expected, parseArgs(arrayOf("top", "all")))
     }
 

@@ -1,7 +1,12 @@
 package db
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import models.Repository
+import models.Language
 import models.TopRepository
 import mu.KotlinLogging
 
@@ -14,10 +19,10 @@ class MongoManager {
 
     fun getBlacklist(): List<String> = MongoClient.getBlacklistCollection()
 
-    suspend fun updateLoc(repo: Repository, language: String) =
+    suspend fun updateLoc(repo: Repository, language: Language) =
         coroutineScope { MongoClient.updateFromLoc(repo, language) }
 
-    suspend fun updateAll(languagesMap: Map<String, Set<Repository>>) {
+    suspend fun updateAll(languagesMap: Map<Language, Set<Repository>>) {
         logger.info { "Starting updateAll" }
         val jobs = mutableListOf<Deferred<Unit>>()
         coroutineScope {
@@ -32,7 +37,7 @@ class MongoManager {
         }
     }
 
-    suspend fun updateLanguage(language: String, repos: Set<Repository>) {
+    suspend fun updateLanguage(language: Language, repos: Set<Repository>) {
         val blackList = getBlacklist()
         val jobs = mutableListOf<Deferred<Unit>>()
         coroutineScope {
@@ -76,7 +81,8 @@ class MongoManager {
         }
     }
 
-    fun getAllRepos(languages: Set<String>) = languages.map { Pair(it, MongoClient.getCollection(it)) }
-        .flatMap { it.second.map { repo -> Pair(it.first, repo) } }
-        .sortedBy { it.second.locUpdateDate }
+    fun getAllRepos(languages: Set<Language>) =
+        languages.map { Pair(it, MongoClient.getCollection(it.toString())) }
+            .flatMap { it.second.map { repo -> Pair(it.first, repo) } }
+            .sortedBy { it.second.locUpdateDate }
 }
