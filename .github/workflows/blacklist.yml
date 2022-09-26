@@ -1,0 +1,22 @@
+name: Update blacklist
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 9 * * *"
+
+jobs:
+  update-blacklist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+          working-directory: ./src/utils
+          run: |
+            python3 -m pip install --upgrade pip
+            pip install -r requirements.txt
+      - working-directory: ./src/utils
+        run: |
+          python3 blacklist_by_word.py
