@@ -1,11 +1,12 @@
 package top
 
 import db.MongoClient
+import models.Language
 import models.TopRepository
 
 class TopFactory {
-    fun createTop(language: String) =
-        MongoClient.getCollection(language)
+    fun createTop(language: Language) =
+        MongoClient.getCollection(language.toString())
             .asSequence()
             .map { TopRepository.fromRepository(it) }
             .filterNot { it.loc == null || it.milliStarsPerLine == null }

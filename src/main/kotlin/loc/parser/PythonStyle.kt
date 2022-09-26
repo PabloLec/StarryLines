@@ -1,6 +1,5 @@
 package loc.parser
 
-import loc.parser.removeInlineCommentsShellStyle
 import java.io.BufferedReader
 
 fun parsePythonStyle(reader: BufferedReader): Int {

@@ -5,15 +5,20 @@ import dev.pablolec.starrylines.GetTopReposQuery
 import dev.pablolec.starrylines.UpdateReposQuery
 import models.ApiResponse
 import models.Repository
+import models.Language
 import mu.KotlinLogging
 
 class Fetcher {
     private val logger = KotlinLogging.logger {}
     private val client = GraphQLClient.getClient()
 
-    suspend fun fetchMostStarredRepos(language: String, cursor: Optional<String>, maximumStars: Int?): ApiResponse {
+    suspend fun fetchMostStarredRepos(
+        language: Language,
+        cursor: Optional<String>,
+        maximumStars: Int?
+    ): ApiResponse {
         val starsOperator = if (maximumStars != null) "<$maximumStars" else ">1"
-        val query = "sort:stars stars:$starsOperator language:${language.trim().lowercase()}"
+        val query = "sort:stars stars:$starsOperator language:$language"
         val response = client.query(GetTopReposQuery(query, cursor)).execute()
         if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
 

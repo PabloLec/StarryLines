@@ -128,8 +128,10 @@ val repoToInsertBeforeUpdate = models.Repository(
     null
 )
 
-val testDataTopReposQuery = GetTopReposQuery.Data(GetTopReposQuery.Search(testPageInfo, 10, listOf(testEdgeNewRepo)), null)
+val testDataTopReposQuery =
+    GetTopReposQuery.Data(GetTopReposQuery.Search(testPageInfo, 10, listOf(testEdgeNewRepo)), null)
 
-val testDataFewStars = GetTopReposQuery.Data(GetTopReposQuery.Search(testPageInfo, 10, listOf(testEdgeRepoWithFewStars)), null)
+val testDataFewStars =
+    GetTopReposQuery.Data(GetTopReposQuery.Search(testPageInfo, 10, listOf(testEdgeRepoWithFewStars)), null)
 
 val testDataUpdateReposQuery = UpdateReposQuery.Data(testNodeRepoToUpdate)

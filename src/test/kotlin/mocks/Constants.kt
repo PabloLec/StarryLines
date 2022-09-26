@@ -1,6 +1,7 @@
 package test.mocks
 
 import models.Repository
+import models.Language
 import models.TopRepository
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -129,7 +130,8 @@ val topRepo4 = TopRepository(
     400
 )
 
-val fetchResult = mapOf("java_test" to setOf(javaRepo), "python_test" to setOf(pythonRepo, blacklistRepo))
+val fetchResult =
+    mapOf(Language.JAVA to setOf(javaRepo), Language.PYTHON to setOf(pythonRepo, blacklistRepo))
 
 val locCRepo = Repository(
     "mockId3",

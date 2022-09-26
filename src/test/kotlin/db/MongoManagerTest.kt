@@ -2,10 +2,18 @@ package db
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.*
+import test.mocks.blacklistRepo
+import test.mocks.blacklistRepoPrevious1
+import test.mocks.blacklistRepoPrevious2
+import test.mocks.fetchResult
+import test.mocks.javaRepo
+import test.mocks.pythonRepo
+import test.mocks.topRepo1
+import test.mocks.topRepo2
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertContains
@@ -30,47 +38,47 @@ internal class MongoManagerTest {
 
     @Test
     fun testUpdateLoc() = runTest {
-        MongoClient.insertOne(javaRepo, "java_test")
+        MongoClient.insertOne(javaRepo, "java")
         javaRepo.locUpdateDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)
         javaRepo.loc = 1000
         javaRepo.milliStarsPerLine = 10000
-        mongoManager.updateLoc(javaRepo, "java_test")
-        assertContains(MongoClient.getCollection("java_test"), javaRepo)
+        mongoManager.updateLoc(javaRepo, Language.JAVA)
+        assertContains(MongoClient.getCollection("java"), javaRepo)
     }
 
     @Test
     fun testUpdateAll() = runTest {
         mongoManager.addToBlacklist(blacklistRepo, null)
         mongoManager.updateAll(fetchResult)
-        assertContains(MongoClient.getCollection("java_test"), javaRepo)
-        assertContains(MongoClient.getCollection("python_test"), pythonRepo)
-        assert(!MongoClient.getCollection("python_test").contains(blacklistRepo))
+        assertContains(MongoClient.getCollection("java"), javaRepo)
+        assertContains(MongoClient.getCollection("python"), pythonRepo)
+        assert(!MongoClient.getCollection("python").contains(blacklistRepo))
     }
 
     @Test
     fun testUpdateTop() = runTest {
-        mongoManager.updateTop("top_test", listOf(topRepo1, topRepo2))
-        assertContains(MongoClient.getTopCollection("top_test"), topRepo1)
-        assertContains(MongoClient.getTopCollection("top_test"), topRepo2)
+        mongoManager.updateTop("top", listOf(topRepo1, topRepo2))
+        assertContains(MongoClient.getTopCollection("top"), topRepo1)
+        assertContains(MongoClient.getTopCollection("top"), topRepo2)
     }
 
     @Test
     fun testUpdateCollectionsWithBlacklist() {
         runTest {
             mongoManager.addToBlacklist(blacklistRepo, null)
-            MongoClient.insertOne(blacklistRepo, "java_test")
-            assertContains(MongoClient.getCollection("java_test").map { it.name }, blacklistRepo.name)
+            MongoClient.insertOne(blacklistRepo, "java")
+            assertContains(MongoClient.getCollection("java").map { it.name }, blacklistRepo.name)
             mongoManager.updateCollectionsWithBlacklist()
-            assert(!MongoClient.getCollection("java_test").map { it.name }.contains(blacklistRepo.name))
+            assert(!MongoClient.getCollection("java").map { it.name }.contains(blacklistRepo.name))
         }
     }
 
     @Test
     fun testGetAllRepos() = runTest {
         mongoManager.updateAll(fetchResult)
-        val allRepos = mongoManager.getAllRepos(setOf("java_test", "python_test"))
-        assertContains(allRepos, Pair("java_test", javaRepo))
-        assertContains(allRepos, Pair("python_test", pythonRepo))
+        val allRepos = mongoManager.getAllRepos(setOf(Language.JAVA, Language.PYTHON))
+        assertContains(allRepos, Pair(Language.JAVA, javaRepo))
+        assertContains(allRepos, Pair(Language.PYTHON, pythonRepo))
     }
 
     companion object {
@@ -86,9 +94,9 @@ internal class MongoManagerTest {
         @AfterAll
         fun cleanUp() = runTest {
             MongoClient.deleteCollection("blacklist")
-            MongoClient.deleteCollection("java_test")
-            MongoClient.deleteCollection("python_test")
-            MongoClient.deleteCollection("top_test")
+            MongoClient.deleteCollection("java")
+            MongoClient.deleteCollection("python")
+            MongoClient.deleteCollection("top")
         }
     }
 }

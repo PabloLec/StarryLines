@@ -7,13 +7,21 @@ import db.MongoClient
 import db.MongoManager
 import dev.pablolec.starrylines.GetTopReposQuery
 import dev.pablolec.starrylines.UpdateReposQuery
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.mockkObject
+import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.*
+import test.mocks.apolloClientMocked
+import test.mocks.repoToInsertBeforeUpdate
+import test.mocks.testDataFewStars
+import test.mocks.testDataTopReposQuery
+import test.mocks.testDataUpdateReposQuery
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
@@ -30,22 +38,22 @@ internal class ApiManagerTest {
 
     @Test
     fun testSimpleRun() = runTest {
-        apolloClientMocked.enqueueTestResponse(getTopQuery("kotlin_test"), testDataTopReposQuery)
+        apolloClientMocked.enqueueTestResponse(getTopQuery("kotlin"), testDataTopReposQuery)
 
-        ApiManager(mongoManager, setOf("kotlin_test")).run()
-        val allRepos = mongoManager.getAllRepos(setOf("kotlin_test")).map { it.second.name }
+        ApiManager(mongoManager, setOf(Language.KOTLIN)).run()
+        val allRepos = mongoManager.getAllRepos(setOf(Language.KOTLIN)).map { it.second.name }
 
         assertContains(allRepos, "Repo1")
     }
 
     @Test
     fun testRunWithUpdate() = runTest {
-        apolloClientMocked.enqueueTestResponse(getTopQuery("kotlin_test"), testDataTopReposQuery)
+        apolloClientMocked.enqueueTestResponse(getTopQuery("kotlin"), testDataTopReposQuery)
         apolloClientMocked.enqueueTestResponse(updateQuery, testDataUpdateReposQuery)
-        MongoClient.insertOne(repoToInsertBeforeUpdate, "kotlin_test")
+        MongoClient.insertOne(repoToInsertBeforeUpdate, "kotlin")
 
-        ApiManager(mongoManager, setOf("kotlin_test")).run()
-        val allRepos = mongoManager.getAllRepos(setOf("kotlin_test")).map { it.second }
+        ApiManager(mongoManager, setOf(Language.KOTLIN)).run()
+        val allRepos = mongoManager.getAllRepos(setOf(Language.KOTLIN)).map { it.second }
         val updatedRepo = allRepos.find { it.name == "repo_to_update" }!!
 
         assertEquals(20000, updatedRepo.stargazers)
@@ -54,27 +62,29 @@ internal class ApiManagerTest {
 
     @Test
     fun testRunWithFewStars() = runTest {
-        apolloClientMocked.enqueueTestResponse(getTopQuery("java_test"), testDataFewStars)
+        apolloClientMocked.enqueueTestResponse(getTopQuery("java"), testDataFewStars)
 
-        ApiManager(mongoManager, setOf("java_test")).run()
+        ApiManager(mongoManager, setOf(Language.JAVA)).run()
 
-        val allRepos = mongoManager.getAllRepos(setOf("java_test")).map { it.second.name }
+        val allRepos = mongoManager.getAllRepos(setOf(Language.JAVA)).map { it.second.name }
 
         assert(allRepos.isEmpty())
     }
 
-    private fun getTopQuery(language: String) = GetTopReposQuery("sort:stars stars:>1 language:$language", Optional.absent())
+    private fun getTopQuery(language: String) =
+        GetTopReposQuery("sort:stars stars:>1 language:$language", Optional.absent())
+
     companion object {
         @JvmStatic
         @BeforeAll
         fun setUp() = runTest {
-            MongoClient.deleteCollection("kotlin_test")
+            MongoClient.deleteCollection("kotlin")
         }
 
         @JvmStatic
         @AfterAll
         fun cleanUp() = runTest {
-            MongoClient.deleteCollection("kotlin_test")
+            MongoClient.deleteCollection("kotlin")
             unmockkAll()
         }
     }

@@ -3,6 +3,7 @@ package loc
 import db.MongoClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -15,19 +16,24 @@ internal class GitCountTest {
 
     @Test
     fun testRunOnC() {
-        val gitCount = GitCount("c", locCRepo)
+        val gitCount = GitCount(Language.C, locCRepo)
         assert(gitCount.run() == 28341)
     }
 
     @Test
     fun testRunOnPython() {
-        val gitCount = GitCount("python", locPythonRepo)
+        val gitCount = GitCount(Language.PYTHON, locPythonRepo)
         assert(gitCount.run() == 161)
     }
 
     @Test
     fun testRepoTooBig() {
-        assertFails { GitCount("python", locPythonRepo.copy().also { it.diskUsage = Integer.MAX_VALUE }).run() }
+        assertFails {
+            GitCount(
+                Language.PYTHON,
+                locPythonRepo.copy().also { it.diskUsage = Integer.MAX_VALUE }
+            ).run()
+        }
     }
 
     companion object {

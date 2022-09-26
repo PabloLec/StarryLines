@@ -1,12 +1,13 @@
 package top
 
 import db.MongoManager
+import models.Language
 import models.TopRepository
 
-class TopManager(private val mongoManager: MongoManager, val languages: Set<String>) {
+class TopManager(private val mongoManager: MongoManager, val languages: Set<Language>) {
     suspend fun run() = saveTops(getTops())
 
-    private fun getTops(): Set<Pair<String, Set<TopRepository>>> {
+    private fun getTops(): Set<Pair<Language, Set<TopRepository>>> {
         val topFactory = TopFactory()
         return buildSet {
             languages.forEach {
@@ -15,9 +16,9 @@ class TopManager(private val mongoManager: MongoManager, val languages: Set<Stri
         }
     }
 
-    private suspend fun saveTops(tops: Set<Pair<String, Set<TopRepository>>>) {
+    private suspend fun saveTops(tops: Set<Pair<Language, Set<TopRepository>>>) {
         tops.forEach {
-            mongoManager.updateTop(it.first.plus("_top"), it.second.toList())
+            mongoManager.updateTop(it.first.toString().plus("_top"), it.second.toList())
         }
     }
 }
