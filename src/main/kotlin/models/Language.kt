@@ -1,6 +1,7 @@
 package models
 
 import loc.parser.parseCStyle
+import loc.parser.parsePowershellStyle
 import loc.parser.parsePythonStyle
 import loc.parser.parseShellStyle
 import loc.parser.parseSwiftStyle
@@ -54,6 +55,22 @@ enum class Language {
     SHELL {
         override fun extensions() = setOf(".sh", ".bash", ".zsh", ".fish", ".ksh", ".csh", ".tcsh")
         override fun commentParser() = ::parseShellStyle
+    },
+    RUBY {
+        override fun extensions() = setOf(".rb", ".rbw")
+        override fun commentParser() = ::parseShellStyle
+    },
+    PHP {
+        override fun extensions() = setOf(".php", ".php3", ".php4", ".php5", ".php7", ".phtml")
+        override fun commentParser() = ::parseCStyle
+    },
+    SCALA {
+        override fun extensions() = setOf(".scala", ".sc")
+        override fun commentParser() = ::parseCStyle
+    },
+    POWERSHELL {
+        override fun extensions() = setOf(".ps1", ".psm1", ".psd1")
+        override fun commentParser() = ::parsePowershellStyle
     };
 
     abstract fun extensions(): Set<String>

@@ -23,7 +23,7 @@ internal class GitCountTest {
     @Test
     fun testRunOnPython() {
         val gitCount = GitCount(Language.PYTHON, locPythonRepo)
-        assert(gitCount.run() == 161)
+        assert(gitCount.run() == 256)
     }
 
     @Test

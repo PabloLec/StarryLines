@@ -1,6 +1,7 @@
 package loc
 
 import loc.parser.parseCStyle
+import loc.parser.parsePowershellStyle
 import loc.parser.parsePythonStyle
 import loc.parser.parseShellStyle
 import loc.parser.parseSwiftStyle
@@ -22,7 +23,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.py")?.bufferedReader()
             ?.let { parsePythonStyle(it) }
 
-        assertEquals(105, result)
+        assertEquals(100, result)
     }
 
     @Test
@@ -31,6 +32,14 @@ internal class ParserTest {
             ?.let { parseShellStyle(it) }
 
         assertEquals(29, result)
+    }
+
+    @Test
+    fun testParsePowerShellStyle() {
+        val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.ps1")?.bufferedReader()
+            ?.let { parsePowershellStyle(it) }
+
+        assertEquals(40, result)
     }
 
     @Test
