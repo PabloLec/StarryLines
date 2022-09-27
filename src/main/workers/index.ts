@@ -8,6 +8,7 @@ interface Bindings {
 type Document = globalThis.Realm.Services.MongoDB.Document;
 
 interface Repository extends Document {
+    rank: number,
     name: string;
     description: string;
     createdAt: Date;
@@ -89,6 +90,8 @@ const worker: ExportedHandler<Bindings> = {
             // Remove _id from response
             data.forEach(function (v) {
                 delete v._id;
+                delete v.milliStarsPerLine;
+                delete v.languagePercent;
             });
             let response = reply(data);
 
