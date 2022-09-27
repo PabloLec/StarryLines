@@ -3,7 +3,6 @@
     :headers="headers"
     :items="items"
     :loading="loading"
-    @click-row="expand"
     alternating
   >
     <template #item-name="{ name, url }">
