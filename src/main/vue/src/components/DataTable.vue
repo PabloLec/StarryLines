@@ -51,11 +51,11 @@ export default {
   },
   mounted() {
     this.headers = [
+      { text: "rank", value: "rank", sortable: true },
       { text: "name", value: "name", sortable: true },
       { text: "createdAt", value: "createdAt", sortable: true },
       { text: "stargazers", value: "stargazers", sortable: true },
       { text: "loc", value: "loc", sortable: true },
-      { text: "milliStarsPerLine", value: "milliStarsPerLine" },
       { text: "score", value: "score", sortable: true },
     ];
     this.fetchData();
