@@ -131,6 +131,12 @@ async function login(token: string) {
     return user.mongoClient("mongodb-atlas");
 }
 
+const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
+    'Access-Control-Max-Age': '86400',
+};
+
 const cacheHeaders = {
     "Cache-Control": "max-age=cacheTtl, s-maxage=cacheTtl",
 };
@@ -138,7 +144,7 @@ const cacheHeaders = {
 function toJSON(data: unknown, status = 200): Response {
     let headers = {"content-type": "application/json"};
     if (status == 200) {
-        headers = {...headers, ...cacheHeaders};
+        headers = {...headers, ...cacheHeaders, ...corsHeaders};
     }
     let body = JSON.stringify(data, null, 2);
     return new Response(body, {headers, status});
