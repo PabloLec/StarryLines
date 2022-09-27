@@ -3,6 +3,8 @@
     :headers="headers"
     :items="items"
     :loading="loading"
+    :header-item-class-name="getHeaderClassNameByIndex"
+    :body-item-class-name="getItemClassNameByIndex"
     alternating
   >
     <template #item-name="{ name, url }">
@@ -26,6 +28,20 @@
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
+const HEADER_REACTIVE_CLASSES = {
+    1: "text-0 before:content-['#'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
+    3: "hidden md:table-cell",
+    4: "text-0 before:content-['★'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
+    5: "text-0 before:content-['LoC'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
+    all: "break-words"
+}
+
+const REACTIVE_CLASSES = {
+  2: "break-all text-ellipsis",
+  3: "hidden md:table-cell",
+  all: ""
+};
+
 export default {
   components: {
     EasyDataTable: Vue3EasyDataTable,
@@ -48,15 +64,27 @@ export default {
       this.items = await res.json();
       this.loading = false;
     },
+    getHeaderClassNameByIndex(header, index) {
+        if (index in HEADER_REACTIVE_CLASSES) {
+            return HEADER_REACTIVE_CLASSES[index] + " " + HEADER_REACTIVE_CLASSES.all;
+        }
+        return HEADER_REACTIVE_CLASSES.all;
+    },
+    getItemClassNameByIndex(object, index) {
+        if (index in REACTIVE_CLASSES) {
+          return REACTIVE_CLASSES[index] + " " + REACTIVE_CLASSES.all;
+        }
+        return REACTIVE_CLASSES.all
+    }
   },
   mounted() {
     this.headers = [
-      { text: "rank", value: "rank", sortable: true },
-      { text: "name", value: "name", sortable: true },
-      { text: "createdAt", value: "createdAt", sortable: true },
-      { text: "stargazers", value: "stargazers", sortable: true },
-      { text: "loc", value: "loc", sortable: true },
-      { text: "score", value: "score", sortable: true },
+      { text: "RANK", value: "rank", sortable: true },
+      { text: "NAME", value: "name", sortable: true },
+      { text: "CREATED AT", value: "createdAt", sortable: true },
+      { text: "STARGAZERS", value: "stargazers", sortable: true },
+      { text: "LINES OF CODE", value: "loc", sortable: true },
+      { text: "SCORE", value: "score", sortable: true },
     ];
     this.fetchData();
   },
