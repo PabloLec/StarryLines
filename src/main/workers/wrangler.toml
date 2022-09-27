@@ -12,7 +12,7 @@ command = "npm run build"
 
 [env.production]
 workers_dev = false
-route = "https://starrylines-worker.pablolec.dev/*"
+route = "https://starrylines.pablolec.dev/api/*"
 kv_namespaces = [
     { binding = "StarryLinesTop", id = "814e96bb9e8b4ab082856f6184db30d9", preview_id = "165396dc2ed6466489147dee2ca50906" }
 ]
