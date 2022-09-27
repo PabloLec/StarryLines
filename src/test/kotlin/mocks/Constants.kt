@@ -1,7 +1,7 @@
 package test.mocks
 
-import models.Repository
 import models.Language
+import models.Repository
 import models.TopRepository
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
@@ -87,47 +87,51 @@ val pythonRepo = Repository(
 )
 
 val topRepo1 = TopRepository(
+    null,
     "topJavaRepo1",
     "test",
-    LocalDateTime.now().toLocalDate(),
+    "",
     10000,
     "topJavaRepo1",
     100,
     100,
-    100
+    100, null
 )
 
 val topRepo2 = TopRepository(
+    null,
     "topPythonRepo1",
     "test",
-    LocalDateTime.now().toLocalDate(),
+    "",
     20000,
     "topPythonRepo1",
     200,
     200,
-    200
+    200, null
 )
 
 val topRepo3 = TopRepository(
+    null,
     "topJavaRepo2",
     "test",
-    LocalDateTime.now().toLocalDate(),
+    "",
     30000,
     "topJavaRepo1",
     300,
     300,
-    300
+    300, null
 )
 
 val topRepo4 = TopRepository(
+    null,
     "topPythonRepo2",
     "test",
-    LocalDateTime.now().toLocalDate(),
+    "",
     40000,
     "topPythonRepo2",
     400,
     400,
-    400
+    400, null
 )
 
 val fetchResult =
