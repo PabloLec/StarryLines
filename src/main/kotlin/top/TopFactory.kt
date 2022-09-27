@@ -8,14 +8,17 @@ class TopFactory {
     fun createTop(language: Language) =
         MongoClient.getCollection(language.toString())
             .asSequence()
-            .map { TopRepository.fromRepository(it) }
             .filterNot { it.loc == null || it.milliStarsPerLine == null }
+            .map { TopRepository.fromRepository(it) }
             .onEach { repo -> repo.score = getRealMilliStars(repo) }
             .sortedByDescending { it.score }
             .take(100)
+            .onEachIndexed { index, repo -> repo.rank = index + 1 }
             .toSet()
 
     private fun getRealMilliStars(repo: TopRepository) =
-        (repo.milliStarsPerLine?.div(100.0))?.times(repo.languagePercent)
-            ?.toInt()
+        repo.milliStarsPerLine
+            .div(100.0)
+            .times(repo.languagePercent)
+            .toInt()
 }
