@@ -2,8 +2,9 @@
   <EasyDataTable
     :headers="headers"
     :items="items"
-    alternating
     :loading="loading"
+    @click-row="expand"
+    alternating
   >
     <template #item-name="{ name, url }">
       <a :href="url" target="_blank" rel="noopener noreferrer">{{ name }}</a>
