@@ -1,19 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
   <DataTable />
 </template>
 
 <script>
-import DataTable from './components/DataTable.vue'
+import DataTable from "./components/DataTable.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    DataTable
-  }
+    DataTable,
+  },
 };
-
-
 </script>
 
 <style>
