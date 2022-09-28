@@ -1,14 +1,30 @@
 <template>
-  <DataTable />
+  <LangSlider @clickLanguage="changeLanguage" />
+  <DataTable :language="language" />
 </template>
 
 <script>
 import DataTable from "./components/DataTable.vue";
+import LangSlider from "./components/LangSlider.vue";
 
 export default {
   name: "App",
   components: {
+    LangSlider,
     DataTable,
+  },
+  data() {
+    return {
+      language: "kotlin",
+    };
+  },
+  mounted() {
+    document.body.classList.add("mx-0", "sm:mx-24", "lg:mx-32");
+  },
+  methods: {
+    changeLanguage(lang) {
+      this.language = lang;
+    },
   },
 };
 </script>

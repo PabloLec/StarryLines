@@ -23,26 +23,31 @@ import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
 const HEADER_REACTIVE_CLASSES = {
-    1: "text-0 before:content-['#'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
-    3: "hidden md:table-cell",
-    4: "text-0 before:content-['★'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
-    5: "text-0 before:content-['LoC'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
-    all: "break-words"
-}
+  1: "text-0 before:content-['#'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
+  3: "hidden md:table-cell",
+  4: "text-0 before:content-['★'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
+  5: "text-0 before:content-['LoC'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
+  all: "break-words",
+};
 
 const REACTIVE_CLASSES = {
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
-  all: ""
+  all: "",
 };
 
 export default {
+  props: {
+    language: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     EasyDataTable: Vue3EasyDataTable,
   },
   data() {
     return {
-      language: "kotlin",
       headers: [],
       items: [],
       loading: true,
@@ -59,17 +64,19 @@ export default {
       this.loading = false;
     },
     getHeaderClassNameByIndex(header, index) {
-        if (index in HEADER_REACTIVE_CLASSES) {
-            return HEADER_REACTIVE_CLASSES[index] + " " + HEADER_REACTIVE_CLASSES.all;
-        }
-        return HEADER_REACTIVE_CLASSES.all;
+      if (index in HEADER_REACTIVE_CLASSES) {
+        return (
+          HEADER_REACTIVE_CLASSES[index] + " " + HEADER_REACTIVE_CLASSES.all
+        );
+      }
+      return HEADER_REACTIVE_CLASSES.all;
     },
     getItemClassNameByIndex(object, index) {
-        if (index in REACTIVE_CLASSES) {
-          return REACTIVE_CLASSES[index] + " " + REACTIVE_CLASSES.all;
-        }
-        return REACTIVE_CLASSES.all
-    }
+      if (index in REACTIVE_CLASSES) {
+        return REACTIVE_CLASSES[index] + " " + REACTIVE_CLASSES.all;
+      }
+      return REACTIVE_CLASSES.all;
+    },
   },
   mounted() {
     this.headers = [
