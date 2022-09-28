@@ -1,41 +1,68 @@
 <template>
-  <carousel
-    class="mx-4 my-16 sm:mx-12 md:mx-24"
-    :wrap-around="true"
-    :breakpoints="breakpoints"
+  <swiper
+    class="my-16 md:mx-4 lg:mx-12 xl:mx-24 2xl:mx-32"
+    :modules="modules"
+    :navigation="true"
+    :slides-per-view="5"
+    :loop="true"
+    :space-between="5"
+    :freeMode="true"
+    :keyboard="{
+      enabled: true,
+    }"
+    :breakpoints="{
+      '640': {
+        slidesPerView: 5,
+        spaceBetween: 10,
+      },
+      '768': {
+        slidesPerView: 5,
+        spaceBetween: 20,
+      },
+      '1280': {
+        slidesPerView: 7,
+        spaceBetween: 30,
+      },
+    }"
   >
-    <slide class="mx-2" v-for="(lang, index) in langs" :key="index">
+    <swiper-slide class="mx-2" v-for="(lang, index) in langs" :key="index">
       <img
         @click="clickLanguage(lang)"
-        class="max-h-12 max-w-12 sm:max-h-14 sm:max-w-14 md:max-h-20 md:max-w-20"
+        class="cursor-pointer max-h-16 max-w-16 sm:max-h-18 sm:max-w-18 md:max-h-20 md:max-w-20"
         :alt="lang"
         :src="require(`@/assets/${lang}.svg`)"
       />
-    </slide>
-
-    <template #addons>
-      <navigation />
-    </template>
-  </carousel>
+    </swiper-slide>
+  </swiper>
 </template>
 
 <style>
-.carousel__icon {
-  stroke: black;
-  fill: black;
+.swiper-button-prev {
+  transform: translateX(-50%);
 }
-
-.carousel__prev,
-.carousel__next {
-  background-color: white !important;
-  border: black;
-  border-style: solid;
+.swiper-button-next {
+  transform: translateX(50%);
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 2rem;
+  color: black;
+}
+@media all and (max-width: 640px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
 }
 </style>
 
 <script>
-import "vue3-carousel/dist/carousel.css";
-import { Carousel, Slide, Navigation } from "vue3-carousel";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Keyboard, FreeMode, Navigation } from "swiper";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
 
 const LANGS = [
   "javascript",
@@ -57,24 +84,13 @@ const LANGS = [
 
 export default {
   components: {
-    Carousel,
-    Slide,
-    Navigation,
+    Swiper,
+    SwiperSlide,
   },
   data() {
     return {
       langs: LANGS.sort(),
-      breakpoints: {
-        1: {
-          itemsToShow: 3,
-        },
-        700: {
-          itemsToShow: 7,
-        },
-        1024: {
-          itemsToShow: 10,
-        },
-      },
+      modules: [Keyboard, Navigation, FreeMode],
     };
   },
   methods: {

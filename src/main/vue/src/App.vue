@@ -19,7 +19,7 @@ export default {
     };
   },
   mounted() {
-    document.body.classList.add("mx-0", "sm:mx-24", "lg:mx-32");
+    document.body.classList.add("mx-0", "sm:mx-12", "md:mx-16", "lg:mx-20");
   },
   methods: {
     changeLanguage(lang) {
