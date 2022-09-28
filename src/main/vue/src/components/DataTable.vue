@@ -1,14 +1,23 @@
 <template>
   <EasyDataTable
+    class="font-mono"
     :headers="headers"
     :items="items"
     :loading="loading"
     :header-item-class-name="getHeaderClassNameByIndex"
     :body-item-class-name="getItemClassNameByIndex"
+    header-text-direction="center"
+    body-text-direction="center"
     alternating
   >
     <template #item-name="{ name, url }">
-      <a :href="url" target="_blank" rel="noopener noreferrer">{{ name }}</a>
+      <a
+        class="after:content-['_↗'] after:text-sm"
+        :href="url"
+        target="_blank"
+        rel="noopener noreferrer"
+        >{{ name }}</a
+      >
     </template>
     <template #expand="item">
       <div style="padding: 15px">
@@ -23,17 +32,17 @@ import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
 const HEADER_REACTIVE_CLASSES = {
-  1: "text-0 before:content-['#'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
+  1: "text-0 before:content-['#'] before:inline before:text-black before:text-sm sm:text-base sm:before:content-none",
   3: "hidden md:table-cell",
-  4: "text-0 before:content-['★'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
-  5: "text-0 before:content-['LoC'] before:inline before:text-black before:text-sm sm:text-sm sm:before:content-none",
-  all: "break-words",
+  4: "text-0 before:content-['★'] before:inline before:text-black before:text-sm sm:text-base sm:before:content-none",
+  5: "text-0 before:content-['LoC'] before:inline before:text-black before:text-sm sm:text-base sm:before:content-none",
+  all: "break-words sm:text-base lg:text-xl text-black",
 };
 
 const REACTIVE_CLASSES = {
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
-  all: "",
+  all: "text-sm sm:text-base lg:text-l",
 };
 
 export default {
