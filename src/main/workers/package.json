@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "3.16.0",
-    "typescript": "4.8.3",
+    "typescript": "4.8.4",
     "worktop.build": "0.0.5"
   }
 }
