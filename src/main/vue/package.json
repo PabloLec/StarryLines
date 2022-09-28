@@ -12,7 +12,7 @@
     "core-js": "^3.8.3",
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8",
-    "vue": "^3.2.13",
+    "vue": "^3.2.40",
     "vue3-easy-data-table": "^1.4.19"
   },
   "devDependencies": {
