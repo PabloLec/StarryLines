@@ -28,8 +28,7 @@
     <swiper-slide class="mx-2" v-for="(lang, index) in langs" :key="index">
       <img
         @click="clickLanguage(lang)"
-        :id="`${lang}-logo`"
-        class="cursor-pointer max-h-16 max-w-16 sm:max-h-18 sm:max-w-18 md:max-h-20 md:max-w-20 lang-logo"
+        :class="`cursor-pointer max-h-16 max-w-16 sm:max-h-18 sm:max-w-18 md:max-h-20 md:max-w-20 lang-logo ${lang}-logo`"
         :alt="lang"
         :src="`/logos/${lang}.svg`"
       />
@@ -103,10 +102,12 @@ const LANGS = [
 
 function highlightSelected(lang: string) {
   const logos = document.querySelectorAll(".lang-logo");
-  logos.forEach((logos) => {
-    logos.classList.remove("logo-selected");
+  logos.forEach((logo) => {
+    logo.classList.remove("logo-selected");
   });
-  document.getElementById(lang + "-logo")!.classList.add("logo-selected");
+  document.querySelectorAll(`.${lang}-logo`).forEach((logo) => {
+    logo.classList.add("logo-selected");
+  })
 }
 
 export default defineComponent({
