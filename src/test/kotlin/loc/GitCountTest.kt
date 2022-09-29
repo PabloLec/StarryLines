@@ -37,10 +37,13 @@ internal class GitCountTest {
     }
 
     companion object {
+        @OptIn(ExperimentalCoroutinesApi::class)
         @JvmStatic
         @BeforeAll
-        fun setUp() {
+        fun setUp() = runTest {
             File("/tmp/loc/").deleteRecursively()
+            MongoClient.deleteCollection("c")
+            MongoClient.deleteCollection("python")
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -49,6 +52,8 @@ internal class GitCountTest {
         fun cleanUp() = runTest {
             File("/tmp/loc/").deleteRecursively()
             MongoClient.deleteCollection("blacklist")
+            MongoClient.deleteCollection("c")
+            MongoClient.deleteCollection("python")
         }
     }
 }
