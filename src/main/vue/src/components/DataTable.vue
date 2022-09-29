@@ -27,7 +27,7 @@
   </EasyDataTable>
 </template>
 
-<script>
+<script lang="ts">
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
@@ -71,7 +71,7 @@ export default {
       this.items = await res.json();
       this.loading = false;
     },
-    getHeaderClassNameByIndex(header, index) {
+    getHeaderClassNameByIndex(header: object, index: number) {
       if (index in HEADER_REACTIVE_CLASSES) {
         return (
           HEADER_REACTIVE_CLASSES[index] + " " + HEADER_REACTIVE_CLASSES.all
@@ -79,7 +79,7 @@ export default {
       }
       return HEADER_REACTIVE_CLASSES.all;
     },
-    getItemClassNameByIndex(object, index) {
+    getItemClassNameByIndex(object: object, index: number) {
       if (index in REACTIVE_CLASSES) {
         return REACTIVE_CLASSES[index] + " " + REACTIVE_CLASSES.all;
       }
