@@ -52,6 +52,9 @@ const worker: ExportedHandler<Bindings> = {
         const path = url.pathname.replace(/[/]$/, "");
         const topID = url.pathname.split("/")[2].toLowerCase().trim();
 
+        if (!path.startsWith("/api/")) {
+            return toError(404);
+        }
         if (SUPPORTED_LANGUAGES.indexOf(topID) == -1) {
             return toError("Unsupported language", 400);
         }
@@ -70,10 +73,6 @@ const worker: ExportedHandler<Bindings> = {
         if (kv) {
             console.log(`KV hit for: ${req.url}.`);
             return reply(JSON.parse(kv));
-        }
-
-        if (!path.startsWith("/api/")) {
-            return toError(404);
         }
 
         try {
