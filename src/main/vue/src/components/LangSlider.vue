@@ -81,6 +81,8 @@ const LANGS = [
   "scala",
   "powershell",
   "ruby",
+  "dart",
+  "shell"
 ];
 
 export default defineComponent({
