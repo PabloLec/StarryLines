@@ -1,0 +1,10 @@
+name = "prerender"
+main = "build/index.mjs"
+compatibility_date = "2022-09-22"
+workers_dev = false
+
+[build]
+command = "npm run build"
+
+[env.production]
+route = "*starrylines.pablolec.dev/"

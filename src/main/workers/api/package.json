@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "mongo-proxy",
+  "name": "cf-worker",
   "scripts": {
     "build": "worktop build index.ts",
     "types": "tsc --noEmit --skipLibCheck"

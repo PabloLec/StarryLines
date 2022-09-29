@@ -17,8 +17,5 @@
     "noImplicitAny": true,
     "module": "es2020"
   },
-  "include": [
-    "@types",
-    "src"
-  ]
+  "include": ["@types", "src"]
 }
