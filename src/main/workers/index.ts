@@ -56,20 +56,20 @@ const worker: ExportedHandler<Bindings> = {
             return toError("Unsupported language", 400);
         }
 
-        // Try to get KV
-        let kv = await env.StarryLinesTop.get(topID, {cacheTtl: cacheTtl});
-        if (kv) {
-            console.log(`KV hit for: ${req.url}.`);
-            return reply(JSON.parse(kv));
-        }
-
-        // Fallback on edge cache
+        // Query edge cache
         const cacheKey = new Request(url.toString(), req);
         const cache = await caches.default;
         let cacheResponse = await cache.match(cacheKey);
         if (cacheResponse) {
             console.log(`Cache hit for: ${req.url}.`);
             return cacheResponse;
+        }
+
+        // Fallback on KV
+        let kv = await env.StarryLinesTop.get(topID, {cacheTtl: cacheTtl});
+        if (kv) {
+            console.log(`KV hit for: ${req.url}.`);
+            return reply(JSON.parse(kv));
         }
 
         if (!path.startsWith("/api/")) {
@@ -141,7 +141,7 @@ const corsHeaders = {
 };
 
 const cacheHeaders = {
-    "Cache-Control": "max-age=cacheTtl, s-maxage=cacheTtl",
+    "Cache-Control": `public, max-age=${cacheTtl}, s-maxage=${cacheTtl}`,
 };
 
 function toJSON(data: unknown, status = 200): Response {
