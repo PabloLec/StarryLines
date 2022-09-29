@@ -38,6 +38,12 @@
 </template>
 
 <style>
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
 .swiper-button-prev {
   transform: translateX(-50%);
 }
