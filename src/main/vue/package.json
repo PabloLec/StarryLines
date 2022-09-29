@@ -19,8 +19,6 @@
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/eslint-parser": "^7.12.16",
-    "@fullhuman/postcss-purgecss": "^4.0.0",
-    "@fullhuman/vue-cli-plugin-purgecss": "~5.0.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
