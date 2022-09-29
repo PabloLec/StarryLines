@@ -65,7 +65,6 @@ export default {
   methods: {
     async fetchData() {
       this.loading = true;
-      this.items = null;
       const res = await fetch(
         `https://starrylines.pablolec.dev/api/${this.language}_top`
       );
