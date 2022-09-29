@@ -57,6 +57,7 @@
 </style>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Keyboard, FreeMode, Navigation } from "swiper";
 
@@ -82,7 +83,7 @@ const LANGS = [
   "ruby",
 ];
 
-export default {
+export default defineComponent({
   components: {
     Swiper,
     SwiperSlide,
@@ -98,8 +99,8 @@ export default {
       this.$emit("clickLanguage", lang);
     },
     getIcon(lang: string) {
-        return new URL(`../../src/assets/${lang}.svg`, import.meta.url).href
+      return new URL(`../../src/assets/${lang}.svg`, import.meta.url).href;
+    },
   },
-}
-}
+});
 </script>
