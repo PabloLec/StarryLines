@@ -94,10 +94,10 @@ export default {
     };
   },
   methods: {
-    clickLanguage(lang: any) {
+    clickLanguage(lang: string) {
       this.$emit("clickLanguage", lang);
     },
-    getIcon(lang: any) {
+    getIcon(lang: string) {
         return new URL(`../../src/assets/${lang}.svg`, import.meta.url).href
   },
 }
