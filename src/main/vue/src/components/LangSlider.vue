@@ -30,7 +30,7 @@
         @click="clickLanguage(lang)"
         class="cursor-pointer max-h-16 max-w-16 sm:max-h-18 sm:max-w-18 md:max-h-20 md:max-w-20"
         :alt="lang"
-        :src="getIcon(lang)"
+        :src="`/logos/${lang}.svg`"
       />
     </swiper-slide>
   </swiper>
@@ -97,10 +97,7 @@ export default defineComponent({
   methods: {
     clickLanguage(lang: string) {
       this.$emit("clickLanguage", lang);
-    },
-    getIcon(lang: string) {
-      return new URL(`../../src/assets/${lang}.svg`, import.meta.url).href;
-    },
+    }
   },
 });
 </script>
