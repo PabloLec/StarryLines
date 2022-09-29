@@ -30,7 +30,7 @@
         @click="clickLanguage(lang)"
         class="cursor-pointer max-h-16 max-w-16 sm:max-h-18 sm:max-w-18 md:max-h-20 md:max-w-20"
         :alt="lang"
-        :src="require(`@/assets/${lang}.svg`)"
+        :src="getIcon(lang)"
       />
     </swiper-slide>
   </swiper>
@@ -56,7 +56,7 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Keyboard, FreeMode, Navigation } from "swiper";
 
@@ -94,9 +94,12 @@ export default {
     };
   },
   methods: {
-    clickLanguage(lang) {
+    clickLanguage(lang: any) {
       this.$emit("clickLanguage", lang);
     },
+    getIcon(lang: any) {
+        return new URL(`../../src/assets/${lang}.svg`, import.meta.url).href
   },
-};
+}
+}
 </script>
