@@ -1,41 +1,42 @@
 <template>
-    <LangSlider @clickLanguage="changeLanguage" />
-    <DataTable :language="language" />
-  </template>
+  <LangSlider @clickLanguage="changeLanguage" />
+  <DataTable :language="language" />
+</template>
 
-  <script lang="ts">
-  import DataTable from "./components/DataTable.vue";
-  import LangSlider from "./components/LangSlider.vue";
+<script lang="ts">
+import { defineComponent } from "vue";
+import DataTable from "./components/DataTable.vue";
+import LangSlider from "./components/LangSlider.vue";
 
-  export default {
-    name: "App",
-    components: {
-      LangSlider,
-      DataTable,
+export default defineComponent({
+  name: "App",
+  components: {
+    LangSlider,
+    DataTable,
+  },
+  data() {
+    return {
+      language: "kotlin",
+    };
+  },
+  mounted() {
+    document.body.classList.add("mx-0", "sm:mx-12", "md:mx-16", "lg:mx-20");
+  },
+  methods: {
+    changeLanguage(lang: string) {
+      this.language = lang;
     },
-    data() {
-      return {
-        language: "kotlin",
-      };
-    },
-    mounted() {
-      document.body.classList.add("mx-0", "sm:mx-12", "md:mx-16", "lg:mx-20");
-    },
-    methods: {
-      changeLanguage(lang: string) {
-        this.language = lang;
-      },
-    },
-  };
-  </script>
+  },
+});
+</script>
 
-  <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
-  </style>
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>

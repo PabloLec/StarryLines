@@ -28,10 +28,11 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from "vue";
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
-const HEADER_REACTIVE_CLASSES = {
+const HEADER_REACTIVE_CLASSES: any = {
   1: "text-0 before:content-['#'] before:inline before:text-black before:text-sm sm:text-base sm:before:content-none",
   3: "hidden md:table-cell",
   4: "text-0 before:content-['★'] before:inline before:text-black before:text-sm sm:text-base sm:before:content-none",
@@ -39,13 +40,13 @@ const HEADER_REACTIVE_CLASSES = {
   all: "break-words sm:text-base lg:text-xl text-black",
 };
 
-const REACTIVE_CLASSES = {
+const REACTIVE_CLASSES: any = {
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
   all: "text-sm sm:text-base lg:text-l",
 };
 
-export default {
+export default defineComponent({
   props: {
     language: {
       type: String,
@@ -57,7 +58,7 @@ export default {
   },
   data() {
     return {
-      headers: [],
+      headers: [{}],
       items: [],
       loading: true,
     };
@@ -71,7 +72,7 @@ export default {
       this.items = await res.json();
       this.loading = false;
     },
-    getHeaderClassNameByIndex(header: object, index: number) {
+    getHeaderClassNameByIndex(header: object, index: string) {
       if (index in HEADER_REACTIVE_CLASSES) {
         return (
           HEADER_REACTIVE_CLASSES[index] + " " + HEADER_REACTIVE_CLASSES.all
@@ -102,5 +103,5 @@ export default {
       this.fetchData();
     },
   },
-};
+});
 </script>
