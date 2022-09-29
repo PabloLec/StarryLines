@@ -3,7 +3,7 @@
     <DataTable :language="language" />
   </template>
 
-  <script>
+  <script lang="ts">
   import DataTable from "./components/DataTable.vue";
   import LangSlider from "./components/LangSlider.vue";
 
@@ -22,7 +22,7 @@
       document.body.classList.add("mx-0", "sm:mx-12", "md:mx-16", "lg:mx-20");
     },
     methods: {
-      changeLanguage(lang) {
+      changeLanguage(lang: string) {
         this.language = lang;
       },
     },
