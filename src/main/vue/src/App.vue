@@ -16,7 +16,7 @@ export default defineComponent({
   },
   data() {
     return {
-      language: "kotlin",
+      language: "c",
     };
   },
   methods: {
