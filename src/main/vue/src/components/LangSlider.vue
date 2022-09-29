@@ -28,7 +28,8 @@
     <swiper-slide class="mx-2" v-for="(lang, index) in langs" :key="index">
       <img
         @click="clickLanguage(lang)"
-        class="cursor-pointer max-h-16 max-w-16 sm:max-h-18 sm:max-w-18 md:max-h-20 md:max-w-20"
+        :id="`${lang}-logo`"
+        class="cursor-pointer max-h-16 max-w-16 sm:max-h-18 sm:max-w-18 md:max-h-20 md:max-w-20 lang-logo"
         :alt="lang"
         :src="`/logos/${lang}.svg`"
       />
@@ -53,6 +54,15 @@
   .swiper-button-prev {
     display: none;
   }
+}
+.lang-logo {
+  opacity: 0.5;
+}
+.lang-logo:hover {
+  opacity: 1;
+}
+.logo-selected {
+  opacity: 1;
 }
 </style>
 
@@ -82,8 +92,16 @@ const LANGS = [
   "powershell",
   "ruby",
   "dart",
-  "shell"
+  "shell",
 ];
+
+function highlightSelected(lang: string) {
+  const logos = document.querySelectorAll(".lang-logo");
+  logos.forEach((logos) => {
+    logos.classList.remove("logo-selected");
+  });
+  document.getElementById(lang + "-logo")!.classList.add("logo-selected");
+}
 
 export default defineComponent({
   components: {
@@ -99,7 +117,11 @@ export default defineComponent({
   methods: {
     clickLanguage(lang: string) {
       this.$emit("clickLanguage", lang);
-    }
+      highlightSelected(lang);
+    },
+  },
+  mounted() {
+    highlightSelected("c");
   },
 });
 </script>
