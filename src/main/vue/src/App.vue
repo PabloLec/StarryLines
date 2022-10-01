@@ -1,16 +1,21 @@
 <template>
-  <LangSlider @clickLanguage="changeLanguage" />
-  <DataTable :language="language" />
+  <Navbar />
+  <div class="mx-0 sm:mx-12 md:mx-16 lg:mx-20">
+    <LangSlider @clickLanguage="changeLanguage" />
+    <DataTable :language="language" />
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import DataTable from "./components/DataTable.vue";
+import Navbar from "./components/Navbar.vue";
 import LangSlider from "./components/LangSlider.vue";
+import DataTable from "./components/DataTable.vue";
 
 export default defineComponent({
   name: "App",
   components: {
+    Navbar,
     LangSlider,
     DataTable,
   },

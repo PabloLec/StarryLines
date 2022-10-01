@@ -107,7 +107,7 @@ function highlightSelected(lang: string) {
   });
   document.querySelectorAll(`.${lang}-logo`).forEach((logo) => {
     logo.classList.add("logo-selected");
-  })
+  });
 }
 
 export default defineComponent({
