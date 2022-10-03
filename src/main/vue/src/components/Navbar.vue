@@ -17,7 +17,7 @@
 
 <style>
 #navbar {
-  background: url("navbar.svg");
+  background: url("/navbar.svg");
 }
 </style>
 
