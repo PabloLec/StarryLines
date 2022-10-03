@@ -6,6 +6,15 @@
   </div>
 </template>
 
+<style>
+@font-face {
+  font-family: "DancingScript";
+  src: local("DancingScript"),
+    url(./fonts/DancingScript/DancingScript-Regular.ttf)
+      format("truetype");
+}
+</style>
+
 <script lang="ts">
 import { defineComponent } from "vue";
 import Navbar from "./components/Navbar.vue";
