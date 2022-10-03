@@ -10,8 +10,7 @@
 @font-face {
   font-family: "DancingScript";
   src: local("DancingScript"),
-    url(./fonts/DancingScript/DancingScript-Regular.ttf)
-      format("truetype");
+    url(./fonts/DancingScript/DancingScript-Regular.ttf) format("truetype");
 }
 </style>
 

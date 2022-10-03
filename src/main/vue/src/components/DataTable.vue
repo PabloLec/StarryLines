@@ -7,6 +7,7 @@
     :loading="loading"
     :header-item-class-name="getHeaderClassNameByIndex"
     :body-item-class-name="getItemClassNameByIndex"
+    theme-color="#FFC40C"
     header-text-direction="center"
     body-text-direction="center"
     alternating
@@ -33,6 +34,19 @@
   display: none !important;
 }
 
+.previous-page__click-button.first-page .arrow,
+.next-page__click-button.last-page .arrow {
+  border-color: black !important;
+}
+
+.easy-data-table__rows-selector ul.select-items li.selected {
+  color: black !important;
+}
+
+.previous-page__click-button .arrow,
+.next-page__click-button .arrow {
+  border-color: white !important;
+}
 .data-table {
   --easy-table-border: 1px solid #445269;
   --easy-table-row-border: 1px solid #445269;
@@ -81,17 +95,19 @@ import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
 const HEADER_REACTIVE_CLASSES: any = {
-  1: "text-0 before:content-['#'] before:inline before:text-sm sm:text-base sm:before:content-none",
+  1: "text-0 before:content-['#'] before:inline before:text-xl sm:text-base sm:before:content-none",
+  2: "text-xl",
   3: "hidden md:table-cell",
-  4: "text-0 before:content-['★'] before:inline before:text-xl sm:text-base sm:before:content-none",
-  5: "text-0 before:content-['LoC'] before:inline before:text-sm sm:text-base sm:before:content-none",
-  all: "break-words sm:text-base lg:text-xl text-black",
+  4: "text-0 before:content-['★'] before:inline before:text-3xl sm:text-base sm:before:content-none",
+  5: "text-0 before:content-['LoC'] before:inline before:text-xl sm:text-base sm:before:content-none",
+  6: "text-xl",
+  all: "break-words sm:text-lg lg:text-xl text-black",
 };
 
 const REACTIVE_CLASSES: any = {
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
-  all: "text-sm sm:text-base lg:text-lg",
+  all: "text-lg",
 };
 
 export default defineComponent({
