@@ -52,7 +52,7 @@
 .swiper-button-next::after,
 .swiper-button-prev::after {
   font-size: 2rem;
-  color: black;
+  color: #fff;
 }
 @media all and (max-width: 640px) {
   .swiper-button-next,
