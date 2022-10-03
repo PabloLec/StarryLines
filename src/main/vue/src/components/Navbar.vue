@@ -8,12 +8,12 @@
     >
       <span
         id="nav-title"
-        class="leading-none self-center text-xl font-semibold whitespace-nowrap text-mikado text-4xl md:text-5xl mt-1 mb-2"
+        class="leading-none self-center text-2xl sm:text-4xl font-semibold whitespace-nowrap text-mikado md:text-5xl mt-1 mb-2"
         >StarryLines</span
       >
       <div class="w-auto text-white py-2.5" id="navbar-buttons">
         <button
-          class="nav-button md:text-lg bg-mikado hover:bg-black hover:text-mikado text-black font-bold py-1 px-2 md:px-4 rounded inline-flex items-center mr-2.5"
+          class="nav-button text-sm sm:text-lg bg-mikado hover:bg-black hover:text-mikado text-black font-bold py-1 px-2 md:px-4 rounded inline-flex items-center mr-2.5"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@
           rel="noopener noreferrer"
         >
           <button
-            class="nav-button md:text-lg bg-mikado hover:bg-black hover:text-mikado text-black font-bold py-1 px-2 md:px-4 rounded inline-flex items-center"
+            class="nav-button text-sm sm:text-lg bg-mikado hover:bg-black hover:text-mikado text-black font-bold py-1 px-2 md:px-4 rounded inline-flex items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

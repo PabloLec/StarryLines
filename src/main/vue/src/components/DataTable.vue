@@ -95,19 +95,19 @@ import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
 const HEADER_REACTIVE_CLASSES: any = {
-  1: "text-0 before:content-['#'] before:inline before:text-xl sm:text-base sm:before:content-none",
-  2: "text-xl",
+  1: "text-0 before:content-['#'] before:inline before:text-lg sm:text-base sm:before:content-none",
+  2: "text-lg sm:text-xl",
   3: "hidden md:table-cell",
-  4: "text-0 before:content-['★'] before:inline before:text-3xl sm:text-base sm:before:content-none",
-  5: "text-0 before:content-['LoC'] before:inline before:text-xl sm:text-base sm:before:content-none",
-  6: "text-xl",
+  4: "text-0 before:content-['★'] before:inline before:text-2xl sm:text-base sm:before:content-none",
+  5: "text-0 before:content-['LoC'] before:inline before:text-lg sm:text-base sm:before:content-none",
+  6: "text-lg sm:text-xl",
   all: "break-words sm:text-lg lg:text-xl text-black",
 };
 
 const REACTIVE_CLASSES: any = {
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
-  all: "text-lg",
+  all: "text-sm sm:text-lg",
 };
 
 export default defineComponent({
