@@ -2,9 +2,9 @@
   <div class="my-16">
     <div id="lang-wrapper">
       <swiper
-        grabCursor="true"
-        slideToClickedSlide="true"
-        centeredSlides="true"
+        :grabCursor="true"
+        :slideToClickedSlide="true"
+        :centeredSlides="true"
         :modules="modules"
         :navigation="true"
         :slides-per-view="5"
