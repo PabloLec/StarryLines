@@ -22,8 +22,12 @@
       >
     </template>
     <template #expand="item">
-      <div style="padding: 15px">
-        {{ item.description }}
+      <div class="p-5">
+        <h2 class="font-bold">Description</h2>
+        <p v-if="item.description">{{ item.description }}</p>
+        <p v-else>None</p>
+        <h2 class="inline md:hidden font-bold">Created at:</h2>
+        <p class="inline md:hidden ml-2">{{ item.createdAt }}</p>
       </div>
     </template>
   </EasyDataTable>
