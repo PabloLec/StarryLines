@@ -7,10 +7,10 @@ def get_repos_to_blacklist(coll_name: str):
     c = db[coll_name]
     too_big = set()
     too_small = set()
-    for repo in c.find({}):
+    for repo in list(c.find({})):
         if repo["diskUsage"] > MAX_SIZE:
             too_big.add(repo["url"])
-        elif "loc" in repo and repo["loc"] < 15:
+        elif "loc" in repo and int(repo["loc"]) < 10:
             too_small.add(repo["url"])
     return too_big, too_small
 

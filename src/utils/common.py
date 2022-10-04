@@ -3,6 +3,7 @@ from os import getenv
 from urllib.parse import quote_plus
 
 LANGS = (
+    "javascript",
     "typescript",
     "java",
     "python",

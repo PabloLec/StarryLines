@@ -99,7 +99,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Vue3EasyDataTable from "vue3-easy-data-table";
-import type { Header, Item, ClickRowArgument } from "vue3-easy-data-table";
+import type { ClickRowArgument } from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
 const HEADER_REACTIVE_CLASSES: any = {
@@ -144,7 +144,8 @@ export default defineComponent({
       const res = await fetch(
         `https://starrylines.pablolec.dev/api/${this.language}_top`
       );
-      this.items = await res.json();
+      const data = await res.json();
+      this.items = data.sort((a: any, b:any) => parseInt(a.rank) - parseInt(b.rank));
       this.loading = false;
     },
     expandRow(item: ClickRowArgument) {
