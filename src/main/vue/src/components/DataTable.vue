@@ -7,6 +7,7 @@
     :loading="loading"
     :header-item-class-name="getHeaderClassNameByIndex"
     :body-item-class-name="getItemClassNameByIndex"
+    @click-row="expandRow"
     theme-color="#FFC40C"
     header-text-direction="center"
     body-text-direction="center"
@@ -26,8 +27,10 @@
         <h2 class="font-bold">Description</h2>
         <p v-if="item.description">{{ item.description }}</p>
         <p v-else>None</p>
-        <h2 class="inline md:hidden font-bold">Created at:</h2>
-        <p class="inline md:hidden ml-2">{{ item.createdAt }}</p>
+        <div class="block md:hidden mt-2">
+          <h2 class="inline font-bold mt-2">Created at:</h2>
+          <p class="inline ml-2">{{ item.createdAt }}</p>
+        </div>
       </div>
     </template>
   </EasyDataTable>
@@ -96,6 +99,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Vue3EasyDataTable from "vue3-easy-data-table";
+import type { Header, Item, ClickRowArgument } from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
 const HEADER_REACTIVE_CLASSES: any = {
@@ -110,7 +114,7 @@ const HEADER_REACTIVE_CLASSES: any = {
 };
 
 const REACTIVE_CLASSES: any = {
-  0: "!px-0 sm:!px-3",
+  0: "expand-button !px-0 sm:!px-3",
   1: "!pl-2 !pr-0 sm:!px-3",
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
@@ -143,19 +147,22 @@ export default defineComponent({
       this.items = await res.json();
       this.loading = false;
     },
+    expandRow(item: ClickRowArgument) {
+      let xpath = `//tr[td/text()='${item["rank"]}']/td[contains(@class, 'expand-button')]`;
+      let expandButton = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      ).singleNodeValue as HTMLElement;
+      expandButton.click();
+    },
     getHeaderClassNameByIndex(header: object, index: string) {
-      if (index in HEADER_REACTIVE_CLASSES) {
-        return (
-          HEADER_REACTIVE_CLASSES[index] + " " + HEADER_REACTIVE_CLASSES.all
-        );
-      }
-      return HEADER_REACTIVE_CLASSES.all;
+      return HEADER_REACTIVE_CLASSES.all + " " + HEADER_REACTIVE_CLASSES[index];
     },
     getItemClassNameByIndex(object: object, index: number) {
-      if (index in REACTIVE_CLASSES) {
-        return REACTIVE_CLASSES[index] + " " + REACTIVE_CLASSES.all;
-      }
-      return REACTIVE_CLASSES.all;
+      return REACTIVE_CLASSES.all + " " + REACTIVE_CLASSES[index];
     },
   },
   mounted() {
