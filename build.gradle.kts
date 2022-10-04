@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "1.7.20"
     application
     jacoco
-    id("com.apollographql.apollo3") version "3.6.0"
+    id("com.apollographql.apollo3") version "3.6.1"
 }
 
 group = "dev.pablolec"
