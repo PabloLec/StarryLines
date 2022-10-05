@@ -38,7 +38,7 @@ The idea is to find the lines of code that seem to have been proportionally the 
 
 Tutorials, cheatsheets, boilerplates, roadmaps and other directories that are not code or not actual projects.
 Some filters are in place as well as a manual exclusion list. It is possible that there are irrelevant entries in the tables.
-If you think you see a repository that doesn't belong, please [open an issue](https://github.com/PabloLec/StarryLines/issues).
+If you think you see a repository that doesn't belong, please [open an issue](https://github.com/PabloLec/StarryLines/issues/new?assignees=PabloLec&labels=enhancement&template=repo_removal.md&title=Repository+deletion).
 
 
 # Score calculation
@@ -75,5 +75,5 @@ A small Vue + Tailwind application, hosted by Cloudflare. The latter also hosts 
 # Contributing
 
 Any contribution is welcome.
-Apart from pull requests you can open an issue to report a bug, report an irrelevant repository, etc.
+Apart from pull requests you can [open an issue](https://github.com/PabloLec/StarryLines/issues/new/choose) to report a bug, report an irrelevant repository, etc.
 For features requests, general ideas or any broader topic, please prefer the [Discussions section](https://github.com/PabloLec/StarryLines/discussions).
