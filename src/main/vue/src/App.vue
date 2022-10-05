@@ -31,16 +31,15 @@ export default defineComponent({
     Readme,
   },
   setup() {
-    const params = new URL(document.location).searchParams;
+    const params = new URL(document.location.href).searchParams;
     return {
       showModalParam: params.get("showModal"),
     };
   },
   data() {
-    console.log(this.showModalParam);
     return {
       language: "c",
-      showModal: this.showModalParam === "true",
+      showModal: this.showModalParam?.toString() === "true",
     };
   },
   methods: {
