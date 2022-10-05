@@ -1,9 +1,9 @@
 ---
 name: Repository deletion
 about: Suggest deletion of a repository
-title: ''
+title: 'Repository deletion'
 labels: enhancement
-assignees: ''
+assignees: 'PabloLec'
 
 ---
 
