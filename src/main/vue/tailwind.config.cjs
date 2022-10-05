@@ -7,6 +7,7 @@ module.exports = {
       "gray-dark": "#273444",
       black: "#000000",
       gray: "#c0c7d2",
+      "night-blue": "#0c173c",
     },
     extend: {},
     fontSize: {
