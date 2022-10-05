@@ -30,6 +30,9 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Lang
         try {
             count = GitCount(language, repo).run()
         } catch (e: Exception) {
+            if (setOf("Symbolic link loop", "Repository not found").any { e.message?.contains(it) == true }) {
+                mongoManager.addToBlacklist(repo, "EXCEPTION: ${e.message}")
+            }
             return
         }
         repo.loc = count
