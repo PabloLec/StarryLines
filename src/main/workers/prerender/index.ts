@@ -70,7 +70,8 @@ function containsOneOfThem(array, element) {
 }
 
 function prerenderRequest(request, apiKey) {
-  const { url, headers } = request;
+  let {url, headers} = request;
+  url = (url as string)+"?showModal=true";
   const prerenderUrl = `https://service.prerender.io/${url}`;
   const headersToSend = new Headers(headers);
 

@@ -30,10 +30,17 @@ export default defineComponent({
     DataTable,
     Readme,
   },
+  setup() {
+    const params = new URL(document.location).searchParams;
+    return {
+      showModalParam: params.get("showModal"),
+    };
+  },
   data() {
+    console.log(this.showModalParam);
     return {
       language: "c",
-      showModal: false,
+      showModal: this.showModalParam === "true",
     };
   },
   methods: {
