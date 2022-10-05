@@ -145,7 +145,9 @@ export default defineComponent({
         `https://starrylines.pablolec.dev/api/${this.language}_top`
       );
       const data = await res.json();
-      this.items = data.sort((a: any, b:any) => parseInt(a.rank) - parseInt(b.rank));
+      this.items = data.sort(
+        (a: any, b: any) => parseInt(a.rank) - parseInt(b.rank)
+      );
       this.loading = false;
     },
     expandRow(item: ClickRowArgument) {

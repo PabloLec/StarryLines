@@ -1,8 +1,9 @@
 <template>
-  <Navbar />
+  <Navbar @showReadme="showReadme" />
   <div class="mx-0 sm:mx-12 md:mx-16 lg:mx-20">
     <LangSlider @clickLanguage="changeLanguage" />
     <DataTable :language="language" />
+    <Readme :showModal="showModal" @close="hideReadme" />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import { defineComponent } from "vue";
 import Navbar from "./components/Navbar.vue";
 import LangSlider from "./components/LangSlider.vue";
 import DataTable from "./components/DataTable.vue";
+import Readme from "./components/Readme.vue";
 
 export default defineComponent({
   name: "App",
@@ -26,15 +28,23 @@ export default defineComponent({
     Navbar,
     LangSlider,
     DataTable,
+    Readme,
   },
   data() {
     return {
       language: "c",
+      showModal: false,
     };
   },
   methods: {
     changeLanguage(lang: string) {
       this.language = lang;
+    },
+    showReadme() {
+      this.showModal = true;
+    },
+    hideReadme() {
+      this.showModal = false;
     },
   },
 });

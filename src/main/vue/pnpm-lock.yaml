@@ -9,6 +9,7 @@ specifiers:
   typescript: ^4.6.4
   vite: ^3.1.0
   vue: ^3.2.37
+  vue-final-modal: ^3.4.4
   vue-tsc: ^0.40.4
   vue3-easy-data-table: ^1.4.19
 
@@ -18,6 +19,7 @@ dependencies:
   swiper: 8.4.2
   tailwindcss: 3.1.8_postcss@8.4.16
   vue: 3.2.40
+  vue-final-modal: 3.4.4
   vue3-easy-data-table: 1.4.19
 
 devDependencies:
@@ -1371,6 +1373,13 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /vue-final-modal/3.4.4:
+    resolution:
+      {
+        integrity: sha512-4nOLU+cMcUqAT0kg+64+Hi96kkQPOph2LOJa7Fl58BXlTyhfRxaMuz3M91wi2ooMIL4poWA8428P5GIAXSpuZg==,
+      }
+    dev: false
 
   /vue-tsc/0.40.13_typescript@4.8.4:
     resolution:
