@@ -9,9 +9,11 @@ type Document = globalThis.Realm.Services.MongoDB.Document;
 
 interface Repository extends Document {
   rank: number;
+  ghid: string;
   name: string;
   description: string;
   createdAt: Date;
+  updatedAt: Date;
   stargazers: number;
   url: string;
   loc: number;
@@ -93,6 +95,7 @@ const worker: ExportedHandler<Bindings> = {
         delete v._id;
         delete v.milliStarsPerLine;
         delete v.languagePercent;
+        delete v.ghid;
       });
       let response = reply(data);
 
