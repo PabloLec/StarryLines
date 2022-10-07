@@ -4,13 +4,12 @@ import db.MongoClient
 import db.MongoManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import mocks.javaRepo
+import mocks.pythonRepo
 import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.blacklistRepo
-import test.mocks.javaRepo
-import test.mocks.pythonRepo
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class TopManagerTest {

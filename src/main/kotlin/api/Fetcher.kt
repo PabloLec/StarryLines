@@ -1,11 +1,14 @@
 package api
 
+import com.apollographql.apollo3.api.ApolloResponse
 import com.apollographql.apollo3.api.Optional
 import dev.pablolec.starrylines.GetTopReposQuery
+import dev.pablolec.starrylines.GetUpdateDateQuery
 import dev.pablolec.starrylines.UpdateReposQuery
 import models.ApiResponse
-import models.Repository
 import models.Language
+import models.Repository
+import models.TopRepository
 import mu.KotlinLogging
 
 class Fetcher {
@@ -58,5 +61,32 @@ class Fetcher {
             "",
             null
         )
+    }
+
+    suspend fun fetchUpdateDates(repos: Set<TopRepository>): Set<Pair<String, String>> {
+        val response: ApolloResponse<GetUpdateDateQuery.Data>
+        try {
+            response = client.query(GetUpdateDateQuery(repos.map { it.ghid })).execute()
+            if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
+        } catch (e: Exception) {
+            logger.error { "Error while fetching update dates: ${e.message}" }
+            return emptySet()
+        }
+
+        val fetchedDates = mutableSetOf<Pair<String, String>>()
+        for (node in response.data?.nodes!!) {
+            try {
+                fetchedDates.add(
+                    Pair(
+                        node!!.onRepository!!.id,
+                        node.onRepository!!.defaultBranchRef!!.target!!.onCommit!!.pushedDate.toString()
+                    )
+                )
+            } catch (e: Exception) {
+                logger.error { "Error while parsing node $node: $e - ${e.message}" }
+            }
+        }
+
+        return fetchedDates.toSet()
     }
 }

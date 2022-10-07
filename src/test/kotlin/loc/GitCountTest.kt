@@ -3,12 +3,12 @@ package loc
 import db.MongoClient
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import mocks.locCRepo
+import mocks.locPythonRepo
 import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.locCRepo
-import test.mocks.locPythonRepo
 import java.io.File
 import kotlin.test.assertFails
 

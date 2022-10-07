@@ -26,7 +26,7 @@
       <div class="p-5">
         <h2 class="font-bold">Description</h2>
         <p v-if="item.description">{{ item.description }}</p>
-        <p v-else>None</p>
+        <p v-else>None 😢</p>
         <div class="block md:hidden mt-2">
           <h2 class="inline font-bold mt-2">Created at:</h2>
           <p class="inline ml-2">{{ item.createdAt }}</p>

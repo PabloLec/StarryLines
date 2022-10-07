@@ -1,4 +1,4 @@
-package test.mocks
+package mocks
 
 import models.Language
 import models.Repository
@@ -88,8 +88,10 @@ val pythonRepo = Repository(
 
 val topRepo1 = TopRepository(
     null,
+    "mockId1",
     "topJavaRepo1",
     "test",
+    "",
     "",
     10000,
     "topJavaRepo1",
@@ -100,8 +102,10 @@ val topRepo1 = TopRepository(
 
 val topRepo2 = TopRepository(
     null,
+    "mockId2",
     "topPythonRepo1",
     "test",
+    "",
     "",
     20000,
     "topPythonRepo1",
@@ -112,8 +116,10 @@ val topRepo2 = TopRepository(
 
 val topRepo3 = TopRepository(
     null,
+    "mockId3",
     "topJavaRepo2",
     "test",
+    "",
     "",
     30000,
     "topJavaRepo1",
@@ -124,8 +130,10 @@ val topRepo3 = TopRepository(
 
 val topRepo4 = TopRepository(
     null,
+    "mockId4",
     "topPythonRepo2",
     "test",
+    "",
     "",
     40000,
     "topPythonRepo2",

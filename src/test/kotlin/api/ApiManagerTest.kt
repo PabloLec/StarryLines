@@ -13,15 +13,15 @@ import io.mockk.mockkObject
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import mocks.apolloClientMocked
+import mocks.repoToInsertBeforeUpdate
+import mocks.testDataFewStars
+import mocks.testDataTopReposQuery
+import mocks.testDataUpdateReposQuery
 import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.apolloClientMocked
-import test.mocks.repoToInsertBeforeUpdate
-import test.mocks.testDataFewStars
-import test.mocks.testDataTopReposQuery
-import test.mocks.testDataUpdateReposQuery
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 

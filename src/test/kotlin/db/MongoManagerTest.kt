@@ -2,18 +2,18 @@ package db
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import mocks.blacklistRepo
+import mocks.blacklistRepoPrevious1
+import mocks.blacklistRepoPrevious2
+import mocks.fetchResult
+import mocks.javaRepo
+import mocks.pythonRepo
+import mocks.topRepo1
+import mocks.topRepo2
 import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import test.mocks.blacklistRepo
-import test.mocks.blacklistRepoPrevious1
-import test.mocks.blacklistRepoPrevious2
-import test.mocks.fetchResult
-import test.mocks.javaRepo
-import test.mocks.pythonRepo
-import test.mocks.topRepo1
-import test.mocks.topRepo2
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.test.assertContains

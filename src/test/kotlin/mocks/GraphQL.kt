@@ -1,4 +1,4 @@
-package test.mocks
+package mocks
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.annotations.ApolloExperimental

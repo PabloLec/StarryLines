@@ -1,0 +1,14 @@
+query GetUpdateDate($ids: [ID!]!) {
+    nodes(ids: $ids) {
+        ... on Repository {
+            id
+            defaultBranchRef {
+                target {
+                    ... on Commit {
+                        pushedDate
+                    }
+                }
+            }
+        }
+    }
+}
