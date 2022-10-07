@@ -161,6 +161,14 @@ export default defineComponent({
       ).singleNodeValue as HTMLElement;
       expandButton.click();
     },
+    async shrinkAllRows() {
+      let expandButtons = document.querySelectorAll(
+        ".expanding"
+      ) as NodeListOf<HTMLElement>;
+      expandButtons.forEach((button) => {
+        button.click();
+      });
+    },
     getHeaderClassNameByIndex(header: object, index: string) {
       return HEADER_REACTIVE_CLASSES.all + " " + HEADER_REACTIVE_CLASSES[index];
     },
@@ -181,12 +189,15 @@ export default defineComponent({
   },
   watch: {
     language() {
+      this.shrinkAllRows();
       this.fetchData();
     },
   },
   updated() {
-    Array.from(document.getElementsByClassName("repo-link")).forEach(function(el) {
-      el.addEventListener('click', (e) => {
+    Array.from(document.getElementsByClassName("repo-link")).forEach(function (
+      el
+    ) {
+      el.addEventListener("click", (e) => {
         e.stopPropagation();
       });
     });
