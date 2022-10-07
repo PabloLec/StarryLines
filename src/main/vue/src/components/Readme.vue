@@ -44,8 +44,7 @@
           possible that there still are irrelevant entries in the tables.
         </p>
         <p>
-          It is possible that there are irrelevant entries in the tables. If you
-          think you see a repository that doesn't belong, please
+          If you think you see a repository that doesn't belong, please
           <a
             href="https://github.com/PabloLec/StarryLines/issues/new?assignees=PabloLec&labels=enhancement&template=repo_removal.md&title=Repository+deletion"
             class="no-underline hover:underline text-mikado"
