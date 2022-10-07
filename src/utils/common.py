@@ -41,6 +41,7 @@ def add_to_blacklist(urls: set, reason: str):
         if url not in current:
             c.insert_one({"url": url, "reason": reason})
             print(f" - Added {url} to blacklist")
+            current.add(url)
             count += 1
         else:
             print(f" ! {url} already in blacklist")
