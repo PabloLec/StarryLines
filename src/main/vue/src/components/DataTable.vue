@@ -15,7 +15,7 @@
   >
     <template #item-name="{ name, url }">
       <a
-        class="after:content-['_↗'] after:text-sm after:pb-2"
+        class="repo-link after:content-['_↗'] after:text-sm after:pb-2"
         :href="url"
         target="_blank"
         rel="noopener noreferrer"
@@ -115,7 +115,7 @@ const HEADER_REACTIVE_CLASSES: any = {
 
 const REACTIVE_CLASSES: any = {
   0: "expand-button !px-0 sm:!px-3",
-  1: "!pl-2 !pr-0 sm:!px-3",
+  1: "repo-rank !pl-2 !pr-0 sm:!px-3",
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
   all: "text-sm sm:text-lg",
@@ -151,7 +151,7 @@ export default defineComponent({
       this.loading = false;
     },
     expandRow(item: ClickRowArgument) {
-      let xpath = `//tr[td/text()='${item["rank"]}']/td[contains(@class, 'expand-button')]`;
+      let xpath = `//tr[td[text()='${item["rank"]}'][contains(@class, 'repo-rank')]]/td[contains(@class, 'expand-button')]`;
       let expandButton = document.evaluate(
         xpath,
         document,
@@ -183,6 +183,13 @@ export default defineComponent({
     language() {
       this.fetchData();
     },
+  },
+  updated() {
+    Array.from(document.getElementsByClassName("repo-link")).forEach(function(el) {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    });
   },
 });
 </script>

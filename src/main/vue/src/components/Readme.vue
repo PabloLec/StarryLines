@@ -6,6 +6,14 @@
     classes="flex justify-center items-center"
     content-class="relative flex flex-col max-h-full mx-4 p-4 border rounded bg-night-blue text-white"
     @closed="closed"
+    :transition="{
+      'enter-active-class': 'transition duration-350 ease-in-out transform',
+      'enter-class': 'translate-y-full',
+      'enter-to-class': 'translate-y-0',
+      'leave-active-class': 'transition duration-350 ease-in-out transform',
+      'leave-to-class': 'translate-y-full',
+      'leave-class': 'translate-y-0',
+    }"
   >
     <div
       class="flex-grow overflow-y-auto text-left sm: px-6 xl:px-32 max-w-lg lg:max-w-2xl xl:max-w-3xl 2xl:max-w-7xl"
@@ -39,9 +47,14 @@
       </div>
       <div class="text-2xl mt-6 font-bold text-mikado">Score calculation</div>
       <div>
-        The score is obtained by dividing the number of stars by the number of
-        lines of code. Star count is adjusted and several operations are applied
-        on the code to obtain a relevant number of lines.
+        <p>
+          The score is obtained by dividing the number of stars by the number of
+          lines of code.
+        </p>
+        <p>
+          Star count is adjusted and several operations are applied on the code
+          to obtain a relevant number of lines.
+        </p>
       </div>
       <div class="text-xl mt-2">- Star count</div>
       <div>
