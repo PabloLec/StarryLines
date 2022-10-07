@@ -28,6 +28,10 @@
         <p v-if="item.description">{{ item.description }}</p>
         <p v-else>None 😢</p>
         <div class="block md:hidden mt-2">
+          <h2 class="inline font-bold mt-2">Last update:</h2>
+          <p class="inline ml-2">{{ item.updatedAt }}</p>
+        </div>
+        <div class="block lg:hidden mt-2">
           <h2 class="inline font-bold mt-2">Created at:</h2>
           <p class="inline ml-2">{{ item.createdAt }}</p>
         </div>
@@ -107,9 +111,10 @@ const HEADER_REACTIVE_CLASSES: any = {
   1: "!pl-2 !pr-0 sm:!px-3 text-0 before:content-['#'] before:inline before:text-lg sm:text-base sm:before:content-none",
   2: "text-lg sm:text-xl",
   3: "hidden md:table-cell",
-  4: "text-0 before:content-['★'] before:inline before:text-2xl sm:text-base sm:before:content-none",
-  5: "text-0 before:content-['LoC'] before:inline before:text-lg sm:text-base sm:before:content-none",
-  6: "text-lg sm:text-xl",
+  4: "hidden lg:table-cell",
+  5: "text-0 before:content-['★'] before:inline before:text-2xl sm:text-base sm:before:content-none",
+  6: "text-0 before:content-['LoC'] before:inline before:text-lg sm:text-base sm:before:content-none",
+  7: "text-lg sm:text-xl",
   all: "break-words sm:text-lg lg:text-xl text-black",
 };
 
@@ -118,6 +123,7 @@ const REACTIVE_CLASSES: any = {
   1: "repo-rank !pl-2 !pr-0 sm:!px-3",
   2: "break-all text-ellipsis",
   3: "hidden md:table-cell",
+  4: "hidden lg:table-cell",
   all: "text-sm sm:text-lg",
 };
 
@@ -180,6 +186,7 @@ export default defineComponent({
     this.headers = [
       { text: "RANK", value: "rank", sortable: true },
       { text: "NAME", value: "name", sortable: true },
+      { text: "LAST UPDATE", value: "updatedAt", sortable: true },
       { text: "CREATED AT", value: "createdAt", sortable: true },
       { text: "STARGAZERS", value: "stargazers", sortable: true },
       { text: "LINES OF CODE", value: "loc", sortable: true },
