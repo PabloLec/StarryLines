@@ -22,8 +22,8 @@
    * [Score calculation](#score-calculation)
       * [Star count](#star-count)
       * [Lines of code](#lines-of-code)
-   * [Technicalities](#technicalities)
    * [Contributing](#contributing)
+   * [Technicalities](#technicalities)
 <!--te-->
 
 ---
@@ -36,15 +36,15 @@ The idea is to find the lines of code that seem to have been proportionally the 
 
 #### What should not be in StarryLines
 
-Tutorials, cheatsheets, boilerplates, roadmaps and other directories that are not code or not actual projects.
-Some filters are in place as well as a manual exclusion list. It is possible that there are irrelevant entries in the tables.
+Tutorials, cheat sheets, lists, roadmaps and other repositories that are not code or not actual projects.
+Some filters are in place as well as a manual exclusion list. It is possible that there still are irrelevant entries in the tables.
 If you think you see a repository that doesn't belong, please [open an issue](https://github.com/PabloLec/StarryLines/issues/new?assignees=PabloLec&labels=enhancement&template=repo_removal.md&title=Repository+deletion).
 
 
 # Score calculation
 
 The score is obtained by dividing the number of stars by the number of lines of code.
-Star count is adjusted and several operations are applied on the code to obtain a relevant number of lines.
+Star count is adjusted and several operations are applied to the code to obtain a relevant number of lines.
 
 ### Star count
 
@@ -53,27 +53,27 @@ For a repository whose main language is C, composed of 60% C and 40% Python with
 
 ### Lines of code
 
-The entire code is analyzed and stripped of comments or documentation. The number of lines is calculated by the number of characters divided by 80 for each file.
-The goal is to obtain a fair result, without penalizing the repositories with the most documentation.
-Moreover, only files written in the main language are retained, the others are ignored.
+The entire code is parsed and stripped of comments or documentation. The number of lines is calculated by the number of characters divided by 80 for each file.
+The goal is to obtain a fair result, without penalizing the repositories with the most documentation.  
+Moreover, only files written in the main language are retained, others are ignored.
+
+# Contributing
+
+Any contribution is welcome!  
+Apart from pull requests you can [open an issue](https://github.com/PabloLec/StarryLines/issues/new/choose) to report a bug, report an irrelevant repository, etc.
+For feature requests, general ideas, or any broader topic, please use the [Discussions section](https://github.com/PabloLec/StarryLines/discussions).
 
 # Technicalities
 
 #### Backend
 
 Written in Kotlin as a CLI. The whole thing is orchestrated by crons that execute actions (retrieving data from the API, counting lines of code and creating tops) periodically.
-In the dependencies we find Apollo for the interactions with the GraphQL database of GitHub, and KMongo for the database.
+In the dependencies we find Apollo for the interactions with the GraphQL database of GitHub and KMongo for the database.
 
 #### Database
 
-A Mongo database, hosted on Mongo Atlas. Each language has a main collection and another one that serves as a top 100
+A Mongo database hosted on Mongo Atlas. Each language has a main collection and another one that serves as a top 100
 
 #### Frontend
 
-A small Vue + Tailwind application, hosted by Cloudflare. The latter also hosts workers that act as middleware before the database. The tops are stored in KV stores and edge cache as a fallback. This allows to relieve the Mongo database and to avoid slow and useless requests.
-
-# Contributing
-
-Any contribution is welcome.
-Apart from pull requests you can [open an issue](https://github.com/PabloLec/StarryLines/issues/new/choose) to report a bug, report an irrelevant repository, etc.
-For features requests, general ideas or any broader topic, please prefer the [Discussions section](https://github.com/PabloLec/StarryLines/discussions).
+A small Vue + Tailwind application, hosted by Cloudflare. The latter also hosts workers that act as middleware before the database. The tops are stored in KV stores and edge cache as a fallback. This allows to relieve the Mongo database and to avoids slow and useless requests.
