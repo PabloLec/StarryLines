@@ -27,4 +27,4 @@ jobs:
           preCommands: cd src/main/workers/prerender && npm install .
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: publish --env production --var API_TOKEN:${{ secrets.PRERENDER_API_KEY }}
+          command: publish --env production --var API_KEY:${{ secrets.PRERENDER_API_KEY }}
