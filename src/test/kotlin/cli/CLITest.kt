@@ -1,7 +1,5 @@
-package test.cli
+package cli
 
-import cli.Action
-import cli.parseArgs
 import models.Language
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals

@@ -3,8 +3,8 @@ package db
 import com.mongodb.client.MongoDatabase
 import kotlinx.coroutines.coroutineScope
 import models.BlacklistUrl
-import models.Repository
 import models.Language
+import models.Repository
 import models.TopRepository
 import mu.KotlinLogging
 import org.litote.kmongo.KMongo
