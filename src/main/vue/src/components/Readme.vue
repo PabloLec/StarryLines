@@ -19,7 +19,9 @@
       class="flex-grow overflow-y-auto text-left sm: px-6 xl:px-32 max-w-lg lg:max-w-2xl xl:max-w-3xl 2xl:max-w-7xl"
     >
       <slot v-bind:params="params"></slot>
-      <h1 v-if="isPrerender" class="text-3xl" >Most starred lines of code on GitHub</h1>
+      <h1 v-if="isPrerender" class="text-3xl">
+        Most starred lines of code on GitHub
+      </h1>
       <h2 class="text-2xl mt-4 font-bold text-mikado">What is it?</h2>
 
       <div class="ml-1 md:ml-2">

@@ -3,7 +3,11 @@
   <div class="mx-0 sm:mx-12 md:mx-16 lg:mx-20">
     <LangSlider @clickLanguage="changeLanguage" />
     <DataTable :language="language" />
-    <Readme :showModal="showModal" @close="hideReadme" :isPrerender="isPrerender" />
+    <Readme
+      :showModal="showModal"
+      @close="hideReadme"
+      :isPrerender="isPrerender"
+    />
   </div>
 </template>
 
