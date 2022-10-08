@@ -27,8 +27,15 @@
     <template #expand="item">
       <div class="p-5">
         <h2 class="font-bold">Description</h2>
-        <p v-if="item.description">{{ item.description }}</p>
-        <p v-else>None 😢</p>
+        <p v-if="!item.description">None 😢</p>
+        <p v-else-if="item.descriptionLanguage !== 'EN'">
+          {{ item.translatedDescription }}
+          <span class="italic font-bold block"
+            >(Auto-translated from
+            {{ this.getFlagEmoji(item.descriptionLanguage) }})
+          </span>
+        </p>
+        <p v-else>{{ item.description }}</p>
         <div class="block md:hidden mt-2">
           <h2 class="inline font-bold mt-2">Last update:</h2>
           <p class="inline ml-2">{{ item.updatedAt }}</p>
@@ -182,6 +189,18 @@ export default defineComponent({
     },
     getItemClassNameByIndex(object: object, index: number) {
       return REACTIVE_CLASSES.all + " " + REACTIVE_CLASSES[index];
+    },
+    getFlagEmoji(countryCode: string) {
+      if (countryCode == "ZH") countryCode = "CN";
+      if (countryCode == "JA") countryCode = "JP";
+      const codePoints = countryCode
+        .toUpperCase()
+        .split("")
+        .map((char) => 127397 + char.charCodeAt(0));
+      return (
+        String.fromCodePoint(codePoints[0]) +
+        String.fromCodePoint(codePoints[1])
+      );
     },
   },
   mounted() {
