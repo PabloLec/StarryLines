@@ -25,17 +25,18 @@ class Fetcher {
         val response = client.query(GetTopReposQuery(query, cursor)).execute()
         if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
 
-        val fetchedRepos = mutableSetOf<Repository>()
-        for (edge in response.data?.search?.edges!!) {
-            try {
-                fetchedRepos.add(Repository.fromEdge(edge!!))
-            } catch (e: Exception) {
-                logger.error { "Error while parsing edge $edge: ${e.message}" }
+        val fetchedRepos = buildSet {
+            response.data?.search?.edges!!.forEach {
+                try {
+                    add(Repository.fromEdge(it!!))
+                } catch (e: Exception) {
+                    logger.error { "Error while parsing edge $it: ${e.message}" }
+                }
             }
         }
 
         return ApiResponse(
-            fetchedRepos.toSet(),
+            fetchedRepos,
             response.data?.search?.pageInfo?.hasNextPage!!,
             response.data?.search?.pageInfo?.endCursor!!,
             response.data?.rateLimit
@@ -46,17 +47,18 @@ class Fetcher {
         val response = client.query(UpdateReposQuery(repos.map { it.ghid })).execute()
         if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
 
-        val fetchedRepos = mutableSetOf<Repository>()
-        for (node in response.data?.nodes!!) {
-            try {
-                fetchedRepos.add(Repository.fromNode(node!!))
-            } catch (e: Exception) {
-                logger.error { "Error while parsing node $node: ${e.message}" }
+        val fetchedRepos = buildSet {
+            response.data?.nodes!!.forEach {
+                try {
+                    add(Repository.fromNode(it!!))
+                } catch (e: Exception) {
+                    logger.error { "Error while parsing node $it: ${e.message}" }
+                }
             }
         }
 
         return ApiResponse(
-            fetchedRepos.toSet(),
+            fetchedRepos,
             false,
             "",
             null
@@ -73,20 +75,19 @@ class Fetcher {
             return emptySet()
         }
 
-        val fetchedDates = mutableSetOf<Pair<String, String>>()
-        for (node in response.data?.nodes!!) {
-            try {
-                fetchedDates.add(
-                    Pair(
-                        node!!.onRepository!!.id,
-                        node.onRepository!!.defaultBranchRef!!.target!!.onCommit!!.pushedDate.toString()
+        return buildSet {
+            response.data?.nodes!!.forEach {
+                try {
+                    add(
+                        Pair(
+                            it!!.onRepository!!.id,
+                            it.onRepository!!.defaultBranchRef!!.target!!.onCommit!!.pushedDate.toString()
+                        )
                     )
-                )
-            } catch (e: Exception) {
-                logger.error { "Error while parsing node $node: $e - ${e.message}" }
+                } catch (e: Exception) {
+                    logger.error { "Error while parsing node $it: $e - ${e.message}" }
+                }
             }
         }
-
-        return fetchedDates.toSet()
     }
 }
