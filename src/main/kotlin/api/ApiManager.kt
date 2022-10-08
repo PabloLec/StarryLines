@@ -10,8 +10,7 @@ import models.Repository
 import mu.KotlinLogging
 import java.time.LocalDateTime
 
-const val LIMIT_PER_LANGUAGE = 2000
-const val MINIMUM_STARS = 350
+private const val MINIMUM_STARS = 350
 
 class ApiManager(private val mongoManager: MongoManager, val languages: Set<Language>) {
     private val logger = KotlinLogging.logger {}
@@ -53,6 +52,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Lang
         coroutineScope {
             minimumStarsFound.forEach { (lang, maximumStars) ->
                 val fetchedRepos = fetchLanguage(lang, maximumStars)
+                logger.info { "$lang | Fetching finished, total: ${fetchedRepos.size}" }
                 launch {
                     mongoManager.updateLanguage(lang, fetchedRepos)
                 }
@@ -60,63 +60,57 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Lang
         }
     }
 
-    private suspend fun fetchLanguage(language: Language, maximumStars: Int?): MutableSet<Repository> {
+    private suspend fun fetchLanguage(language: Language, maximumStars: Int?): Set<Repository> {
         val fetcher = Fetcher()
-        val repos = mutableSetOf<Repository>()
         var cursor = Optional.absent<String>()
 
-        while (repos.size < LIMIT_PER_LANGUAGE) {
-            val apiResponse: ApiResponse
-            try {
-                apiResponse = fetcher.fetchMostStarredRepos(language, cursor, maximumStars)
-            } catch (e: Exception) {
-                if ("403" in e.message.orEmpty()) {
-                    logger.error { " 403: Rate limit exceeded" }
+        return buildSet {
+            do {
+                val apiResponse: ApiResponse
+                try {
+                    apiResponse = fetcher.fetchMostStarredRepos(language, cursor, maximumStars)
+                } catch (e: Exception) {
+                    if ("403" in e.message.orEmpty()) {
+                        logger.error { " 403: Rate limit exceeded" }
+                        break
+                    }
+                    logger.error { " $language | $e " }
                     break
                 }
-                logger.error { " $language | $e " }
-                return mutableSetOf()
-            }
 
-            if (apiResponse.repos.any { it.stargazers < MINIMUM_STARS }) {
-                logger.warn { "Found repo with < $MINIMUM_STARS stars" }
-                return repos
-            }
+                if (apiResponse.repos.any { it.stargazers < MINIMUM_STARS }) {
+                    logger.warn { "Found repo with < $MINIMUM_STARS stars" }
+                    break
+                }
 
-            repos.addAll(apiResponse.repos)
-            if (!apiResponse.hasNextPage) break
-            cursor = Optional.present(apiResponse.endCursor)
+                addAll(apiResponse.repos)
+                cursor = Optional.present(apiResponse.endCursor)
+            } while (apiResponse.hasNextPage)
         }
-
-        logger.info { "$language | Fetching finished, total: ${repos.size}" }
-        return repos
     }
 
     private suspend fun updateLeftoverRepos(toUpdate: Map<Language, List<Repository>>): Map<Language, Set<Repository>> {
         logger.info { "Starting to update repositories for languages: $languages with ${toUpdate.flatMap { it.value }.size} repos" }
-        val results = buildMap {
+        return buildMap {
             toUpdate.forEach { (lang, repos) ->
                 put(lang, updateLeftoverByLanguage(repos))
             }
         }
-
-        return results.entries.associate { it.key to it.value }
+            .entries
+            .associate { it.key to it.value }
     }
 
     private suspend fun updateLeftoverByLanguage(repos: List<Repository>): Set<Repository> {
         val fetcher = Fetcher()
-        val updatedRepos = mutableSetOf<Repository>()
-
-        repos.chunked(20).forEach {
-            val apiResponse: ApiResponse
-            try {
-                apiResponse = fetcher.fetchReposToUpdate(it)
-                updatedRepos.addAll(apiResponse.repos)
-            } catch (e: Exception) {
-                logger.error { "Update error: $e " }
+        return buildSet {
+            repos.chunked(20).forEach {
+                try {
+                    val apiResponse = fetcher.fetchReposToUpdate(it)
+                    addAll(apiResponse.repos)
+                } catch (e: Exception) {
+                    logger.error { "Update error: $e " }
+                }
             }
         }
-
-        return updatedRepos
     }
 }
