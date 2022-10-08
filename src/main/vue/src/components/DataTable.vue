@@ -1,5 +1,6 @@
 <template>
   <EasyDataTable
+    ref="data-table"
     table-class-name="data-table"
     class="font-mono"
     :headers="headers"
@@ -7,6 +8,7 @@
     :loading="loading"
     :header-item-class-name="getHeaderClassNameByIndex"
     :body-item-class-name="getItemClassNameByIndex"
+    updatePage
     @click-row="expandRow"
     theme-color="#FFC40C"
     header-text-direction="center"
@@ -198,6 +200,7 @@ export default defineComponent({
     language() {
       this.shrinkAllRows();
       this.fetchData();
+      (this.$refs["data-table"] as any).updatePage(1);
     },
   },
   updated() {
