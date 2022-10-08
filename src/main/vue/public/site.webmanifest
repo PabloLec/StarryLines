@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "StarryLines",
+  "short_name": "StarryLines",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -8,7 +8,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#FFC40C",
+  "background_color": "#0c173c",
   "display": "standalone"
 }
