@@ -5,10 +5,10 @@ import models.Language
 import models.TopRepository
 
 class TopFactory {
-    fun createTop(language: Language) =
+    fun createTop(language: Language, blacklist: List<String>) =
         MongoClient.getCollection(language.toString())
             .asSequence()
-            .filterNot { it.loc == null || it.milliStarsPerLine == null }
+            .filterNot { it.loc == null || it.milliStarsPerLine == null || it.url in blacklist }
             .map { TopRepository.fromRepository(it) }
             .onEach { repo -> repo.score = getRealMilliStars(repo) }
             .sortedByDescending { it.score }

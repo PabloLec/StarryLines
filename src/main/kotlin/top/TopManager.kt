@@ -18,9 +18,10 @@ class TopManager(private val mongoManager: MongoManager, val languages: Set<Lang
 
     private fun getTops(): Set<Pair<Language, Set<TopRepository>>> {
         val topFactory = TopFactory()
+        val blacklist = mongoManager.getBlacklist()
         return buildSet {
             languages.forEach {
-                add(Pair(it, topFactory.createTop(it)))
+                add(Pair(it, topFactory.createTop(it, blacklist)))
             }
         }
     }
