@@ -32,7 +32,7 @@
           {{ item.translatedDescription }}
           <span class="italic font-bold block"
             >(Auto-translated from
-            {{ this.getFlagEmoji(item.descriptionLanguage) }})
+            {{ getFlagEmoji(item.descriptionLanguage) }})
           </span>
         </p>
         <p v-else>{{ item.description }}</p>
