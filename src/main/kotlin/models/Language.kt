@@ -10,7 +10,7 @@ import java.io.BufferedReader
 
 enum class Language {
     JAVASCRIPT {
-        override fun extensions() = setOf(".js", ".jsx")
+        override fun extensions() = setOf(".js", ".jsx", ".mjs", ".cjs")
         override fun commentParser() = ::parseCStyle
     },
     TYPESCRIPT {
