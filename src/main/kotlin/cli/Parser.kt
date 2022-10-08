@@ -5,7 +5,8 @@ import models.Language
 enum class Action {
     FETCH, // Fetch GH API
     GETLOC, // Get LoC for stored repos
-    TOP; // Create Top 100
+    TOP, // Create Top 100
+    TRANSLATE; // Translate repos description
     val args: MutableSet<Language> = mutableSetOf()
 }
 
@@ -23,6 +24,10 @@ fun parseArgs(args: Array<String>): Action {
 
         Action.TOP -> {
             parseAction(Action.TOP, args)
+        }
+
+        Action.TRANSLATE -> {
+            parseAction(Action.TRANSLATE, args)
         }
     }
 }

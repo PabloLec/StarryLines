@@ -26,6 +26,9 @@ class MongoManager {
     suspend fun updateLoc(repo: Repository, language: Language) =
         coroutineScope { MongoClient.updateFromLoc(repo, language) }
 
+    suspend fun updateTranslation(repo: TopRepository, language: Language, descriptionLanguage: String, translatedDescription: String?) =
+        coroutineScope { MongoClient.updateTranslation(repo, language, descriptionLanguage, translatedDescription) }
+
     suspend fun updateAll(languagesMap: Map<Language, Set<Repository>>) {
         logger.info { "Starting updateAll" }
         val jobs = mutableListOf<Deferred<Unit>>()
@@ -64,6 +67,10 @@ class MongoManager {
     suspend fun updateTop(collectionName: String, repos: List<TopRepository>) {
         MongoClient.deleteCollection(collectionName)
         MongoClient.insertMany(repos, collectionName)
+    }
+
+    fun getTop(language: Language): List<TopRepository> {
+        return MongoClient.getTopCollection(language.name.lowercase() + "_top")
     }
 
     suspend fun updateCollectionsWithBlacklist() {

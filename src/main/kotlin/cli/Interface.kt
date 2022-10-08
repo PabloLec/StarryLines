@@ -5,6 +5,7 @@ import db.MongoClient
 import db.MongoManager
 import loc.LocManager
 import top.TopManager
+import translation.TranslationManager
 import kotlin.system.exitProcess
 
 suspend fun main(args: Array<String>) {
@@ -21,6 +22,10 @@ suspend fun main(args: Array<String>) {
 
         Action.TOP -> {
             TopManager(mongoManager, action.args).run()
+        }
+
+        Action.TRANSLATE -> {
+            TranslationManager(mongoManager, action.args).run()
         }
     }
     MongoClient.close()

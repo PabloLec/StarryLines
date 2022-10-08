@@ -14,7 +14,9 @@ data class TopRepository(
     val loc: Int,
     val languagePercent: Int,
     val milliStarsPerLine: Int,
-    var score: Int?
+    var score: Int?,
+    var descriptionLanguage: String?,
+    var translatedDescription: String?
 ) {
 
     companion object {
@@ -32,7 +34,9 @@ data class TopRepository(
                 repo.loc!!,
                 repo.languagePercent,
                 repo.milliStarsPerLine!!,
-                null
+                null,
+                repo.descriptionLanguage,
+                repo.translatedDescription
             )
     }
 }

@@ -65,7 +65,7 @@ object MongoClient {
         logger.debug { "Removed $result from $collectionName" }
     }
 
-    suspend fun upsertFromGHApi(repository: Repository, language: Language) {
+    suspend fun upsertFromGHApi(repository: Repository, language: Language) =
         coroutineScope {
             val col = database.getCollection<Repository>(language.toString())
             client.startSession().use { session ->
@@ -93,7 +93,35 @@ object MongoClient {
                 logger.debug("Upserted $repository to $language")
             }
         }
-    }
+
+    suspend fun updateTranslation(repository: TopRepository, language: Language, descriptionLanguage: String, translatedDescription: String?) =
+        coroutineScope {
+            val col = database.getCollection<Repository>(language.toString())
+            client.startSession().use { session ->
+                session.startTransaction()
+                col.updateOne(
+                    Repository::url eq repository.url,
+                    set(
+                        SetTo(Repository::descriptionLanguage, descriptionLanguage),
+                        SetTo(Repository::translatedDescription, translatedDescription)
+                    )
+                )
+                session.commitTransaction()
+            }
+            val topCol = database.getCollection<TopRepository>(language.toString().lowercase() + "_top")
+            client.startSession().use { session ->
+                session.startTransaction()
+                topCol.updateOne(
+                    TopRepository::url eq repository.url,
+                    set(
+                        SetTo(TopRepository::descriptionLanguage, descriptionLanguage),
+                        SetTo(TopRepository::translatedDescription, translatedDescription)
+                    )
+                )
+                session.commitTransaction()
+            }
+            logger.debug("Updated translation for $repository")
+        }
 
     suspend fun updateFromLoc(repository: Repository, language: Language) {
         coroutineScope {
