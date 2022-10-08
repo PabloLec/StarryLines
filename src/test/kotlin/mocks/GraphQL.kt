@@ -125,6 +125,8 @@ val repoToInsertBeforeUpdate = models.Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS).minusDays(2),
     null,
     null,
+    null,
+    null,
     null
 )
 

@@ -19,7 +19,9 @@ val blacklistRepoPrevious1 = Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     null,
     null,
-    null
+    null,
+    null,
+    null,
 )
 
 val blacklistRepoPrevious2 = Repository(
@@ -35,7 +37,9 @@ val blacklistRepoPrevious2 = Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     null,
     null,
-    null
+    null,
+    null,
+    null,
 )
 
 val blacklistRepo = Repository(
@@ -51,7 +55,9 @@ val blacklistRepo = Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     null,
     null,
-    null
+    null,
+    null,
+    null,
 )
 
 val javaRepo = Repository(
@@ -67,7 +73,9 @@ val javaRepo = Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     null,
     null,
-    null
+    null,
+    null,
+    null,
 )
 
 val pythonRepo = Repository(
@@ -83,7 +91,9 @@ val pythonRepo = Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     null,
     null,
-    null
+    null,
+    null,
+    null,
 )
 
 val topRepo1 = TopRepository(
@@ -97,7 +107,9 @@ val topRepo1 = TopRepository(
     "topJavaRepo1",
     100,
     100,
-    100, null
+    100, null,
+    null,
+    null,
 )
 
 val topRepo2 = TopRepository(
@@ -111,7 +123,9 @@ val topRepo2 = TopRepository(
     "topPythonRepo1",
     200,
     200,
-    200, null
+    200, null,
+    null,
+    null,
 )
 
 val topRepo3 = TopRepository(
@@ -125,7 +139,9 @@ val topRepo3 = TopRepository(
     "topJavaRepo1",
     300,
     300,
-    300, null
+    300, null,
+    null,
+    null,
 )
 
 val topRepo4 = TopRepository(
@@ -139,7 +155,9 @@ val topRepo4 = TopRepository(
     "topPythonRepo2",
     400,
     400,
-    400, null
+    400, null,
+    null,
+    null,
 )
 
 val fetchResult =
@@ -158,7 +176,9 @@ val locCRepo = Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     null,
     null,
-    null
+    null,
+    null,
+    null,
 )
 
 val locPythonRepo = Repository(
@@ -174,5 +194,7 @@ val locPythonRepo = Repository(
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     null,
     null,
-    null
+    null,
+    null,
+    null,
 )
