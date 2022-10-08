@@ -3,7 +3,7 @@
   <div class="mx-0 sm:mx-12 md:mx-16 lg:mx-20">
     <LangSlider @clickLanguage="changeLanguage" />
     <DataTable :language="language" />
-    <Readme :showModal="showModal" @close="hideReadme" />
+    <Readme :showModal="showModal" @close="hideReadme" :isPrerender="isPrerender" />
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default defineComponent({
   data() {
     return {
       language: "c",
+      isPrerender: this.ua?.toString().includes("prerender"),
       showModal: this.ua?.toString().includes("prerender"),
     };
   },

@@ -19,82 +19,83 @@
       class="flex-grow overflow-y-auto text-left sm: px-6 xl:px-32 max-w-lg lg:max-w-2xl xl:max-w-3xl 2xl:max-w-7xl"
     >
       <slot v-bind:params="params"></slot>
-      <div class="text-2xl mt-4 font-bold text-mikado">What is it?</div>
+      <h1 v-if="isPrerender" class="text-3xl" >Most starred lines of code on GitHub</h1>
+      <h2 class="text-2xl mt-4 font-bold text-mikado">What is it?</h2>
 
       <div class="ml-1 md:ml-2">
-        <p class="mt-2">
+        <h3 class="mt-2">
           StarryLines retrieves from GitHub the best repositories for each
           language and then ranks them by the ratio between the number of stars
           and the number of lines of code.
-        </p>
-        <p class="mt-4">
+        </h3>
+        <h3 class="mt-4">
           The idea is to find the lines of code that seem to have been
           proportionally the most interesting for the greatest number of
           developers. Useful for learning or just for curiosity.
-        </p>
+        </h3>
       </div>
-      <div class="text-xl mt-6">- What should not be in StarryLines</div>
+      <h2 class="text-xl mt-6">- What should not be in StarryLines</h2>
       <div class="ml-2 md:ml-4">
-        <p class="mt-2">
+        <h3 class="mt-2">
           Tutorials, cheat sheets, lists, roadmaps and other repositories that
           are not code or not actual projects.
-        </p>
-        <p>
+        </h3>
+        <h3>
           Some filters are in place as well as a manual exclusion list. It is
           possible that there still are irrelevant entries in the tables.
-        </p>
-        <p>
+        </h3>
+        <h3>
           If you think you see a repository that doesn't belong, please
           <a
             href="https://github.com/PabloLec/StarryLines/issues/new?assignees=PabloLec&labels=enhancement&template=repo_removal.md&title=Repository+deletion"
             class="no-underline hover:underline text-mikado"
             >open an issue.</a
           >
-        </p>
+        </h3>
       </div>
-      <div class="text-2xl mt-8 font-bold text-mikado">Score calculation</div>
+      <h2 class="text-2xl mt-8 font-bold text-mikado">Score calculation</h2>
       <div class="ml-2 md:ml-4">
-        <p class="mt-2">
+        <h3 class="mt-2">
           The score is obtained by dividing the number of stars by the number of
           lines of code.
-        </p>
-        <p>
+        </h3>
+        <h3>
           Star count is adjusted and several operations are applied to the code
           to obtain a relevant number of lines.
-        </p>
+        </h3>
       </div>
-      <div class="text-xl mt-6">- Star count</div>
+      <h2 class="text-xl mt-6">- Star count</h2>
       <div class="ml-2 md:ml-4">
-        <p class="mt-2">
+        <h3 class="mt-2">
           Although the star count displayed in the table is left unchanged, the
           one taken into account is adjusted. The number of stars is divided by
           the proportion of code written in the main language.
-        </p>
-        <p>
+        </h3>
+        <h3>
           For a repository whose main language is C, composed of 60% C and 40%
           Python with 100 stars in total, the final star count will be 60.
-        </p>
+        </h3>
       </div>
-      <div class="text-xl mt-6">- Lines of code</div>
+      <h2 class="text-xl mt-6">- Lines of code</h2>
       <div class="ml-2 md:ml-4">
-        <p class="mt-2">
+        <h3 class="mt-2">
           The entire code is parsed and stripped of comments or documentation.
           The number of lines is calculated by the number of characters divided
           by 80 for each file.
-        </p>
-        <p>
+        </h3>
+        <h3>
           The goal is to obtain a fair result, without penalizing the
           repositories with the most documentation.
-        </p>
-        <p>
+        </h3>
+        <h3>
           Moreover, only files written in the main language are retained, others
           are ignored.
-        </p>
+        </h3>
       </div>
-      <div class="text-2xl mt-8 font-bold text-mikado">Contributing</div>
+      <h2 class="text-2xl mt-8 font-bold text-mikado">Contributing</h2>
       <div class="ml-2 md:ml-4">
-        <p class="mt-2">Any contribution is welcome!</p>
-        <p>
+        <h3 class="mt-2">Any contribution is welcome!</h3>
+        <h3>
           Apart from pull requests you can
           <a
             href="https://github.com/PabloLec/StarryLines/issues/new/choose"
@@ -102,8 +103,8 @@
             >open an issue</a
           >
           to report a bug, report an irrelevant repository, etc.
-        </p>
-        <p>
+        </h3>
+        <h3>
           For feature requests, general ideas, or any broader topic, please use
           the
           <a
@@ -111,7 +112,7 @@
             class="no-underline hover:underline text-mikado"
             >Discussions section</a
           >.
-        </p>
+        </h3>
       </div>
     </div>
     <button
@@ -129,6 +130,10 @@ import { VueFinalModal, ModalsContainer } from "vue-final-modal";
 export default {
   props: {
     showModal: {
+      type: Boolean,
+      required: true,
+    },
+    isPrerender: {
       type: Boolean,
       required: true,
     },
