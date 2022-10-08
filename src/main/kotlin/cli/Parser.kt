@@ -6,32 +6,29 @@ enum class Action {
     FETCH, // Fetch GH API
     GETLOC, // Get LoC for stored repos
     TOP; // Create Top 100
-
     val args: MutableSet<Language> = mutableSetOf()
 }
 
 fun parseArgs(args: Array<String>): Action {
-    if (args.isEmpty()) throw IllegalArgumentException("No action specified")
-
-    return when (args[0].uppercase().trim()) {
-        Action.FETCH.name -> {
+    require(args.isNotEmpty()) { "No action specified" }
+    require(args[0].uppercase().trim() in Action.values().map { it.name }) { "Invalid action specified" }
+    return when (Action.valueOf(args[0].uppercase().trim())) {
+        Action.FETCH -> {
             parseAction(Action.FETCH, args)
         }
 
-        Action.GETLOC.name -> {
+        Action.GETLOC -> {
             parseAction(Action.GETLOC, args)
         }
 
-        Action.TOP.name -> {
+        Action.TOP -> {
             parseAction(Action.TOP, args)
         }
-
-        else -> throw IllegalArgumentException("Unknown action: ${args[0]}")
     }
 }
 
 fun parseAction(action: Action, args: Array<String>): Action {
-    if (args.size < 2) throw IllegalArgumentException("No language specified")
+    require(args.size > 1) { "No language specified" }
     if (args[1] == "all") {
         action.args.addAll(Language.values())
         return action
