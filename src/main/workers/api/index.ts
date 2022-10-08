@@ -20,6 +20,8 @@ interface Repository extends Document {
   milliStarsPerLine: number;
   score: number;
   languagePercent: string;
+  descriptionLanguage: string;
+  translatedDescription: string;
 }
 
 let App: Realm.App;
