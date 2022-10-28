@@ -24,7 +24,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.py")?.bufferedReader()
             ?.let { parsePythonStyle(it) }
 
-        assertEquals(100, result)
+        assertEquals(138, result)
     }
 
     @Test

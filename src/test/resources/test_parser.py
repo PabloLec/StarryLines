@@ -3,11 +3,15 @@ module description
 And its multiline
 """
 
+_ = print("""
+    This is not a comment
+    """)
+
 a = 1 # This is a comment
 
 def foo():
     """This is a function docstring
-    And its multiline"""
+    And it is multiline"""
     return 1
 
 # This is a comment
