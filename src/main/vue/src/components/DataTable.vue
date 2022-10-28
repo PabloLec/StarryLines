@@ -28,7 +28,7 @@
       <div class="p-5">
         <h2 class="font-bold">Description</h2>
         <p v-if="!item.description">None 😢</p>
-        <p v-else-if="item.descriptionLanguage !== 'EN'">
+        <p v-else-if="item.descriptionLanguage && item.descriptionLanguage !== 'EN'">
           {{ item.translatedDescription }}
           <span class="italic font-bold block"
             >(Auto-translated from
@@ -191,6 +191,7 @@ export default defineComponent({
       return REACTIVE_CLASSES.all + " " + REACTIVE_CLASSES[index];
     },
     getFlagEmoji(countryCode: string) {
+      if (countryCode == undefined) return;
       if (countryCode == "ZH") countryCode = "CN";
       if (countryCode == "JA") countryCode = "JP";
       const codePoints = countryCode
