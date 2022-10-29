@@ -1,6 +1,6 @@
 package models
 
 data class Translation(
-    val detected_source_language: String,
+    val detectedSourceLanguage: String,
     val text: String
 )

@@ -6,6 +6,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import models.DeeplResponse
 import models.Language
+import models.TopRepository
 import mu.KotlinLogging
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -21,34 +22,34 @@ class TranslationManager(private val mongoManager: MongoManager, val languages: 
         languages.forEach { language ->
             mongoManager.getTop(language)
                 .forEach { repo ->
-                    if (repo.description.isNotEmpty() &&
-                        (
-                            repo.descriptionLanguage.isNullOrEmpty() ||
-                                (repo.descriptionLanguage != "EN" && repo.translatedDescription.isNullOrEmpty())
-                            )
-                    ) {
+                    val isLanguageToBeDetermined = repo.descriptionLanguage.isNullOrEmpty() ||
+                        (repo.descriptionLanguage != "EN" && repo.translatedDescription.isNullOrEmpty())
+
+                    if (repo.description.isNotEmpty() && isLanguageToBeDetermined) {
                         getTranslation(repo.description)?.let {
-                            launch {
-                                var descriptionLanguage = it.translations.first().detected_source_language
-                                var translatedDescription: String? = it.translations.first().text
-                                if (descriptionLanguage != "EN" && translatedDescription?.trim() == repo.description.trim()) {
-                                    descriptionLanguage = "EN"
-                                }
-                                if (descriptionLanguage == "EN") {
-                                    translatedDescription = null
-                                }
-                                mongoManager.updateTranslation(
-                                    repo,
-                                    language,
-                                    descriptionLanguage,
-                                    translatedDescription
-                                )
-                                logger.info { "Updated ${repo.url} with language $descriptionLanguage: $translatedDescription" }
-                            }
+                            launch { processTranslationResponse(repo, language, it) }
                         }
                     }
                 }
         }
+    }
+
+    private suspend fun processTranslationResponse(repo: TopRepository, language: Language, response: DeeplResponse) = coroutineScope {
+        var descriptionLanguage = response.translations.first().detectedSourceLanguage
+        var translatedDescription: String? = response.translations.first().text
+        if (descriptionLanguage != "EN" && translatedDescription?.trim() == repo.description.trim()) {
+            descriptionLanguage = "EN"
+        }
+        if (descriptionLanguage == "EN") {
+            translatedDescription = null
+        }
+        mongoManager.updateTranslation(
+            repo,
+            language,
+            descriptionLanguage,
+            translatedDescription
+        )
+        logger.info { "Updated ${repo.url} with language $descriptionLanguage: $translatedDescription" }
     }
 
     private fun getTranslation(payload: String): DeeplResponse? {
