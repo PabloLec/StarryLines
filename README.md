@@ -65,15 +65,24 @@ For feature requests, general ideas, or any broader topic, please use the [Discu
 
 # Technicalities
 
-#### Backend
-
-Written in Kotlin as a CLI. The whole thing is orchestrated by crons that execute actions (retrieving data from the API, counting lines of code and creating tops) periodically.
-In the dependencies we find Apollo for the interactions with the GraphQL database of GitHub and KMongo for the database.
-
-#### Database
-
-A Mongo database hosted on Mongo Atlas. Each language has a main collection and another one that serves as a top 100
-
-#### Frontend
-
-A small Vue + Tailwind application, hosted by Cloudflare. The latter also hosts workers that act as middleware before the database. The tops are stored in KV stores and edge cache as a fallback. This allows to relieve the Mongo database and to avoids slow and useless requests.
+```mermaid
+sequenceDiagram
+participant B as Backend<br>(Kotlin)
+participant D as Database<br>(MongoDB Atlas)
+participant C as Cloudflare Edge
+participant F as Frontend<br>(Vue)
+loop cron
+B-->B: Fetch Github API
+B->>D: Update main collections
+D->>B: Get outdated repos
+B-->B: Parse repos lines of code
+B->>D: Update LoC counts
+D->>B: Get sorted repos by language
+B-->B: Create top 100
+B->>D: Update top 100
+end
+D->>C: Node workers consuming DB
+Note over C: Top lists are stored inside a KV data store<br>and edge cache for redundancy
+F->>C: Request top list
+C->>F: Node worker consume KV<br>or cache to serve data
+```
