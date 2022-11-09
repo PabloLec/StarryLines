@@ -26,7 +26,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
     testImplementation("io.mockk:mockk:1.13.2")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    testImplementation("com.apollographql.apollo3:apollo-testing-support:3.6.2")
+    testImplementation("com.apollographql.apollo3:apollo-testing-support:3.7.0")
 }
 
 tasks.test {
