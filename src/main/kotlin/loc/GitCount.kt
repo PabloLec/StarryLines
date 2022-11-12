@@ -68,6 +68,7 @@ class GitCount(val language: Language, val repo: Repository) {
 
     private fun isFileParsable(file: File, extensions: Set<String>): Boolean =
         when {
+            file.name.lowercase().endsWith(".lock") -> false
             Files.isSymbolicLink(file.toPath()) || (file.isFile && extensions.none { extension ->
                 file.name.lowercase().endsWith(extension)
             }) -> {
