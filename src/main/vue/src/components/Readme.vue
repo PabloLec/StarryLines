@@ -2,7 +2,7 @@
   <vue-final-modal
     v-slot="{ params, close }"
     v-bind="$attrs"
-    v-model="showModal"
+    v-model="showModalModel"
     classes="flex justify-center items-center"
     content-class="relative flex flex-col max-h-full mx-4 p-4 border rounded bg-night-blue text-white"
     @closed="closed"
@@ -138,6 +138,12 @@ export default {
     isPrerender: {
       type: Boolean,
       required: true,
+    },
+  },
+  computed: {
+    showModalModel: {
+      get () { return this.showModal },
+      set (value) { this.$emit('update:showModal', value) },
     },
   },
   name: "Readme",
