@@ -16,6 +16,7 @@ jobs:
       MONGO_DATABASE: ${{ secrets.MONGO_DATABASE }}
       MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
   translate:
+    needs: tops
     uses: PabloLec/StarryLines/.github/workflows/run.yml@main
     with:
       args: 'translate all'
