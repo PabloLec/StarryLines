@@ -5,6 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import mocks.locCRepo
 import mocks.locPythonRepo
+import models.GitCountResult
 import models.Language
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
@@ -17,13 +18,13 @@ internal class GitCountTest {
     @Test
     fun testRunOnC() {
         val gitCount = GitCount(Language.C, locCRepo)
-        assert(gitCount.run() == 28341)
+        assert(gitCount.run() == GitCountResult(28341, 28341))
     }
 
     @Test
     fun testRunOnPython() {
         val gitCount = GitCount(Language.PYTHON, locPythonRepo)
-        assert(gitCount.run() == 256)
+        assert(gitCount.run() == GitCountResult(256, 256))
     }
 
     @Test
