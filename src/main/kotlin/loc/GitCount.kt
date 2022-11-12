@@ -49,7 +49,6 @@ class GitCount(val language: Language, val repo: Repository) {
         val extensions = Language.valueOf(languageString).extensions()
         val parser = Language.valueOf(languageString).commentParser()
         directory.walk().forEach { file ->
-            logger.info { "Parsing file $file" }
             if (!isFileParsable(file, extensions)) return@forEach
             try {
                 val result = parser(file.bufferedReader())
