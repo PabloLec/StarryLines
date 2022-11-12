@@ -7,13 +7,7 @@ import models.Language
 import models.Repository
 import models.TopRepository
 import mu.KotlinLogging
-import org.litote.kmongo.KMongo
-import org.litote.kmongo.SetTo
-import org.litote.kmongo.eq
-import org.litote.kmongo.findOne
-import org.litote.kmongo.`in`
-import org.litote.kmongo.set
-import org.litote.kmongo.upsert
+import org.litote.kmongo.*
 
 object MongoClient {
     private val user = System.getenv("MONGO_USER")!!

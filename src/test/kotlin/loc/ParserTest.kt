@@ -6,6 +6,7 @@ import loc.parser.parsePythonStyle
 import loc.parser.parseRubyStyle
 import loc.parser.parseShellStyle
 import loc.parser.parseSwiftStyle
+import models.LocParseResult
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -16,7 +17,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("TestParser.kt")?.bufferedReader()
             ?.let { parseCStyle(it) }
 
-        assertEquals(80, result)
+        assertEquals(LocParseResult(80, 80), result)
     }
 
     @Test
