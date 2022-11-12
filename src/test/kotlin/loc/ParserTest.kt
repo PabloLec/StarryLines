@@ -17,7 +17,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("TestParser.kt")?.bufferedReader()
             ?.let { parseCStyle(it) }
 
-        assertEquals(LocParseResult(80, 80), result)
+        assertEquals(LocParseResult(6, 80), result)
     }
 
     @Test
@@ -25,7 +25,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.py")?.bufferedReader()
             ?.let { parsePythonStyle(it) }
 
-        assertEquals(LocParseResult(138, 138), result)
+        assertEquals(LocParseResult(13, 138), result)
     }
 
     @Test
@@ -33,7 +33,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.sh")?.bufferedReader()
             ?.let { parseShellStyle(it) }
 
-        assertEquals(LocParseResult(29, 29), result)
+        assertEquals(LocParseResult(1, 29), result)
     }
 
     @Test
@@ -41,7 +41,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.ps1")?.bufferedReader()
             ?.let { parsePowershellStyle(it) }
 
-        assertEquals(LocParseResult(40, 40), result)
+        assertEquals(LocParseResult(2, 40), result)
     }
 
     @Test
@@ -49,7 +49,7 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("TestParser.swift")?.bufferedReader()
             ?.let { parseSwiftStyle(it) }
 
-        assertEquals(LocParseResult(77, 77), result)
+        assertEquals(LocParseResult(8, 77), result)
     }
 
     @Test
@@ -57,6 +57,6 @@ internal class ParserTest {
         val result = Thread.currentThread().contextClassLoader.getResourceAsStream("test_parser.rb")?.bufferedReader()
             ?.let { parseRubyStyle(it) }
 
-        assertEquals(LocParseResult(39, 39), result)
+        assertEquals(LocParseResult(2, 39), result)
     }
 }
