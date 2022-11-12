@@ -24,7 +24,7 @@ data class Repository(
     var descriptionLanguage: String?,
     var translatedDescription: String?
 ) {
-    fun computeMilliStarsPerLine(): Int? = loc?.let { if (loc == 0) 0 else (stargazers * 1000) / it }
+    fun computeMilliStarsPerLine(): Int? = parsedLength?.let { if (it == 0) 0 else (stargazers * 1000) / it }
 
     companion object {
         private val dateTimeRegex = Regex("""(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})""")
