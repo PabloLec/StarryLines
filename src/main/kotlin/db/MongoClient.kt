@@ -125,6 +125,7 @@ object MongoClient {
                     Repository::url eq repository.url,
                     set(
                         SetTo(Repository::loc, repository.loc),
+                        SetTo(Repository::parsedLength, repository.parsedLength),
                         SetTo(Repository::locUpdateDate, repository.locUpdateDate),
                         SetTo(Repository::milliStarsPerLine, repository.computeMilliStarsPerLine())
                     ),

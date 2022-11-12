@@ -79,7 +79,7 @@ enum class Language {
     };
 
     abstract fun extensions(): Set<String>
-    abstract fun commentParser(): (BufferedReader) -> Int
+    abstract fun commentParser(): (BufferedReader) -> LocParseResult
 
     override fun toString() = name.lowercase()
 

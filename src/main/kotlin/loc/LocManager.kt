@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import models.GitCountResult
 import models.Language
 import models.Repository
 import java.io.File
@@ -26,7 +27,7 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Lang
     }
 
     private suspend fun updateLocCount(repo: Repository, language: Language) {
-        val count: Int
+        val count: GitCountResult
         try {
             count = GitCount(language, repo).run()
         } catch (e: Exception) {
@@ -35,7 +36,8 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Lang
             }
             return
         }
-        repo.loc = count
+        repo.loc = count.lineCount
+        repo.parsedLength = count.parsedLength
         repo.locUpdateDate = LocalDateTime.now(ZoneOffset.UTC)
         mongoManager.updateLoc(repo, language)
     }

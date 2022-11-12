@@ -19,6 +19,7 @@ data class Repository(
     val githubUpdateDate: LocalDateTime,
     var locUpdateDate: LocalDateTime?,
     var loc: Int?,
+    var parsedLength: Int?,
     var milliStarsPerLine: Int?,
     var descriptionLanguage: String?,
     var translatedDescription: String?
@@ -56,6 +57,7 @@ data class Repository(
                 null,
                 null,
                 null,
+                null,
                 null
             )
         }
@@ -84,6 +86,7 @@ data class Repository(
                 getLanguagePercent(edge.node.onRepository.languages),
                 edge.node.onRepository.diskUsage!!,
                 LocalDateTime.now(ZoneOffset.UTC),
+                null,
                 null,
                 null,
                 null,

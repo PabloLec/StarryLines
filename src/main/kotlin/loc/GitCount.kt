@@ -1,6 +1,7 @@
 package loc
 
 import com.github.syari.kgit.KGit
+import models.GitCountResult
 import models.Language
 import models.Repository
 import mu.KotlinLogging
@@ -10,9 +11,10 @@ import java.util.*
 class GitCount(val language: Language, val repo: Repository) {
     private val logger = KotlinLogging.logger {}
     private var lineCount = 0
+    private var parsedLength = 0
     private val directory = getTmpDirectory()
 
-    fun run(): Int {
+    fun run(): GitCountResult {
         logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
         try {
             clone()
@@ -23,7 +25,7 @@ class GitCount(val language: Language, val repo: Repository) {
         } finally {
             directory.deleteRecursively()
         }
-        return lineCount
+        return GitCountResult(lineCount, parsedLength)
     }
 
     private fun clone() {
@@ -50,15 +52,18 @@ class GitCount(val language: Language, val repo: Repository) {
             }
             if (!file.isFile) return@forEach
 
-            lineCount += try {
-                parser(file.bufferedReader())
+            try {
+                val result = parser(file.bufferedReader())
+                lineCount += result.lineCount
+                parsedLength += result.parsedLength
             } catch (e: VirtualMachineError) {
                 logger.error { "Error counting ${repo.url} file ${file.name} ${e.message}" }
-                file.readText().length
+                lineCount += file.readText().lines().size
+                parsedLength += file.readText().length
             }
         }
-        lineCount /= 80
-        logger.info { "Count succeeded for ${repo.name} | Total LoC: $lineCount" }
+        parsedLength /= 80
+        logger.info { "Count succeeded for ${repo.name} | Total LoC: $lineCount | Parsed LoC: $parsedLength" }
     }
 
     private fun isFreeSpaceEnough(): Boolean {
