@@ -142,8 +142,14 @@ export default {
   },
   computed: {
     showModalModel: {
-      get () { return this.showModal },
-      set (value) { this.$emit('update:showModal', value) },
+      get () {
+        return this.showModal
+      },
+      set (value) {
+        if (value === false) {
+          this.closed()
+        }
+      }
     },
   },
   name: "Readme",
