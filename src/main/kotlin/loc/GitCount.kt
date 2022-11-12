@@ -6,6 +6,7 @@ import models.Language
 import models.Repository
 import mu.KotlinLogging
 import java.io.File
+import java.nio.file.Files
 import java.util.*
 
 class GitCount(val language: Language, val repo: Repository) {
@@ -48,11 +49,8 @@ class GitCount(val language: Language, val repo: Repository) {
         val extensions = Language.valueOf(languageString).extensions()
         val parser = Language.valueOf(languageString).commentParser()
         directory.walk().forEach { file ->
-            if (extensions.none { extension -> file.name.lowercase().endsWith(extension) }) {
-                return@forEach
-            }
-            if (!file.isFile) return@forEach
-
+            logger.info { "Parsing file $file" }
+            if (!isFileParsable(file, extensions)) return@forEach
             try {
                 val result = parser(file.bufferedReader())
                 lineCount += result.lineCount
@@ -62,10 +60,24 @@ class GitCount(val language: Language, val repo: Repository) {
                 lineCount += file.readText().lines().size
                 parsedLength += file.readText().length
             }
+            file.delete()
         }
         parsedLength /= 80
         logger.info { "Count succeeded for ${repo.name} | Total LoC: $lineCount | Parsed LoC: $parsedLength" }
     }
+
+    private fun isFileParsable(file: File, extensions: Set<String>): Boolean =
+        when {
+            Files.isSymbolicLink(file.toPath()) || (file.isFile && extensions.none { extension ->
+                file.name.lowercase().endsWith(extension)
+            }) -> {
+                file.delete()
+                false
+            }
+
+            !file.isFile -> false
+            else -> true
+        }
 
     private fun isFreeSpaceEnough(): Boolean {
         val freeSpace = File("/").freeSpace * 0.9
