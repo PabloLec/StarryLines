@@ -23,7 +23,8 @@ class GitCount(val language: Language, val repo: Repository) {
             logger.error { "Error cloning ${repo.name} ${e.message}" }
             throw e
         } finally {
-            directory.deleteRecursively()
+            directory.parentFile.deleteRecursively()
+            logger.info { "Directory deleted: $directory" }
         }
         return GitCountResult(lineCount, parsedLength)
     }
