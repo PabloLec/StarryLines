@@ -21,6 +21,8 @@ on:
         required: true
       MONGO_DATABASE:
         required: true
+      DEEPL_TOKEN:
+        required: false
 
 jobs:
   run:
@@ -32,4 +34,4 @@ jobs:
         run: docker build -f docker/Dockerfile -t starrylines_${{ github.sha }} . --no-cache
       - name: Run
         run: |
-          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' -e 'MONGO_CLUSTER=${{ secrets.MONGO_CLUSTER }}' -e 'MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}' starrylines_${{ github.sha }} ${{ inputs.args }}
+          docker run -e 'GITHUB_TOKEN= ${{ secrets.GITHUB_TOKEN }}' -e 'MONGO_SECRET=${{ secrets.MONGO_SECRET }}' -e 'MONGO_USER=${{ secrets.MONGO_USER }}' -e 'MONGO_CLUSTER=${{ secrets.MONGO_CLUSTER }}' -e 'MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}' -e 'DEEPL_TOKEN=${{ secrets.DEEPL_TOKEN }}' starrylines_${{ github.sha }} ${{ inputs.args }}
