@@ -1,12 +1,15 @@
 package loc.parser
 
+import models.LocParseResult
 import java.io.BufferedReader
 
-fun parsePythonStyle(reader: BufferedReader): Int {
+fun parsePythonStyle(reader: BufferedReader): LocParseResult {
     var line: String?
+    var lineCount = 0
     var parsedLength = 0
     var openedParenthesis = false
     var isInComment = false
+
     while (reader.readLine().also { line = it } != null) {
         line = line!!.trim()
         if (line!!.contains("\"\"\"") || line!!.contains("'''")) openedParenthesis = !openedParenthesis
@@ -18,8 +21,14 @@ fun parsePythonStyle(reader: BufferedReader): Int {
             (line!!.startsWith("\"\"\"") || line!!.startsWith("'''")) && openedParenthesis -> isInComment = true
             isInComment -> continue
             line!!.startsWith("#") -> continue
-            else -> parsedLength += removeInlineCommentsShellStyle(line!!).length
+            else -> {
+                val lineLength = removeInlineCommentsShellStyle(line!!).length
+                parsedLength += lineLength
+                if (lineLength > 0) {
+                    lineCount += 1
+                }
+            }
         }
     }
-    return parsedLength
+    return LocParseResult(lineCount, parsedLength)
 }

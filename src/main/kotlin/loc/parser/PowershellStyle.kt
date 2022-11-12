@@ -1,12 +1,14 @@
 package loc.parser
 
+import models.LocParseResult
 import java.io.BufferedReader
 
-fun parsePowershellStyle(reader: BufferedReader): Int {
+fun parsePowershellStyle(reader: BufferedReader): LocParseResult {
     var line: String?
+    var lineCount = 0
     var parsedLength = 0
-
     var isInComment = false
+
     while (reader.readLine().also { line = it } != null) {
         line = line!!.trim()
         when {
@@ -16,8 +18,14 @@ fun parsePowershellStyle(reader: BufferedReader): Int {
             line!!.startsWith("<#") -> isInComment = true
             isInComment -> continue
             line!!.startsWith("#") -> continue
-            else -> parsedLength += removeInlineCommentsShellStyle(line!!).length
+            else -> {
+                val lineLength = removeInlineCommentsShellStyle(line!!).length
+                parsedLength += lineLength
+                if (lineLength > 0) {
+                    lineCount += 1
+                }
+            }
         }
     }
-    return parsedLength
+    return LocParseResult(lineCount, parsedLength)
 }
