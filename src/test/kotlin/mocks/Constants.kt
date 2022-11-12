@@ -22,6 +22,7 @@ val blacklistRepoPrevious1 = Repository(
     null,
     null,
     null,
+    null,
 )
 
 val blacklistRepoPrevious2 = Repository(
@@ -35,6 +36,7 @@ val blacklistRepoPrevious2 = Repository(
     100,
     0,
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
+    null,
     null,
     null,
     null,
@@ -58,6 +60,7 @@ val blacklistRepo = Repository(
     null,
     null,
     null,
+    null,
 )
 
 val javaRepo = Repository(
@@ -71,6 +74,7 @@ val javaRepo = Repository(
     100,
     0,
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
+    null,
     null,
     null,
     null,
@@ -94,6 +98,7 @@ val pythonRepo = Repository(
     null,
     null,
     null,
+    null,
 )
 
 val topRepo1 = TopRepository(
@@ -107,7 +112,8 @@ val topRepo1 = TopRepository(
     "topJavaRepo1",
     100,
     100,
-    100, null,
+    100,
+    null,
     null,
     null,
 )
@@ -123,7 +129,8 @@ val topRepo2 = TopRepository(
     "topPythonRepo1",
     200,
     200,
-    200, null,
+    200,
+    null,
     null,
     null,
 )
@@ -139,7 +146,8 @@ val topRepo3 = TopRepository(
     "topJavaRepo1",
     300,
     300,
-    300, null,
+    300,
+    null,
     null,
     null,
 )
@@ -155,7 +163,8 @@ val topRepo4 = TopRepository(
     "topPythonRepo2",
     400,
     400,
-    400, null,
+    400,
+    null,
     null,
     null,
 )
@@ -179,6 +188,7 @@ val locCRepo = Repository(
     null,
     null,
     null,
+    null,
 )
 
 val locPythonRepo = Repository(
@@ -192,6 +202,7 @@ val locPythonRepo = Repository(
     90,
     0,
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
+    null,
     null,
     null,
     null,
