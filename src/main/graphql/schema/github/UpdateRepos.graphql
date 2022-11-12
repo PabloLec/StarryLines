@@ -11,6 +11,11 @@ query UpdateRepos($ids: [ID!]!) {
             url
             defaultBranchRef {
                 name
+                target {
+                    ... on Commit {
+                        pushedDate
+                    }
+                }
             }
             languages(first: 100) {
                 totalSize

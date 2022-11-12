@@ -19,6 +19,11 @@ query GetTopRepos($query : String!, $cursor: String) {
                     url
                     defaultBranchRef {
                         name
+                        target {
+                            ... on Commit {
+                                pushedDate
+                            }
+                        }
                     }
                     languages(first: 100) {
                         totalSize

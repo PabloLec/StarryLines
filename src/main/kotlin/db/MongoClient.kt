@@ -73,6 +73,7 @@ object MongoClient {
                         SetTo(Repository::name, repository.name),
                         SetTo(Repository::description, repository.description),
                         SetTo(Repository::createdAt, repository.createdAt),
+                        SetTo(Repository::updatedAt, repository.updatedAt),
                         SetTo(Repository::stargazers, repository.stargazers),
                         SetTo(Repository::defaultBranch, repository.defaultBranch),
                         SetTo(Repository::githubUpdateDate, repository.githubUpdateDate),

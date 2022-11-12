@@ -32,7 +32,14 @@ val testEdgeNewRepo = GetTopReposQuery.Edge(
             ),
             url = "",
             defaultBranchRef = GetTopReposQuery.DefaultBranchRef(
-                name = "main"
+                name = "main",
+                target = GetTopReposQuery.Target(
+                    "",
+                    onCommit = GetTopReposQuery.OnCommit(
+                        pushedDate = "2021-01-01T00:00:00Z"
+                    )
+                )
+
             ),
             languages = GetTopReposQuery.Languages(
                 totalSize = 1,
@@ -63,7 +70,13 @@ val testEdgeRepoWithFewStars = GetTopReposQuery.Edge(
             ),
             url = "",
             defaultBranchRef = GetTopReposQuery.DefaultBranchRef(
-                name = "main"
+                name = "main",
+                target = GetTopReposQuery.Target(
+                    "",
+                    onCommit = GetTopReposQuery.OnCommit(
+                        pushedDate = "2021-01-01T00:00:00Z"
+                    )
+                )
             ),
             languages = GetTopReposQuery.Languages(
                 totalSize = 1,
@@ -94,7 +107,13 @@ val testNodeRepoToUpdate = listOf(
             ),
             url = "repo_to_update",
             defaultBranchRef = UpdateReposQuery.DefaultBranchRef(
-                name = "main"
+                name = "main",
+                target = UpdateReposQuery.Target(
+                    "",
+                    onCommit = UpdateReposQuery.OnCommit(
+                        pushedDate = "2021-01-01T00:00:00Z"
+                    )
+                )
             ),
             languages = UpdateReposQuery.Languages(
                 totalSize = 1,
@@ -116,6 +135,7 @@ val repoToInsertBeforeUpdate = models.Repository(
     "testId",
     "repo_to_update",
     "test",
+    LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     10000,
     "repo_to_update",
