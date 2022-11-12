@@ -33,8 +33,10 @@ internal class LocManagerTest {
         val pythonRepo = allRepos.find { it.name == "pythonRepo" }!!
         val cRepo = allRepos.find { it.name == "CRepo" }!!
 
-        assertEquals(pythonRepo.loc, 256)
-        assertEquals(cRepo.loc, 28341)
+        assertEquals(pythonRepo.loc, 409)
+        assertEquals(pythonRepo.parsedLength, 256)
+        assertEquals(cRepo.loc, 49835)
+        assertEquals(cRepo.parsedLength, 28340)
     }
 
     @Test

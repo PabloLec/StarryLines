@@ -18,13 +18,13 @@ internal class GitCountTest {
     @Test
     fun testRunOnC() {
         val gitCount = GitCount(Language.C, locCRepo)
-        assert(gitCount.run() == GitCountResult(28341, 28341))
+        assert(gitCount.run() == GitCountResult(49835, 28340))
     }
 
     @Test
     fun testRunOnPython() {
         val gitCount = GitCount(Language.PYTHON, locPythonRepo)
-        assert(gitCount.run() == GitCountResult(256, 256))
+        assert(gitCount.run() == GitCountResult(409, 256))
     }
 
     @Test
