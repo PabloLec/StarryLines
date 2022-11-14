@@ -52,7 +52,7 @@ class Fetcher {
                 try {
                     add(Repository.fromNode(it!!))
                 } catch (e: Exception) {
-                    logger.error { "Error while parsing node $it: ${e.message}" }
+                    logger.error { "Error while parsing node $it: $e - ${e.message}" }
                 }
             }
         }
