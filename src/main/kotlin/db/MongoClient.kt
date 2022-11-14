@@ -65,6 +65,7 @@ object MongoClient {
                 session.startTransaction()
                 col.findOne(Repository::url eq repository.url)?.let {
                     repository.loc = it.loc
+                    repository.parsedLength = it.parsedLength
                 }
                 col.updateOne(
                     Repository::url eq repository.url,
