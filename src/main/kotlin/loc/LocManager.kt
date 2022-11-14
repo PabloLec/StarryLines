@@ -43,7 +43,12 @@ class LocManager(private val mongoManager: MongoManager, val languages: Set<Lang
     }
 
     private fun getReposToProcess() = mongoManager.getAllRepos(languages).filter { it.second.loc == null }
-        .plus(mongoManager.getAllRepos(languages).sortedBy { it.second.locUpdateDate }.take(500))
+        .plus(mongoManager.getAllRepos(languages).sortedBy { it.second.locUpdateDate }
+            .filterNot {
+                it.second.locUpdateDate != null && it.second.locUpdateDate!!.isAfter(
+                    LocalDateTime.now().minusHours(8)
+                )
+            })
 
     private fun clearLocDir() = File("${System.getProperty("java.io.tmpdir")}/loc/").deleteRecursively()
 }
