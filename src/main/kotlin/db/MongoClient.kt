@@ -52,6 +52,19 @@ object MongoClient {
         logger.debug { "Deleted collection $collectionName" }
     }
 
+    suspend fun deleteByUrl(url: String, collectionName: String) = coroutineScope {
+        val col = database.getCollection<Repository>(collectionName)
+        col.deleteOne(Repository::url eq url)
+        logger.debug { "Deleted $url from $collectionName" }
+    }
+
+    suspend fun deleteFromTopByUrl(url: String, collectionName: String) = coroutineScope {
+        val col = database.getCollection<TopRepository>(collectionName)
+        col.deleteOne(TopRepository::url eq url)
+        logger.debug { "Deleted $url from $collectionName" }
+    }
+
+
     suspend fun deleteManyByUrl(urls: List<String>, collectionName: String) = coroutineScope {
         val col = database.getCollection<Repository>(collectionName)
         val result = col.deleteMany(Repository::url `in` urls.toSet())

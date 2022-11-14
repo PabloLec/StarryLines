@@ -1,6 +1,7 @@
 package top
 
 import api.Fetcher
+import db.MongoClient
 import db.MongoManager
 import models.Language
 import models.TopRepository
@@ -37,12 +38,12 @@ class TopManager(private val mongoManager: MongoManager, val languages: Set<Lang
 
         tops.forEach { top ->
             fetcher.fetchUpdateDates(top.second).forEach { date ->
-                top.second.find { it.ghid == date.first }!!.updatedAt = dateToHumanReadable(date.second)
-            }
-            top.second.forEach {
-                if (it.updatedAt == null) {
-                    it.updatedAt = "Unknown"
-                    mongoManager.addToBlacklist(it, "EXCEPTION: No update date")
+                val repo = top.second.find { it.ghid == date.first }!!
+                repo.updatedAt = dateToHumanReadable(date.second)
+                if (repo.updatedAt == null) {
+                    repo.updatedAt = "Unknown"
+                    MongoClient.deleteByUrl(repo.url, top.first.name)
+                    MongoClient.deleteFromTopByUrl(repo.url, top.first.name)
                 }
             }
         }
