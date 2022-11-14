@@ -12,11 +12,12 @@ import java.time.LocalDateTime
 
 private const val MINIMUM_STARS = 350
 
-class ApiManager(private val mongoManager: MongoManager, val languages: Set<Language>) {
+class ApiManager(private val mongoManager: MongoManager, var languages: Set<Language>) {
     private val logger = KotlinLogging.logger {}
     private val minimumStarsFound = mutableMapOf<Language, Int>()
 
     suspend fun run() {
+        languages = languages.shuffled().toSet()
         fetchTopRepos()
 
         val toUpdate = mongoManager
@@ -24,7 +25,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Lang
             .filter { it.second.githubUpdateDate < LocalDateTime.now().minusDays(1) }
             .groupBy { it.first }
             .mapValues { it.value.map { it.second } }
-            .mapValues { it.value.sortedBy { it.githubUpdateDate } }
+            .mapValues { it.value.sortedBy { it.githubUpdateDate }.take(500) }
 
         coroutineScope {
             val updatedMap = updateLeftoverRepos(toUpdate)
@@ -104,7 +105,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Lang
     private suspend fun updateLeftoverByLanguage(repos: List<Repository>): Set<Repository> {
         val fetcher = Fetcher()
         return buildSet {
-            repos.chunked(20).forEach {
+            repos.chunked(50).forEach {
                 try {
                     val apiResponse = fetcher.fetchReposToUpdate(it)
                     addAll(apiResponse.repos)
