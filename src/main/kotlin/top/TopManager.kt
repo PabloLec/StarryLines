@@ -50,7 +50,11 @@ class TopManager(private val mongoManager: MongoManager, val languages: Set<Lang
         return tops
     }
 
-    private fun dateToHumanReadable(date: String): String {
+    private fun dateToHumanReadable(date: String): String? {
+        if (date == "null") {
+            logger.warn { "Date is null" }
+            return null
+        }
         val now = LocalDateTime.now(ZoneOffset.UTC)
         val then = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME)
 
