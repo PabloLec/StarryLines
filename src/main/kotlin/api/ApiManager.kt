@@ -24,6 +24,7 @@ class ApiManager(private val mongoManager: MongoManager, val languages: Set<Lang
             .filter { it.second.githubUpdateDate < LocalDateTime.now().minusDays(1) }
             .groupBy { it.first }
             .mapValues { it.value.map { it.second } }
+            .mapValues { it.value.sortedBy { it.githubUpdateDate } }
 
         coroutineScope {
             val updatedMap = updateLeftoverRepos(toUpdate)
