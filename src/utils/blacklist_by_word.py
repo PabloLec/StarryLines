@@ -6,8 +6,18 @@ WORDS = [
     "tutorial",
     "cheatsheet",
     "cheat sheet",
+    "cheat-sheet",
     "boilerplate",
     "exercises",
+    "papers",
+    "curated list",
+    "100 days",
+    "100days",
+    "awesome",
+    "wordlist",
+    "snippets",
+    "interview",
+    "questions",
 ]
 
 
