@@ -28,7 +28,7 @@ data class TopRepository(
                 repo.name,
                 repo.description,
                 repo.createdAt.format(formatter),
-                null,
+                repo.updatedAt.format(formatter),
                 repo.stargazers,
                 repo.url,
                 repo.loc!!,

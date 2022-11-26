@@ -11,7 +11,7 @@ data class Repository(
     val name: String,
     var description: String,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime?,
+    val updatedAt: LocalDateTime,
     val stargazers: Int,
     val url: String,
     var defaultBranch: String,
