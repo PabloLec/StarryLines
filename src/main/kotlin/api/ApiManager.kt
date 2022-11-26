@@ -10,7 +10,7 @@ import models.Repository
 import mu.KotlinLogging
 import java.time.LocalDateTime
 
-private const val MINIMUM_STARS = 350
+private const val MINIMUM_STARS = 200
 
 class ApiManager(private val mongoManager: MongoManager, var languages: Set<Language>) {
     private val logger = KotlinLogging.logger {}
