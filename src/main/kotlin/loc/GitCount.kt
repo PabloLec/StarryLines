@@ -16,7 +16,7 @@ class GitCount(val language: Language, val repo: Repository) {
     private val directory = getTmpDirectory()
 
     fun run(): GitCountResult {
-        logger.info { "Start GitCount: ${repo.name} last update ${repo.locUpdateDate}" }
+        logger.info { "Start GitCount: ${repo.name} | last GH update: ${repo.updatedAt} | Last LoC update: ${repo.locUpdateDate}" }
         try {
             clone()
             count()
