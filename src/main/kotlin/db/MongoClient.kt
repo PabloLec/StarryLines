@@ -30,20 +30,20 @@ object MongoClient {
     }
 
     suspend fun insertOne(repo: Repository, collectionName: String) = coroutineScope {
-        val col = database.getCollection<Repository>(collectionName)
-        col.insertOne(repo)
+        database.getCollection<Repository>(collectionName)
+            .insertOne(repo)
         logger.debug { "Inserted $repo into $collectionName" }
     }
 
     suspend fun insertOneToBlacklist(url: String, reason: String?) = coroutineScope {
-        val col = database.getCollection<BlacklistUrl>("blacklist")
-        col.insertOne(BlacklistUrl(url, reason))
+        database.getCollection<BlacklistUrl>("blacklist")
+            .insertOne(BlacklistUrl(url, reason))
         logger.debug { "Inserted $url into blacklist" }
     }
 
     suspend fun insertMany(repos: List<TopRepository>, collectionName: String) = coroutineScope {
-        val col = database.getCollection<TopRepository>(collectionName)
-        col.insertMany(repos)
+        database.getCollection<TopRepository>(collectionName)
+            .insertMany(repos)
         logger.debug { "Inserted ${repos.size} repos into $collectionName" }
     }
 
@@ -53,21 +53,21 @@ object MongoClient {
     }
 
     suspend fun deleteByUrl(url: String, collectionName: String) = coroutineScope {
-        val col = database.getCollection<Repository>(collectionName)
-        col.deleteOne(Repository::url eq url)
+        database.getCollection<Repository>(collectionName)
+            .deleteOne(Repository::url eq url)
         logger.debug { "Deleted $url from $collectionName" }
     }
 
     suspend fun deleteFromTopByUrl(url: String, collectionName: String) = coroutineScope {
-        val col = database.getCollection<TopRepository>(collectionName)
-        col.deleteOne(TopRepository::url eq url)
+        database.getCollection<TopRepository>(collectionName)
+            .deleteOne(TopRepository::url eq url)
         logger.debug { "Deleted $url from $collectionName" }
     }
 
 
     suspend fun deleteManyByUrl(urls: List<String>, collectionName: String) = coroutineScope {
-        val col = database.getCollection<Repository>(collectionName)
-        val result = col.deleteMany(Repository::url `in` urls.toSet())
+        val result = database.getCollection<Repository>(collectionName)
+            .deleteMany(Repository::url `in` urls.toSet())
         logger.debug { "Removed $result from $collectionName" }
     }
 
@@ -102,7 +102,33 @@ object MongoClient {
             }
         }
 
-    suspend fun updateTranslation(repository: TopRepository, language: Language, descriptionLanguage: String, translatedDescription: String?) =
+    suspend fun updateFromLoc(repository: Repository, language: Language) {
+        coroutineScope {
+            val col = database.getCollection<Repository>(language.toString())
+            client.startSession().use { session ->
+                session.startTransaction()
+                col.updateOne(
+                    Repository::url eq repository.url,
+                    set(
+                        SetTo(Repository::loc, repository.loc),
+                        SetTo(Repository::parsedLength, repository.parsedLength),
+                        SetTo(Repository::locUpdateDate, repository.locUpdateDate),
+                        SetTo(Repository::milliStarsPerLine, repository.computeMilliStarsPerLine())
+                    ),
+                    upsert()
+                )
+                session.commitTransaction()
+                logger.debug("Updated $repository to $language")
+            }
+        }
+    }
+
+    suspend fun updateTranslation(
+        repository: TopRepository,
+        language: Language,
+        descriptionLanguage: String,
+        translatedDescription: String?
+    ) =
         coroutineScope {
             val col = database.getCollection<Repository>(language.toString())
             client.startSession().use { session ->
@@ -130,27 +156,6 @@ object MongoClient {
             }
             logger.debug("Updated translation for $repository")
         }
-
-    suspend fun updateFromLoc(repository: Repository, language: Language) {
-        coroutineScope {
-            val col = database.getCollection<Repository>(language.toString())
-            client.startSession().use { session ->
-                session.startTransaction()
-                col.updateOne(
-                    Repository::url eq repository.url,
-                    set(
-                        SetTo(Repository::loc, repository.loc),
-                        SetTo(Repository::parsedLength, repository.parsedLength),
-                        SetTo(Repository::locUpdateDate, repository.locUpdateDate),
-                        SetTo(Repository::milliStarsPerLine, repository.computeMilliStarsPerLine())
-                    ),
-                    upsert()
-                )
-                session.commitTransaction()
-                logger.debug("Updated $repository to $language")
-            }
-        }
-    }
 
     fun getCollection(collectionName: String): List<Repository> =
         database.getCollection<Repository>(collectionName).find().toList()

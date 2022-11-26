@@ -1,10 +1,6 @@
 package db
 
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import models.Language
 import models.Repository
 import models.TopRepository
@@ -17,16 +13,26 @@ class MongoManager {
         MongoClient.insertOneToBlacklist(repo.url, reason)
     }
 
-    suspend fun addToBlacklist(repo: TopRepository, reason: String?) = coroutineScope {
-        MongoClient.insertOneToBlacklist(repo.url, reason)
+    fun getBlacklist(): List<String> = MongoClient.getBlacklistCollection()
+
+    suspend fun getOneCollection(language: Language): List<Repository> = coroutineScope {
+        MongoClient.getCollection(language.toString())
     }
 
-    fun getBlacklist(): List<String> = MongoClient.getBlacklistCollection()
+    fun getAllRepos(languages: Set<Language>) =
+        languages.map { Pair(it, MongoClient.getCollection(it.toString())) }
+            .flatMap { it.second.map { repo -> Pair(it.first, repo) } }
+            .sortedBy { it.second.locUpdateDate }
 
     suspend fun updateLoc(repo: Repository, language: Language) =
         coroutineScope { MongoClient.updateFromLoc(repo, language) }
 
-    suspend fun updateTranslation(repo: TopRepository, language: Language, descriptionLanguage: String, translatedDescription: String?) =
+    suspend fun updateTranslation(
+        repo: TopRepository,
+        language: Language,
+        descriptionLanguage: String,
+        translatedDescription: String?
+    ) =
         coroutineScope { MongoClient.updateTranslation(repo, language, descriptionLanguage, translatedDescription) }
 
     suspend fun updateAll(languagesMap: Map<Language, Set<Repository>>) {
@@ -64,13 +70,18 @@ class MongoManager {
         }
     }
 
+    fun getTop(language: Language): List<TopRepository> {
+        return MongoClient.getTopCollection(language.name.lowercase() + "_top")
+    }
+
     suspend fun updateTop(collectionName: String, repos: List<TopRepository>) {
         MongoClient.deleteCollection(collectionName)
         MongoClient.insertMany(repos, collectionName)
     }
 
-    fun getTop(language: Language): List<TopRepository> {
-        return MongoClient.getTopCollection(language.name.lowercase() + "_top")
+    suspend fun deleteFromMainAndTop(url: String, collectionName: String) {
+        MongoClient.deleteByUrl(url, collectionName)
+        MongoClient.deleteFromTopByUrl(url, collectionName)
     }
 
     suspend fun updateCollectionsWithBlacklist() {
@@ -91,9 +102,4 @@ class MongoManager {
             logger.info { "Blacklist update finished" }
         }
     }
-
-    fun getAllRepos(languages: Set<Language>) =
-        languages.map { Pair(it, MongoClient.getCollection(it.toString())) }
-            .flatMap { it.second.map { repo -> Pair(it.first, repo) } }
-            .sortedBy { it.second.locUpdateDate }
 }

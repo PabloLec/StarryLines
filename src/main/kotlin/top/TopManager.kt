@@ -1,7 +1,6 @@
 package top
 
 import api.Fetcher
-import db.MongoClient
 import db.MongoManager
 import models.Language
 import models.TopRepository
@@ -17,12 +16,13 @@ class TopManager(private val mongoManager: MongoManager, val languages: Set<Lang
         saveTops(setUpdateDates(getTops()))
     }
 
-    private fun getTops(): Set<Pair<Language, Set<TopRepository>>> {
+    private suspend fun getTops(): Set<Pair<Language, Set<TopRepository>>> {
         val topFactory = TopFactory()
         val blacklist = mongoManager.getBlacklist()
         return buildSet {
             languages.forEach {
-                add(Pair(it, topFactory.createTop(it, blacklist)))
+                val repos = mongoManager.getOneCollection(it)
+                add(Pair(it, topFactory.createTop(repos, blacklist)))
             }
         }
     }
@@ -42,8 +42,7 @@ class TopManager(private val mongoManager: MongoManager, val languages: Set<Lang
                 repo.updatedAt = dateToHumanReadable(date.second)
                 if (repo.updatedAt == null) {
                     repo.updatedAt = "Unknown"
-                    MongoClient.deleteByUrl(repo.url, top.first.name)
-                    MongoClient.deleteFromTopByUrl(repo.url, top.first.name)
+                    mongoManager.deleteFromMainAndTop(repo.url, top.first.name)
                 }
             }
         }
