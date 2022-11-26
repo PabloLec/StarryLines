@@ -58,8 +58,9 @@ class GitCount(val language: Language, val repo: Repository) {
                 logger.error { "Error counting ${repo.url} file ${file.name} ${e.message}" }
                 lineCount += file.readText().lines().size
                 parsedLength += file.readText().length
+            } finally {
+                file.delete()
             }
-            file.delete()
         }
         parsedLength /= 80
         logger.info { "Count succeeded for ${repo.name} | Total LoC: $lineCount | Parsed LoC: $parsedLength" }
