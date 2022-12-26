@@ -111,28 +111,28 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Vue3EasyDataTable from "vue3-easy-data-table";
+import Vue3EasyDataTable, { Header } from "vue3-easy-data-table";
 import type { ClickRowArgument } from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
 
 const HEADER_REACTIVE_CLASSES: any = {
-  0: "!px-0 sm:px-0",
-  1: "!pl-2 !pr-0 sm:!px-3 text-0 before:content-['#'] before:inline before:text-lg sm:text-base sm:before:content-none",
-  2: "text-lg sm:text-xl",
-  3: "hidden md:table-cell",
-  4: "hidden lg:table-cell",
-  5: "text-0 before:content-['★'] before:inline before:text-2xl sm:text-base sm:before:content-none",
-  6: "text-0 before:content-['LoC'] before:inline before:text-lg sm:text-base sm:before:content-none",
-  7: "text-lg sm:text-xl",
+  "expand": "!px-0 sm:px-0",
+  "rank": "!pl-2 !pr-0 sm:!px-3 text-0 before:content-['#'] before:inline before:text-lg sm:text-base sm:before:content-none",
+  "name": "text-lg sm:text-xl",
+  "updatedAt": "hidden md:table-cell",
+  "createdAt": "hidden lg:table-cell",
+  "stargazers": "text-0 before:content-['★'] before:inline before:text-2xl sm:text-base sm:before:content-none",
+  "loc": "text-0 before:content-['LoC'] before:inline before:text-lg sm:text-base sm:before:content-none",
+  "score": "text-lg sm:text-xl",
   all: "break-words sm:text-lg lg:text-xl text-black",
 };
 
 const REACTIVE_CLASSES: any = {
-  0: "expand-button !px-0 sm:!px-3",
-  1: "repo-rank !pl-2 !pr-0 sm:!px-3",
-  2: "break-all text-ellipsis",
-  3: "hidden md:table-cell",
-  4: "hidden lg:table-cell",
+  "expand": "expand-button !px-0 sm:!px-3",
+  "rank": "repo-rank !pl-2 !pr-0 sm:!px-3",
+  "name": "break-all text-ellipsis",
+  "updatedAt": "hidden md:table-cell",
+  "createdAt": "hidden lg:table-cell",
   all: "text-sm sm:text-lg",
 };
 
@@ -148,7 +148,9 @@ export default defineComponent({
   },
   data() {
     return {
-      headers: [{}],
+      headers: [
+        { text: "", value: "", sortable: true },
+      ],
       items: [],
       loading: true,
     };
@@ -184,11 +186,11 @@ export default defineComponent({
         button.click();
       });
     },
-    getHeaderClassNameByIndex(header: object, index: string) {
-      return HEADER_REACTIVE_CLASSES.all + " " + HEADER_REACTIVE_CLASSES[index];
+    getHeaderClassNameByIndex(header: Header, index: string) {
+      return HEADER_REACTIVE_CLASSES.all + " " + HEADER_REACTIVE_CLASSES[header.value];
     },
-    getItemClassNameByIndex(object: object, index: number) {
-      return REACTIVE_CLASSES.all + " " + REACTIVE_CLASSES[index];
+    getItemClassNameByIndex(column: string, rowNumber: number) {
+      return REACTIVE_CLASSES.all + " " + REACTIVE_CLASSES[column];
     },
     getFlagEmoji(countryCode: string) {
       if (countryCode == undefined) return;
