@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.22"
+    kotlin("jvm") version "1.8.0"
     application
     jacoco
     id("com.apollographql.apollo3") version "3.7.3"
