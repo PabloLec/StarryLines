@@ -30,7 +30,7 @@ enum class Language {
         override fun commentParser() = ::parseCStyle
     },
     CPP {
-        override fun extensions() = setOf(".cpp", ".cc", ".cxx", ".c++", ".hpp", ".hh", ".hxx", ".h++")
+        override fun extensions() = setOf(".c", ".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hh", ".hxx", ".h++", ".hop")
         override fun commentParser() = ::parseCStyle
     },
     CSHARP {
