@@ -11,7 +11,7 @@
   "dependencies": {
     "autoprefixer": "10.4.13",
     "postcss": "8.4.21",
-    "swiper": "8.4.5",
+    "swiper": "8.4.6",
     "tailwindcss": "3.2.4",
     "vue": "3.2.45",
     "vue-final-modal": "3.4.11",
