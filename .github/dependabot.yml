@@ -2,30 +2,35 @@ version: 2
 updates:
   - package-ecosystem: "gradle"
     directory: "/"
+    target-branch: "develop"
     schedule:
       interval: "daily"
     assignees:
       - "PabloLec"
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "develop"
     schedule:
       interval: "daily"
     assignees:
       - "PabloLec"
   - package-ecosystem: "docker"
     directory: "/docker"
+    target-branch: "develop"
     schedule:
       interval: "daily"
     assignees:
       - "PabloLec"
   - package-ecosystem: "npm"
     directory: "/src/main/workers"
+    target-branch: "develop"
     schedule:
       interval: "daily"
     assignees:
       - "PabloLec"
   - package-ecosystem: "npm"
     directory: "/src/main/vue"
+    target-branch: "develop"
     schedule:
       interval: "daily"
     assignees:
