@@ -4,13 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'src/main/kotlin/**'
-      - 'src/test/kotlin/**'
-      - 'build.gradle.kts'
-      - 'settings.gradle.kts'
-      - 'gradle.properties'
-      - 'gradlew'
+      - develop
   workflow_call:
     secrets:
       MONGO_USER_TEST:
@@ -26,8 +20,8 @@ on:
 
 
 jobs:
-  build:
-    name: build
+  backend:
+    name: backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -44,7 +38,7 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Run build
+      - name: Run Backend build
         env:
           MONGO_USER: ${{ secrets.MONGO_USER_TEST }}
           MONGO_SECRET: ${{ secrets.MONGO_SECRET_TEST }}
@@ -61,6 +55,50 @@ jobs:
           name: Test report
           path: build/reports/tests/test
 
+  frontend:
+    name: frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/main/vue
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 7
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install typescript vue-tsc vite -g && pnpm install
+
+      - name: Run Frontend build
+        run: vue-tsc --noEmit && vite build
+
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v3
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
