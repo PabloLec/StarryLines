@@ -89,7 +89,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install & pnpm install --dev
 
       - name: Run Frontend build
         run: vue-tsc --noEmit && vite build
