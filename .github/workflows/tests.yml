@@ -63,16 +63,33 @@ jobs:
         working-directory: ./src/main/vue
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: np
-      - uses: actions/setup-node@v3
+          node-version: 16
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
         with:
-          node-version: '16'
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
+
       - name: Run Frontend build
         run: vue-tsc --noEmit && vite build
 
