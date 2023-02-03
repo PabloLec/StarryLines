@@ -89,10 +89,10 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install typescript -g && pnpm install && pnpm install --dev
+        run: pnpm install typescript -g && pnpm install
 
       - name: Run Frontend build
-        run: vue-tsc --noEmit && vite build
+        run: pnpx vue-tsc --noEmit && pnpx vite build
 
   sonarcloud:
     name: SonarCloud
