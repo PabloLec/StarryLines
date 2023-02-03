@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./src/main/vue
+        working-directory: src/main/vue
     steps:
       - uses: actions/checkout@v3
       - name: Install Node.js
@@ -72,7 +72,6 @@ jobs:
         name: Install pnpm
         with:
           version: 7
-          run_install: true
 
       - name: Get pnpm store directory
         id: pnpm-cache
@@ -89,7 +88,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install typescript && pnpm install
+        run: |
+          pwd
+          pnpm install typescript && pnpm install
 
       - name: Run Frontend build
         run: pnpx vue-tsc --noEmit && pnpx vite build
