@@ -72,7 +72,7 @@ jobs:
         name: Install pnpm
         with:
           version: 7
-          run_install: false
+          run_install: true
 
       - name: Get pnpm store directory
         id: pnpm-cache
@@ -89,7 +89,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install typescript -g && pnpm install
+        run: pnpm install typescript && pnpm install
 
       - name: Run Frontend build
         run: pnpx vue-tsc --noEmit && pnpx vite build
