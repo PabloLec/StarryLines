@@ -6,10 +6,10 @@
     class="flex justify-center items-center"
     content-class="relative flex flex-col max-h-full mx-4 p-4 border rounded bg-night-blue text-white"
     @closed="closed"
-    :transition="{
+    :contentTransition="{
       'enter-active-class': 'transition duration-350 ease-in-out transform',
       'enter-class': 'translate-y-full',
-      'enter-to-class': 'translate-y-0',
+      'enter-to-class': 'transition duration-350 ease-in-out transform',
       'leave-active-class': 'transition duration-350 ease-in-out transform',
       'leave-to-class': 'translate-y-full',
       'leave-class': 'translate-y-0',
