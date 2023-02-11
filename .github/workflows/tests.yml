@@ -48,12 +48,12 @@ jobs:
         run: |
           ./gradlew clean build --stacktrace --info
 
-      - name: Archive test report
+      - name: Archive tests report
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: Test report
-          path: build/reports/tests/test
+          name: Tests report
+          path: build/reports
 
   frontend:
     name: frontend
@@ -99,6 +99,14 @@ jobs:
     needs: [backend, frontend]
     steps:
       - uses: actions/checkout@v3
+      - name: Download tests report
+        uses: actions/download-artifact@v3
+        with:
+          name: Tests report
+          path: build/reports
+      - name: List current directory
+        run: tree
+
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
@@ -108,7 +116,7 @@ jobs:
           args: >
             -Dsonar.organization=pablolec
             -Dsonar.projectKey=PabloLec_StarryLines
-            -Dsonar.coverage.jacoco.xmlReportPaths=./build/reports/kover/xml/report.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=./build/reports/jacoco/test/jacocoTestReport.xml
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.sources=./src/main/kotlin
             -Dsonar.coverage.exclusions=**/Interface.kt,**/SupportedLanguage.kt
