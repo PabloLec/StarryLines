@@ -6,10 +6,10 @@
 <a href="https://github.com/PabloLec/StarryLines/blob/main/LICENSE" target="_blank">
     <img src="https://img.shields.io/github/license/pablolec/StarryLines" alt="License">
 </a>
-<a href="#" target="_blank">
+<a href="https://sonarcloud.io/project/overview?id=PabloLec_StarryLines" target="_blank">
     <img src="https://sonarcloud.io/api/project_badges/measure?project=PabloLec_StarryLines&metric=coverage" alt="Coverage">
 </a>
-<a href="#" target="_blank">
+<a href="https://github.com/PabloLec/StarryLines/actions/workflows/tests.yml" target="_blank">
     <img src="https://github.com/PabloLec/StarryLines/actions/workflows/tests.yml/badge.svg" alt="Tests">
 </a>
 </p>
@@ -17,13 +17,13 @@
 ---
 
 <!--ts-->
-   * [What is it?](#what-is-it)
-      * [What should not be in StarryLines](#what-should-not-be-in-starrylines)
-   * [Score calculation](#score-calculation)
-      * [Star count](#star-count)
-      * [Lines of code](#lines-of-code)
-   * [Contributing](#contributing)
-   * [Technicalities](#technicalities)
+- [What is it?](#what-is-it)
+      - [What should not be in StarryLines](#what-should-not-be-in-starrylines)
+- [Score calculation](#score-calculation)
+    - [Star count](#star-count)
+    - [Lines of code](#lines-of-code)
+- [Contributing](#contributing)
+- [Technicalities](#technicalities)
 <!--te-->
 
 ---
@@ -54,12 +54,12 @@ For a repository whose main language is C, composed of 60% C and 40% Python with
 ### Lines of code
 
 The entire code is parsed and stripped of comments or documentation. The number of lines is calculated by the number of characters divided by 80 for each file.
-The goal is to obtain a fair result, without penalizing the repositories with the most documentation.  
+The goal is to obtain a fair result, without penalizing the repositories with the most documentation.
 Moreover, only files written in the main language are retained, others are ignored.
 
 # Contributing
 
-Any contribution is welcome!  
+Any contribution is welcome!
 Apart from pull requests you can [open an issue](https://github.com/PabloLec/StarryLines/issues/new/choose) to report a bug, report an irrelevant repository, etc.
 For feature requests, general ideas, or any broader topic, please use the [Discussions section](https://github.com/PabloLec/StarryLines/discussions).
 
