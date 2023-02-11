@@ -3,7 +3,7 @@
     v-slot="{ params, close }"
     v-bind="$attrs"
     v-model="showModalModel"
-    classes="flex justify-center items-center"
+    class="flex justify-center items-center"
     content-class="relative flex flex-col max-h-full mx-4 p-4 border rounded bg-night-blue text-white"
     @closed="closed"
     :transition="{
