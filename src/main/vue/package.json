@@ -14,7 +14,7 @@
     "swiper": "9.1.0",
     "tailwindcss": "3.2.7",
     "vue": "3.2.47",
-    "vue-final-modal": "4.0.9",
+    "vue-final-modal": "4.0.10",
     "vue-router": "4.1.6",
     "vue3-easy-data-table": "1.5.34"
   },
