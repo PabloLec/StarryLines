@@ -19,7 +19,7 @@ dependencies {
     implementation("org.litote.kmongo:kmongo:4.8.0")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.slf4j:slf4j-log4j12:2.0.7")
-    implementation("com.jcabi:jcabi-log:0.22.0")
+    implementation("com.jcabi:jcabi-log:0.23.0")
     implementation("com.apollographql.apollo3:apollo-runtime:3.8.0")
     implementation("com.github.sya-ri:kgit:1.0.5")
     testImplementation(kotlin("test"))
