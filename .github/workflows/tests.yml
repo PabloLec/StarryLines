@@ -88,7 +88,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install typescript vue-tsc vite -g && pnpm install --no-frozen-lockfile
+        run: pnpm install typescript vue-tsc@1.2.0 vite -g && pnpm install --no-frozen-lockfile
 
       - name: Run Frontend build
         run: vue-tsc --noEmit && vite build
