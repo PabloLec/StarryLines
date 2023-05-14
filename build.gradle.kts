@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.8.21"
     application
     jacoco
-    id("com.apollographql.apollo3") version "3.8.0"
+    id("com.apollographql.apollo3") version "3.8.1"
 }
 
 group = "dev.pablolec"
@@ -15,18 +15,18 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.litote.kmongo:kmongo:4.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
+    implementation("org.litote.kmongo:kmongo:4.9.0")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
     implementation("org.slf4j:slf4j-log4j12:2.0.7")
     implementation("com.jcabi:jcabi-log:0.23.0")
-    implementation("com.apollographql.apollo3:apollo-runtime:3.8.0")
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.1")
     implementation("com.github.sya-ri:kgit:1.0.5")
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("io.mockk:mockk:1.13.4")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    testImplementation("com.apollographql.apollo3:apollo-testing-support:3.8.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
+    testImplementation("com.apollographql.apollo3:apollo-testing-support:3.8.1")
 }
 
 tasks.test {
