@@ -16,7 +16,7 @@
     "vue": "3.3.4",
     "vue-final-modal": "4.4.2",
     "vue-router": "4.2.2",
-    "vue3-easy-data-table": "1.5.45"
+    "vue3-easy-data-table": "1.5.47"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "3.2.0",
