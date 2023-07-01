@@ -3,6 +3,7 @@ package loc
 import db.MongoClient
 import db.MongoManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import mocks.locCRepo
 import mocks.locPythonRepo
@@ -19,7 +20,7 @@ internal class LocManagerTest {
     private val mongoManager = MongoManager()
 
     @Test
-    fun testRun() = runTest {
+    fun testRun() = runBlocking {
         val locManager = LocManager(mongoManager, setOf(Language.C, Language.PYTHON))
         MongoClient.insertOne(locCRepo, "c")
         MongoClient.insertOne(locPythonRepo, "python")
