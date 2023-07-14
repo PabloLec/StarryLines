@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "autoprefixer": "10.4.14",
-    "postcss": "8.4.25",
+    "postcss": "8.4.26",
     "swiper": "10.0.4",
     "tailwindcss": "3.3.3",
     "vue": "3.3.4",
