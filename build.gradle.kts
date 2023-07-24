@@ -23,7 +23,7 @@ dependencies {
     implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
     implementation("com.github.sya-ri:kgit:1.0.5")
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testImplementation("io.mockk:mockk:1.13.5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
     testImplementation("com.apollographql.apollo3:apollo-testing-support:3.8.2")
