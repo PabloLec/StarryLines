@@ -21,8 +21,8 @@ dependencies:
     specifier: 3.3.4
     version: 3.3.4
   vue-final-modal:
-    specifier: 4.4.4
-    version: 4.4.4(@vueuse/core@9.13.0)(@vueuse/integrations@9.13.0)(focus-trap@7.4.1)(vue@3.3.4)
+    specifier: 4.4.5
+    version: 4.4.5(@vueuse/core@9.13.0)(@vueuse/integrations@9.13.0)(focus-trap@7.4.1)(vue@3.3.4)
   vue-router:
     specifier: 4.2.4
     version: 4.2.4(vue@3.3.4)
@@ -1243,8 +1243,8 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /vue-final-modal@4.4.4(@vueuse/core@9.13.0)(@vueuse/integrations@9.13.0)(focus-trap@7.4.1)(vue@3.3.4):
-    resolution: {integrity: sha512-XtVIO51tetVg46bxeMA5PDz6xGhcwVtYUgEvTfPHxeJKo5Lak79iqsn6L/Lf1l3CCg/EeVZi7ZxDFjOOmgfUVQ==}
+  /vue-final-modal@4.4.5(@vueuse/core@9.13.0)(@vueuse/integrations@9.13.0)(focus-trap@7.4.1)(vue@3.3.4):
+    resolution: {integrity: sha512-5O1twpVcOuvxc8fJppNYtdZ4M0GGeoSMcHZTFUoie3BmtzSx3EE6Lvz8YgnpQbDkxVMmRKEjhsSBywqqWfoQVw==}
     peerDependencies:
       '@vueuse/core': '>=9.11.1'
       '@vueuse/integrations': '>=9.11.1'
