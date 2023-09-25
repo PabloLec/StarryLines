@@ -24,7 +24,7 @@ dependencies {
     implementation("com.github.sya-ri:kgit:1.0.5")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-    testImplementation("io.mockk:mockk:1.13.7")
+    testImplementation("io.mockk:mockk:1.13.8")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("com.apollographql.apollo3:apollo-testing-support:3.8.2")
 }
