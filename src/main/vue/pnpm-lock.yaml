@@ -12,8 +12,8 @@ dependencies:
     specifier: 8.4.30
     version: 8.4.30
   swiper:
-    specifier: 10.2.0
-    version: 10.2.0
+    specifier: 11.0.1
+    version: 11.0.1
   tailwindcss:
     specifier: 3.3.3
     version: 3.3.3
@@ -1106,8 +1106,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  /swiper@10.2.0:
-    resolution: {integrity: sha512-nktQsOtBInJjr3f5DicxC8eHYGcLXDVIGPSon0QoXRaO6NjKnATCbQ8SZsD3dN1Ph1RH4EhVPwSYCcuDRFWHGQ==}
+  /swiper@11.0.1:
+    resolution: {integrity: sha512-pxVygCS5CVL2pRYSnv8RbjlOC/nN+JrAn5/JM0WBQzIWisv9FYe1s69KEB82TOeqh/T3zc9zks/gxctY6G/XMg==}
     engines: {node: '>= 4.7.0'}
     dev: false
 
