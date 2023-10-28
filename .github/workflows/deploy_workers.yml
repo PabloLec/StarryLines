@@ -13,16 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Publish mongo-proxy
-        uses: cloudflare/wrangler-action@2.0.0
+        uses: cloudflare/wrangler-action@v3.3.2
         with:
           preCommands: cd src/main/workers/api && npm install .
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: publish --env production --var REALM_APPID:${{ secrets.REALM_APPID }} --var MONGO_API_KEY:${{ secrets.MONGO_API_KEY }}
       - name: Publish prerender
-        uses: cloudflare/wrangler-action@2.0.0
+        uses: cloudflare/wrangler-action@v3.3.2
         with:
           preCommands: cd src/main/workers/prerender && npm install .
           apiToken: ${{ secrets.CF_API_TOKEN }}

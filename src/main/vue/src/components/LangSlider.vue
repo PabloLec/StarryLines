@@ -99,7 +99,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { Keyboard, FreeMode, Navigation } from "swiper";
+import { Keyboard, FreeMode, Navigation } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
