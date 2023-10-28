@@ -21,7 +21,7 @@ query GetTopRepos($query : String!, $cursor: String) {
                         name
                         target {
                             ... on Commit {
-                                pushedDate
+                                authoredDate
                             }
                         }
                     }
