@@ -55,7 +55,7 @@ class GitCount(val language: Language, val repo: Repository) {
                 lineCount += result.lineCount
                 parsedLength += result.parsedLength
             } catch (e: VirtualMachineError) {
-                logger.error { "Error counting ${repo.url} file ${file.name} ${e.message}" }
+                logger.error(e) { "Error counting ${repo.url} file ${file.name}" }
                 lineCount += file.readText().lines().size
                 parsedLength += file.readText().length
             } finally {

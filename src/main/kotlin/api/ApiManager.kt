@@ -76,7 +76,7 @@ class ApiManager(private val mongoManager: MongoManager, var languages: Set<Lang
                         logger.error { " 403: Rate limit exceeded" }
                         break
                     }
-                    logger.error { " $language | $e " }
+                    logger.error(e) { " $language | Error in API query " }
                     break
                 }
 
@@ -110,7 +110,7 @@ class ApiManager(private val mongoManager: MongoManager, var languages: Set<Lang
                     val apiResponse = fetcher.fetchReposToUpdate(it)
                     addAll(apiResponse.repos)
                 } catch (e: Exception) {
-                    logger.error { "Update error: $e " }
+                    logger.error(e) { "Update error" }
                 }
             }
         }
