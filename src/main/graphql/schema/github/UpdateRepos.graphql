@@ -13,7 +13,7 @@ query UpdateRepos($ids: [ID!]!) {
                 name
                 target {
                     ... on Commit {
-                        pushedDate
+                        authoredDate
                     }
                 }
             }

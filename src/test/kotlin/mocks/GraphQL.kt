@@ -36,7 +36,7 @@ val testEdgeNewRepo = GetTopReposQuery.Edge(
                 target = GetTopReposQuery.Target(
                     "",
                     onCommit = GetTopReposQuery.OnCommit(
-                        pushedDate = "2021-01-01T00:00:00Z"
+                        authoredDate = "2021-01-01T00:00:00Z"
                     )
                 )
 
@@ -74,7 +74,7 @@ val testEdgeRepoWithFewStars = GetTopReposQuery.Edge(
                 target = GetTopReposQuery.Target(
                     "",
                     onCommit = GetTopReposQuery.OnCommit(
-                        pushedDate = "2021-01-01T00:00:00Z"
+                        authoredDate = "2021-01-01T00:00:00Z"
                     )
                 )
             ),
@@ -111,7 +111,7 @@ val testNodeRepoToUpdate = listOf(
                 target = UpdateReposQuery.Target(
                     "",
                     onCommit = UpdateReposQuery.OnCommit(
-                        pushedDate = "2021-01-01T00:00:00Z"
+                        authoredDate = "2021-01-01T00:00:00Z"
                     )
                 )
             ),

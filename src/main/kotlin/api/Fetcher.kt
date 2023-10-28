@@ -30,7 +30,7 @@ class Fetcher {
                 try {
                     add(Repository.fromEdge(it!!))
                 } catch (e: Exception) {
-                    logger.error { "Error while parsing edge $it: ${e.message}" }
+                    logger.error(e) { "Error while parsing edge $it" }
                 }
             }
         }
@@ -52,7 +52,7 @@ class Fetcher {
                 try {
                     add(Repository.fromNode(it!!))
                 } catch (e: Exception) {
-                    logger.error { "Error while parsing node $it: $e - ${e.message}" }
+                    logger.error(e) { "Error while parsing node $it" }
                 }
             }
         }
@@ -71,7 +71,7 @@ class Fetcher {
             response = client.query(GetUpdateDateQuery(repos.map { it.ghid })).execute()
             if (response.errors != null) logger.error { "Response errors: ${response.errors}" }
         } catch (e: Exception) {
-            logger.error { "Error while fetching update dates: ${e.message}" }
+            logger.error(e) { "Error while fetching update dates" }
             return emptySet()
         }
 
@@ -81,11 +81,11 @@ class Fetcher {
                     add(
                         Pair(
                             it!!.onRepository!!.id,
-                            it.onRepository!!.defaultBranchRef!!.target!!.onCommit!!.pushedDate.toString()
+                            it.onRepository!!.defaultBranchRef!!.target!!.onCommit!!.authoredDate.toString()
                         )
                     )
                 } catch (e: Exception) {
-                    logger.error { "Error while parsing node $it: $e - ${e.message}" }
+                    logger.error(e) { "Error while parsing node $it" }
                 }
             }
         }

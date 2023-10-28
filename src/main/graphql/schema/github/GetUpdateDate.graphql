@@ -5,7 +5,7 @@ query GetUpdateDate($ids: [ID!]!) {
             defaultBranchRef {
                 target {
                     ... on Commit {
-                        pushedDate
+                        authoredDate
                     }
                 }
             }
