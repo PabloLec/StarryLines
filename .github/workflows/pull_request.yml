@@ -8,6 +8,7 @@ on:
 
 jobs:
   approve:
+    if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     environment:
       name: PR-env
@@ -17,6 +18,7 @@ jobs:
 
   PR-tests:
     needs: [approve]
+    if: always()
     uses: PabloLec/StarryLines/.github/workflows/tests.yml@main
     secrets:
       MONGO_USER_TEST: ${{ secrets.MONGO_USER_TEST }}
