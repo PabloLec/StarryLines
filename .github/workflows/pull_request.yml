@@ -26,3 +26,15 @@ jobs:
       MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
       MONGO_DATABASE_TEST: ${{ secrets.MONGO_DATABASE_TEST }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  automerge-dependabot:
+    runs-on: ubuntu-latest
+    needs: PR-tests
+    if: github.actor == 'dependabot[bot]' && github.event.pull_request.user.login == 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop'
+    steps:
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
