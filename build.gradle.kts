@@ -21,7 +21,7 @@ dependencies {
     implementation("org.slf4j:slf4j-log4j12:2.0.9")
     implementation("com.jcabi:jcabi-log:0.23.0")
     implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
-    implementation("com.github.sya-ri:kgit:1.0.5")
+    implementation("com.github.sya-ri:kgit:1.0.6")
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
     testImplementation("io.mockk:mockk:1.13.8")
